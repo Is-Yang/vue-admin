@@ -1,0 +1,83 @@
+$themeColor: #324157;  // 主题色
+$textColor: #2c314e; // 字体色
+
+// 清楚浮动
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+// 滚动条
+@mixin scrollBar {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: hsla(220, 4%, 58%, .3);
+    border-radius: 20px;
+  }
+}
+
+@mixin relative {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+@mixin pct($pct) {
+  width: #{$pct};
+  position: relative;
+  margin: 0 auto;
+}
+
+// 三角形
+@mixin triangle($width, $height, $color, $direction) {
+  $width: $width/2;
+  $color-border-style: $height solid $color;
+  $transparent-border-style: $width solid transparent;
+  height: 0;
+  width: 0;
+  @if $direction==up {
+    border-bottom: $color-border-style;
+    border-left: $transparent-border-style;
+    border-right: $transparent-border-style;
+  }
+  @else if $direction==right {
+    border-left: $color-border-style;
+    border-top: $transparent-border-style;
+    border-bottom: $transparent-border-style;
+  }
+  @else if $direction==down {
+    border-top: $color-border-style;
+    border-left: $transparent-border-style;
+    border-right: $transparent-border-style;
+  }
+  @else if $direction==left {
+    border-right: $color-border-style;
+    border-top: $transparent-border-style;
+    border-bottom: $transparent-border-style;
+  }
+}
+
+// 检索弹性盒子元素在横轴方向上的对齐方式
+@mixin flexJustify($mode) {
+  justify-content: $mode;
+}
+
+// 居中对齐弹性盒的各项
+@mixin flexAlign($mode) {
+  align-items: $mode;
+}
+
+// 弹性盒元素是否换行
+@mixin flexWrap($mode) {
+  flex-wrap: $mode;
+}
+
+// 圆角
+@mixin borderRadius($radius) {
+  border-radius: $radius;
+}

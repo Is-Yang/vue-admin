@@ -1,0 +1,312 @@
+html, body {
+  width: 100%;
+  height: 100%;
+}
+body {
+  background-color: #f2f3f8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,body,ul,ol,li,p,h1,h2,h3,h4,h5 {
+    padding:0;
+    margin:0;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    color:#454545;
+}
+
+a:focus,
+a:active ,
+i:focus,
+i:active,
+span:focus,
+span:active{
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+.a_style,
+.a_style:hover {
+  color: #1494EB;
+  text-decoration: underline;
+}
+
+.f-r {
+  float: right;
+}
+
+.f-l {
+  float: left;
+}
+
+.clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+// 超出部分...
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+@for $i from 1 to 10 {
+  $i: $i * 5;
+  .margin-top-#{$i} {
+    margin-top: #{$i}px;
+  }
+  .margin-left-#{$i} {
+    margin-left: #{$i}px;
+  }
+  .margin-bottom-#{$i} {
+    margin-bottom: #{$i}px;
+  }
+  .margin-right-#{$i} {
+    margin-right: #{$i}px;
+  }
+  .margin-#{$i} {
+    margin: #{$i}px;
+  }
+  .padding-top-#{$i} {
+    padding-top: #{$i}px;
+  }
+  .padding-left-#{$i} {
+    padding-left: #{$i}px;
+  }
+  .padding-bottom-#{$i} {
+    padding-bottom: #{$i}px;
+  }
+  .padding-right-#{$i} {
+    padding-right: #{$i}px;
+  }
+  .padding-#{$i} {
+    padding: #{$i}px;
+  }
+}
+
+.flex {
+  display: flex;
+}
+
+.common-section {
+  font-size: 14px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, .05);
+}
+
+.tip_color {
+  color: #B0B9C4;
+}
+
+.m20 {
+  margin: 20px;
+}
+
+.ml20 {
+  margin-left: 20px;
+}
+
+.mt15 {
+  margin-top: 15px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.mt30{
+  margin-top: 30px;
+}
+
+.mt60{
+  margin-top: 60px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.mb15 {
+  margin-bottom: 15px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.mb30 {
+  margin-bottom: 30px;
+}
+
+.mr10 {
+  margin-right: 10px;
+}
+
+.mr20 {
+  margin-right: 20px;
+}
+
+.mr40 {
+  margin-right: 40px;
+}
+
+.mr50 {
+  margin-right: 50px;
+}
+
+.p20 {
+  padding: 20px;
+}
+
+.h50 {
+  height: 50px;
+}
+
+.minh600 {
+  min-height: 600px;
+}
+
+.minh750 {
+  min-height: 750px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.common-inner {
+  font-size: 14px;
+  background: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px 2px rgba(0, 0, 0, .05);
+}
+
+.form__content {
+  padding: 20px 30px;
+}
+
+.pos-rel {
+  position: relative;
+}
+
+.por {
+  position: relative;
+}
+
+.poa {
+  position: absolute;
+}
+
+.line {
+  border-bottom: 1px solid #ebeef5;
+}
+
+.question {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  z-index: inherit;
+
+  .fa-question {
+      $size: 12px;
+      width: $size;
+      height: $size;
+      line-height: $size;
+      font-size: $size;
+  }
+}
+
+.content-rowspan {
+  padding: 5px 10px;
+  border-bottom: 1px solid #ebeef5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:last-child {
+      border-bottom: 0;
+  }
+} 
+
+// table 表格中用到
+.vcenter { align-items: center}
+.h80{height:80px}
+.h66{height:66px}
+.lright{justify-content:flex-end}
+
+// 搜索做的样式，后续做成组件
+.search__form {
+  margin: 20px;
+}
+
+.search__form.el-form--inline .el-form-item__label {
+  padding-right: 20px;
+}
+
+.search__form .el-form-item{
+  margin-bottom: 0px;
+}
+
+.search-lable {
+  color: #444;
+  font-size: 14px;
+  padding-right: 12px;
+  text-align: right
+}
+// 搜索结束
+
+.search_none_data {
+  line-height: 60px;
+  text-align: center;
+  min-height: 60px;
+  color: #909399;
+  border: 1px solid #eee;
+}
+
+.tips-bg {
+  background-color: #FAEBCC;
+  color: #C09B60;
+}
+
+// 操作按钮样式
+.re-primary-button.el-button{
+  background: #fff;
+  border-color: #b3d8ff;
+  color: #409EFF;
+}
+.re-primary-button.el-button:hover{
+  background: #409EFF;
+  border-color: #409EFF;
+  color: #fff;
+}
+
+.inline__block{
+  display: inline-block;
+}
