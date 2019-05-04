@@ -11,7 +11,17 @@
         <span slot="title">首页</span>
       </el-menu-item>
 
-      <el-submenu index="系统设置">
+      <el-menu-item index="/company">
+        <i class="fa fa-building"></i> 
+        <span slot="title">公司列表</span>
+      </el-menu-item>
+
+      <el-menu-item index="/account">
+        <i class="fa fa-users"></i> 
+        <span slot="title">用户列表</span>
+      </el-menu-item>
+
+      <el-submenu index="/monitoring">
         <template slot="title">
           <i class="fa fa-cogs"></i> 
           <span slot="title">监控列表</span>
@@ -24,21 +34,6 @@
         </el-menu-item>
       </el-submenu>
 
-      <el-menu-item index="/account">
-        <i class="fa fa-users"></i> 
-        <span slot="title">账号列表</span>
-      </el-menu-item>
-
-      <el-menu-item index="/company">
-        <i class="fa fa-building"></i> 
-        <span slot="title">公司列表</span>
-      </el-menu-item>
-
-      <el-menu-item index="/branch">
-        <i class="fa fa-code-branch"></i> 
-        <span slot="title">部门信息列表</span>
-      </el-menu-item>
-
       <el-menu-item index="/thumbtack">
         <i class="fa fa-thumbtack"></i> 
         <span slot="title">应急消息列表</span>
@@ -48,7 +43,13 @@
         <i class="fa fa-tasks"></i> 
         <span slot="title">任务信息</span>
       </el-menu-item>
+
+      <el-menu-item index="/other">
+        <i class="fa el-icon-info"></i> 
+        <span slot="title">其他资料列表</span>
+      </el-menu-item>
     </el-menu>
+    
   </div>
 </template>
 

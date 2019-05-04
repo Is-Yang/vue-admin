@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="margin-bottom-20 text-right">
-      <el-button type="primary" size="small" @click="dialogShow('add', {})">创建账号</el-button>
+      <router-link to="account/add">
+        <el-button type="primary" size="small">创建账号</el-button>
+      </router-link>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column prop="company" label="公司"></el-table-column>
@@ -11,7 +13,7 @@
       <el-table-column prop="job" label="岗位等级"></el-table-column>
       <el-table-column label="操作" width="150px">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row)"
+          <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="editFn(scope.row.user_id)"
             title="编辑"></el-button>
           <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
             title="删除"></el-button>
@@ -24,24 +26,12 @@
       :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
       layout="total, sizes, prev, pager, next, jumper"></el-pagination>
   
-    <!-- 新增和编辑 -->
-    <add-and-edit
-      v-if="dialog.show"
-      :type="dialog.type"
-      :accountParent="dialog.accountParent"
-      @cancel="dialog.show = !dialog.show"
-      @success="dialogSuccess"
-    ></add-and-edit>
   </div>
 </template>
 
 <script>
 import * as Http from "@/api/home";
-import AddAndEdit from "./AddAndEdit";
 export default {
-  components: {
-    AddAndEdit
-  },
   inject: ["reload"],
   data() {
     return {
@@ -54,8 +44,7 @@ export default {
       },
       dialog: {
         show: false,
-        type: "",
-        accountParent: {}
+        type: ""
       }
     };
   },
@@ -91,11 +80,14 @@ export default {
       this.menuCon.keyword = "";
       this.getListData();
     },
-    // 新增，编辑弹窗显示
-    dialogShow(type, initData){ 
-      this.dialog.type = type;
-      this.dialog.accountParent = initData;
-      this.dialog.show = true;
+    editFn(user_id) {
+      // 编辑
+      this.$router.push({
+        path: "account/edit",
+        query: {
+          userId: user_id
+        }
+      });
     },
     deleteFn(data) {
       // 删除
@@ -112,7 +104,6 @@ export default {
     doDelete(id) {
       this.loading = true;
       let params = {
-        token: this.user_info.token,
         user_id: id
       };
       Http.delAccount(params)

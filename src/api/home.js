@@ -25,12 +25,14 @@ export function getAccountList(params) {
 
 // app用户账号添加
 export function addAccount(params) {
-  return http.postAjax('/manager_account_add?token=' + user_info.token, params)
+  let header = {'Content-Type': 'application/json'};
+  return http.postAjax('/manager_account_add?token=' + user_info.token, params, header, true)
 }
 
 // app用户账号修改
 export function updateAccount(params) {
-  return http.postAjax('/manager_account_change?token=' + user_info.token, params)
+  let header = {'Content-Type': 'application/json'};
+  return http.postAjax('/manager_account_change?token=' + user_info.token, params, header, true)
 }
 
 // 根据user_id获取账号详情
@@ -50,12 +52,14 @@ export function getCompanyList(params) {
 
 // 创建公司信息
 export function addCompany(params) {
-  return http.postAjax('/manager_company_add?token=' + user_info.token, params)
+  let header = {'Content-Type': 'application/json'};
+  return http.postAjax('/manager_company_add?token=' + user_info.token, params, header, true)
 }
 
 // 修改公司信息
 export function updateCompany(params) {
-  return http.postAjax('/manager_company_change?token=' + user_info.token, params)
+  let header = {'Content-Type': 'application/json'};
+  return http.postAjax('/manager_company_change?token=' + user_info.token, params, header, true)
 }
 
 // 删除公司信息
@@ -105,15 +109,47 @@ export function getTaskDesc(params) {
 
 // 任务详细解释添加
 export function addTaskDesc(params) {
-  return http.postAjax('/manager_task_desc_add?token=' + user_info.token, params)
+  let header = {'Content-Type': 'application/json'};
+  return http.postAjax('/manager_task_desc_add?token=' + user_info.token, params, header, true)
 }
 
 // 任务详细更新
 export function updateTaskDesc(params) {
-  return http.postAjax('/manager_task_desc_update?token=' + user_info.token, params)
+  let header = {'Content-Type': 'application/json'};
+  return http.postAjax('/manager_task_desc_update?token=' + user_info.token, params, header, true)
 }
 
 // 删除任务详细信息
 export function delTaskDesc(params) {
   return http.postAjax('/manage_delete_task_desc?token=' + user_info.token, params)
+}
+
+// 所有公司的所有部门
+export function getCompanyDepartment() {
+  return http.getAjax('/manager_company_department?token=' + user_info.token)
+}
+
+// 文件列表
+export function getFileList(params) {
+  return http.getAjax('/manager_file_list?token=' + user_info.token, params)
+}
+
+// 上传文件
+export function uploadFile(params) {
+  return http.postAjax('/manager_file_upload', params)
+}
+
+// 下载文件
+export function downloadFile(params) {
+  return http.getAjax('/manager_file_download', params);
+}
+
+// 删除文件
+export function delFile(params) {
+  return http.postAjax('/manager_file_delete?token=' + user_info.token, params)
+}
+
+// 获取图片
+export function getImg(params) {
+  return http.getAjax('/manager_get_img', params);
 }

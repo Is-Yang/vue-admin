@@ -3,8 +3,7 @@ import * as login from './login'
 import * as marketTool from './marketTool'
 import * as marking from './marking'
 import * as setting from './setting'
-import * as statistics from './statistics'
-let apiObj={home,login,marketTool,marking,setting,statistics};
+let apiObj={home,login,marketTool,marking,setting};
 const install = function (Vue) {
   if (install.installed) {
     return

@@ -7,8 +7,6 @@ import Home from './home'
 import MarketTools from './marketTools'
 import NotFound from '../pages/error/404'
 import Layout from '../pages/layout/Layout'
-import store from '../store/index';
-
 
 Vue.use(Router)
 const baseRouter = [{path: '/', redirect:"/login"}];

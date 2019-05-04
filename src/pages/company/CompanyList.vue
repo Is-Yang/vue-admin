@@ -108,7 +108,6 @@ export default {
     doDelete(id) {
       this.loading = true;
       let params = {
-        token: this.user_info.token,
         company_id: id
       };
       Http.delCompany(params)
@@ -121,7 +120,7 @@ export default {
         .catch(error => {
           this.loading = false;
           this.$message.error("删除失败");
-        });
+      });
     },
     sizeChange(val) {
       this.page.size = val;

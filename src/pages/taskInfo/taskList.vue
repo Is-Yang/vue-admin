@@ -4,6 +4,9 @@
       <el-button type="primary" size="small" @click="dialogShow('add', {})">创建任务</el-button>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
+      <el-table-column prop="position_sname" label="大分类"></el-table-column>
+      <el-table-column prop="position_detail_name" label="小分类"></el-table-column>
+      <el-table-column prop="task_name" label="分类名称"></el-table-column>
       <el-table-column prop="risk_for" label="风险定位"></el-table-column>
       <el-table-column prop="risk_desc" label="风险描述"></el-table-column>
       <el-table-column prop="risk_to_do" label="管控措施"></el-table-column>
@@ -30,24 +33,25 @@
     <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.current"
       :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
       layout="total, sizes, prev, pager, next, jumper"></el-pagination>
-  
-    <!-- 新增和编辑 -->
-    <add-and-edit
+    
+    <!-- 新增与编辑 -->
+    <task-handle
       v-if="dialog.show"
       :type="dialog.type"
-      :accountParent="dialog.accountParent"
+      :taskParent="dialog.taskParent"
       @cancel="dialog.show = !dialog.show"
-      @success="dialogSuccess"
-    ></add-and-edit>
+      @success="dialogSuccess">
+    </task-handle>
+
   </div>
 </template>
 
 <script>
 import * as Http from "@/api/home";
-import AddAndEdit from "./AddAndEdit";
+import TaskHandle from './TaskHandle';
 export default {
   components: {
-    AddAndEdit
+    TaskHandle
   },
   inject: ["reload"],
   data() {
@@ -62,7 +66,7 @@ export default {
       dialog: {
         show: false,
         type: "",
-        accountParent: {}
+        taskParent: {}
       }
     };
   },
@@ -100,7 +104,7 @@ export default {
     // 新增，编辑弹窗显示
     dialogShow(type, initData){ 
       this.dialog.type = type;
-      this.dialog.accountParent = initData;
+      this.dialog.taskParent = initData;
       this.dialog.show = true;
     },
     deleteFn(data) {
@@ -111,17 +115,16 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.doDelete(data.user_id);
+          this.doDelete(data.task_desc_id);
         })
         .catch(() => {});
     },
     doDelete(id) {
       this.loading = true;
       let params = {
-        token: this.user_info.token,
-        user_id: id
+        task_desc_id: id
       };
-      Http.delAccount(params)
+      Http.delTaskDesc(params)
         .then(res => {
           this.$handleResponse(res, res => {
             this.$message.success("删除成功");

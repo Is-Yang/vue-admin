@@ -99,6 +99,7 @@
                 this.$handleResponse(res, res => {
                   this.$message.success('新增成功');
                   this.handleClose();
+                  this.reload();
                 })
               }).catch(err => {
                 this.loading = false;
@@ -108,8 +109,9 @@
                 Http.updateCompany(params).then(res => {
                     this.loading = false;
                     this.$handleResponse(res, res => {
-                    this.$message.success('修改成功');
-                    this.handleClose();
+                      this.$message.success('修改成功');
+                      this.handleClose();
+                      this.reload();
                     })
                 }).catch(err => {
                     this.loading = false;

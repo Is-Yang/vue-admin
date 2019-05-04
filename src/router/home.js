@@ -5,15 +5,18 @@ import {
 } from '../pages/monitoring'
 
 import {
-  AccountList
+  AccountList,
+  AccountHandle
 } from '../pages/account'
 import {
   CompanyList
 } from '../pages/company'
 import {
-  taskList
+  TaskList
 } from '../pages/taskInfo'
-
+import {
+  FileList
+} from '../pages/other'
 
 /**
   * name: 标题
@@ -32,13 +35,25 @@ export default [
       component: AccountList,
       name: '账号列表'
     }, {
+      path: 'account/add',
+      component: AccountHandle,
+      name: '新增账号'
+    }, {
+      path: 'account/edit',
+      component: AccountHandle,
+      name: '编辑账号'
+    }, {
       path: 'company',
       component: CompanyList,
       name: '公司列表'
     }, {
       path: 'tasks',
-      component: taskList,
+      component: TaskList,
       name: '任务信息'
+    }, {
+      path: 'other',
+      component: FileList,
+      name: '文件列表'
     }]
   }, {
     path: '/monitoring',
