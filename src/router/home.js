@@ -17,6 +17,12 @@ import {
 import {
   FileList
 } from '../pages/other'
+import {
+  ImgList
+} from '../pages/pictures'
+import {
+  MessageList
+} from '../pages/message'
 
 /**
   * name: 标题
@@ -54,6 +60,14 @@ export default [
       path: 'other',
       component: FileList,
       name: '文件列表'
+    }, {
+      path: 'pictures',
+      component: ImgList,
+      name: '宣传图片'
+    }, {
+      path: 'message',
+      component: MessageList,
+      name: '应急消息'
     }]
   }, {
     path: '/monitoring',

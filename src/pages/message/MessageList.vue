@@ -1,25 +1,15 @@
 <template>
   <div>
     <div class="margin-bottom-20 text-right">
-      <el-button type="primary" size="small" @click="dialogShow('add', {})">创建任务</el-button>
+      <el-button type="primary" size="small" @click="dialog.show = true">发送消息</el-button>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-      <el-table-column prop="risk_for" label="风险定位"></el-table-column>
-      <el-table-column prop="risk_desc" label="风险描述"></el-table-column>
-      <el-table-column prop="risk_to_do" label="管控措施"></el-table-column>
-      <el-table-column prop="risk_type" label="风险分类"></el-table-column>
-      <el-table-column prop="risk_result" label="导致后果"></el-table-column>
-      <el-table-column prop="risk_evaluate_technology" label="工程技术"></el-table-column>
-      <el-table-column prop="risk_evaluate_to_do" label="管控措施"></el-table-column>
-      <el-table-column prop="risk_evaluate_train" label="培训教育"></el-table-column>
-      <el-table-column prop="risk_evaluate_protect" label="个体防护"></el-table-column>
-      <el-table-column prop="risk_evaluate_emergency" label="应急处理"></el-table-column>
-      <el-table-column prop="risk_level" label="风险等级"></el-table-column>
-      <el-table-column prop="row" label="法规依据"></el-table-column>
-      <el-table-column label="操作" width="180px">
+      <el-table-column prop="message_from" label="消息发送者"></el-table-column>
+      <el-table-column prop="message_title" label="消息标题"></el-table-column>
+      <el-table-column prop="message_content" label="消息内容"></el-table-column>
+      <el-table-column prop="create_time" label="发送时间"></el-table-column>
+      <el-table-column label="操作" width="120px">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row)"
-            title="编辑"></el-button>
           <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
             title="删除"></el-button>
         </template>
@@ -31,24 +21,21 @@
       :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
       layout="total, sizes, prev, pager, next, jumper"></el-pagination>
     
-    <!-- 新增与编辑 -->
-    <task-handle
+    <!-- 发送应急消息 -->
+    <message-handle
       v-if="dialog.show"
-      :type="dialog.type"
-      :taskParent="dialog.taskParent"
       @cancel="dialog.show = !dialog.show"
       @success="dialogSuccess">
-    </task-handle>
-
+    </message-handle>
   </div>
 </template>
 
 <script>
 import * as Http from "@/api/home";
-import TaskHandle from './TaskHandle';
+import MessageHandle from './MessageHandle';
 export default {
   components: {
-    TaskHandle
+    MessageHandle
   },
   inject: ["reload"],
   data() {
@@ -62,8 +49,6 @@ export default {
       },
       dialog: {
         show: false,
-        type: "",
-        taskParent: {}
       }
     };
   },
@@ -76,7 +61,7 @@ export default {
       let params = {
         page: this.page.current
       };
-      Http.getTaskDesc(params)
+      Http.getMessageList(params)
         .then(res => {
           this.loading = false;
           this.$handleResponse(res, res => {
@@ -87,22 +72,6 @@ export default {
         .catch(err => {
           this.loading = false;
         });
-    },
-    onSearch() {
-      // 搜索
-      this.page.current = 1;
-      this.getListData();
-    },
-    onReset() {
-      // 清空
-      this.menuCon.keyword = "";
-      this.getListData();
-    },
-    // 新增，编辑弹窗显示
-    dialogShow(type, initData){ 
-      this.dialog.type = type;
-      this.dialog.taskParent = initData;
-      this.dialog.show = true;
     },
     deleteFn(data) {
       // 删除
@@ -142,7 +111,6 @@ export default {
       this.getListData();
     },
     dialogSuccess() {
-      // 新增或修改成功后关闭窗口
       this.dialog.show = false;
       this.getListData();
     }

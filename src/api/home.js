@@ -82,11 +82,6 @@ export function updateDepartment(params) {
   return http.postAjax('/manager_department_change?token=' + user_info.token, params)
 }
 
-// 获取一个公司下面的所有部门
-export function companyDepartment(params) {
-  return http.getAjax('/manager_department_company_delete?token=' + user_info.token, params)
-}
-
 // 删除部门信息
 export function delDepartment(params) {
   return http.postAjax('/manager_department_delete?token=' + user_info.token, params)
@@ -94,12 +89,13 @@ export function delDepartment(params) {
 
 // 应急信息发送
 export function genMessage(params) {
-  return http.postAjax('/manager_gen_message?token=' + user_info.token, params)
+  let header = {'Content-Type': 'application/json'};
+  return http.postAjax('/manager_gen_message?token=' + user_info.token, params, header, true)
 }
 
 // 获取应急消息列表
 export function getMessageList(params) {
-  return http.postAjax('/manager_message_list?token=' + user_info.token, params)
+  return http.getAjax('/manager_message_list?token=' + user_info.token, params)
 }
 
 // 获取任务详细信息
@@ -149,7 +145,22 @@ export function delFile(params) {
   return http.postAjax('/manager_file_delete?token=' + user_info.token, params)
 }
 
-// 获取图片
+// 宣传图片列表
+export function getImgList(params) {
+  return http.getAjax('/manager_get_upload_img?token=' + user_info.token, params)
+}
+
+// 上传图片
+export function uploadImg(params) {
+  return http.postAjax('/manager_upload_img', params)
+}
+
+// 下载图片
 export function getImg(params) {
-  return http.getAjax('/manager_get_img', params);
+  return http.getAjax('/manager_get_img?token=' + user_info.token, params);
+}
+
+// 删除图片
+export function delImg(params) {
+  return http.postAjax('/manager_img_delete?token=' + user_info.token, params)
 }

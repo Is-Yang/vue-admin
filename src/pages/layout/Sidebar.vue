@@ -34,7 +34,7 @@
         </el-menu-item>
       </el-submenu>
 
-      <el-menu-item index="/thumbtack">
+      <el-menu-item index="/message">
         <i class="fa fa-thumbtack"></i> 
         <span slot="title">应急消息列表</span>
       </el-menu-item>
@@ -42,6 +42,11 @@
       <el-menu-item index="/tasks">
         <i class="fa fa-tasks"></i> 
         <span slot="title">任务信息</span>
+      </el-menu-item>
+
+      <el-menu-item index="/pictures">
+        <i class="fa el-icon-picture"></i> 
+        <span slot="title">宣传图片</span>
       </el-menu-item>
 
       <el-menu-item index="/other">
@@ -117,7 +122,7 @@
     }
 
     [class*="el-icon-"] {
-      font-size: 18px;
+      font-size: 14px;
       color: #fff;
     }
 

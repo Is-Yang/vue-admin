@@ -5,14 +5,16 @@
         :action="uploadUrl"
         :show-file-list="false"
         :on-success="handleAvatarSuccess">
-        <el-button size="small" type="primary">上传文件</el-button>
+        <el-button size="small" type="primary">上传图片</el-button>
       </el-upload>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-      <el-table-column prop="name" label="宣传图"></el-table-column>
-      <el-table-column prop="create_time" label="创建时间"></el-table-column>
+      <el-table-column prop="title" label="标题"></el-table-column>
+      <el-table-column prop="img" label="图片"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
+            <!-- <el-button size="mini" type="success" plain icon="el-icon-view" @click="viewFn(scope.row.name)" title="查看图片">
+            </el-button> -->
             <el-button size="mini" type="primary" plain icon="el-icon-download" @click="downloadFn(scope.row)" title="下载">
             </el-button>
             <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)" title="删除">
@@ -25,14 +27,26 @@
     <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.current"
       :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
       layout="total, sizes, prev, pager, next, jumper"></el-pagination>
+
+    <!-- 图片预览 -->
+    <view-img
+        v-if="dialog.show"
+        :imgName="dialog.imgName"
+        @cancel="dialog.show = !dialog.show">
+    </view-img>
   </div>
 </template>
 
 <script>
   import * as Http from "@/api/home";
+  import moment from "moment";
+  import ViewImg from './ViewImg'
   import * as userInfo from "@/utils/commonService/getUserInfo";
   let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
   export default {
+    components: {
+        ViewImg
+    },
     inject: ["reload"],
     data() {
       return {
@@ -47,7 +61,7 @@
           show: false,
           imgName: ""
         },
-        uploadUrl: window.scrmApi + '/manager_file_upload?token=' + user_info.token,
+        uploadUrl: window.scrmApi + '/manager_upload_img?token=' + user_info.token,
       };
     },
     created() {
@@ -55,7 +69,7 @@
     },
     methods: {
       handleAvatarSuccess(res, file) {
-        if (res.result == 'ok') {
+        if (res.ok) {
           this.$message.success("上传成功");
           this.reload();
         } else {
@@ -68,7 +82,7 @@
         let params = {
           page: this.page.current
         };
-        Http.getFileList(params)
+        Http.getImgList(params)
           .then(res => {
             this.loading = false;
             this.$handleResponse(res, res => {
@@ -83,8 +97,8 @@
       },
       downloadFn(data) {
         this.loading = true;
-        Http.downloadFile({
-            file_name: data.name
+        Http.getImg({
+            img: data.img
           })
           .then(res => {
             if (res.status === 200) {
@@ -92,7 +106,7 @@
               const blob = new Blob([res.data]);
               const a = document.createElement('a');
               a.href = window.URL.createObjectURL(blob);
-              a.download = `${data.name}`;
+              a.download = `${data.title}`;
               document.body.appendChild(a);
               a.click();
               document.body.removeChild(a);
@@ -117,7 +131,7 @@
       },
       doDelete(id) {
         this.loading = true;
-        Http.delFile({
+        Http.delImg({
             id: id
           })
           .then(res => {
@@ -139,6 +153,10 @@
       currentChange(val) {
         this.page.current = val;
         this.getListData();
+      },
+      viewFn(name) {
+        this.dialog.imgName = name;
+        this.dialog.show = true;
       }
     }
   };
