@@ -74,7 +74,6 @@ export function downloadFileDeal(item, url_attr='url', callback){ // 文件格�
     let url2 = this.getBase64Image(image); // 取不到宽
     setTimeout(() => {
       url2 = this.getBase64Image(image); // 重新取图片的宽度
-      debugger;
       this.downloadBase64Img(url2, fileName, ext);
     }, 500);
   } else {

@@ -4,7 +4,6 @@ import Router from 'vue-router'
 //引入子路由
 import Login from './login'
 import Home from './home'
-import MarketTools from './marketTools'
 import NotFound from '../pages/error/404'
 import Layout from '../pages/layout/Layout'
 
@@ -14,7 +13,7 @@ const ErrorPage = [{  path: '*', component: Layout, children: [{ path: '', compo
 
 let router = new Router({
   // mode: 'history',
-  routes: baseRouter.concat(Login, Home, MarketTools,ErrorPage)
+  routes: baseRouter.concat(Login, Home, ErrorPage)
 })
 
 router.beforeEach(function (to, from, next) {

@@ -43,10 +43,6 @@
           size: 10,
           total: 0
         },
-        dialog: {
-          show: false,
-          imgName: ""
-        },
         uploadUrl: window.scrmApi + '/manager_file_upload?token=' + user_info.token,
       };
     },
@@ -73,8 +69,7 @@
             this.loading = false;
             this.$handleResponse(res, res => {
               this.listData = res.data;
-
-              this.page.total = res.total_page;
+              this.page.total = res.total;
             });
           })
           .catch(err => {

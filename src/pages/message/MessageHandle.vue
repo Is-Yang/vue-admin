@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" :visible.sync="dialogShow"  width="520px" :close-on-click-modal="false" :before-close="handleClose">
+  <el-dialog :title="title" :visible.sync="dialogShow" width="520px" :close-on-click-modal="false" :before-close="handleClose">
     <el-form 
       :model="messageForm"
       :rules="rules"

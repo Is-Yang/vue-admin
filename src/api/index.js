@@ -1,9 +1,6 @@
 import * as home from './home'
 import * as login from './login'
-import * as marketTool from './marketTool'
-import * as marking from './marking'
-import * as setting from './setting'
-let apiObj={home,login,marketTool,marking,setting};
+let apiObj={home, login};
 const install = function (Vue) {
   if (install.installed) {
     return

@@ -6,7 +6,6 @@ import router from './router';
 import store from './store';
 import { handleResponse } from './utils/commonService/handleResponse';
 import ElementUI from 'element-ui';
-// import GeminiScrollbar from 'vue-gemini-scrollbar'
 import component from './components/index';
 import moment from 'moment';
 import api from './api/index';
@@ -30,7 +29,6 @@ import '../static/scripts/ueditor/third-party/zeroclipboard/ZeroClipboard.js'
 
 Vue.use(api)
 Vue.use(ElementUI);
-// Vue.use(GeminiScrollbar);
 Vue.filter('dateFilter', function (value, format = 'YYYY-MM-DD HH:mm:ss') {
   return moment(value).format(format)
 })

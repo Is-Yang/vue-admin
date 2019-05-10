@@ -1,20 +1,13 @@
 <template>
   <div>
     <div class="margin-bottom-20 text-right">
-      <el-upload
-        :action="uploadUrl"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess">
-        <el-button size="small" type="primary">上传图片</el-button>
-      </el-upload>
+        <el-button size="small" type="primary" @click="addPublicity">添加宣传图</el-button>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-      <el-table-column prop="title" label="标题"></el-table-column>
-      <el-table-column prop="img" label="图片"></el-table-column>
+      <el-table-column prop="title" label="宣传标题"></el-table-column>
+      <el-table-column prop="img" label="宣传图片"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-            <!-- <el-button size="mini" type="success" plain icon="el-icon-view" @click="viewFn(scope.row.name)" title="查看图片">
-            </el-button> -->
             <el-button size="mini" type="primary" plain icon="el-icon-download" @click="downloadFn(scope.row)" title="下载">
             </el-button>
             <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)" title="删除">
@@ -29,23 +22,22 @@
       layout="total, sizes, prev, pager, next, jumper"></el-pagination>
 
     <!-- 图片预览 -->
-    <view-img
+    <add-pictures
         v-if="dialog.show"
-        :imgName="dialog.imgName"
         @cancel="dialog.show = !dialog.show">
-    </view-img>
+    </add-pictures>
   </div>
 </template>
 
 <script>
   import * as Http from "@/api/home";
   import moment from "moment";
-  import ViewImg from './ViewImg'
+  import AddPictures from './AddPictures.vue'
   import * as userInfo from "@/utils/commonService/getUserInfo";
   let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
   export default {
     components: {
-        ViewImg
+        AddPictures
     },
     inject: ["reload"],
     data() {
@@ -60,22 +52,13 @@
         dialog: {
           show: false,
           imgName: ""
-        },
-        uploadUrl: window.scrmApi + '/manager_upload_img?token=' + user_info.token,
+        }
       };
     },
     created() {
       this.getListData();
     },
     methods: {
-      handleAvatarSuccess(res, file) {
-        if (res.ok) {
-          this.$message.success("上传成功");
-          this.reload();
-        } else {
-          this.$message.error("上传失败");
-        }
-      },
       getListData() {
         // 菜单列表数据
         this.loading = true;
@@ -88,7 +71,7 @@
             this.$handleResponse(res, res => {
               this.listData = res.data;
 
-              this.page.total = res.total_page;
+              this.page.total = res.total;
             });
           })
           .catch(err => {
@@ -103,13 +86,12 @@
           .then(res => {
             if (res.status === 200) {
               this.loading = false;
-              const blob = new Blob([res.data]);
-              const a = document.createElement('a');
-              a.href = window.URL.createObjectURL(blob);
-              a.download = `${data.title}`;
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
+              // const a = document.createElement('a');
+              // a.href = window.URL.createObjectURL(blob);
+              // a.download = `${data.img}`;
+              // document.body.appendChild(a);
+              // a.click();
+              // document.body.removeChild(a);
             } else {
               this.$message.error("请刷新页面重试！");
             }
@@ -154,8 +136,7 @@
         this.page.current = val;
         this.getListData();
       },
-      viewFn(name) {
-        this.dialog.imgName = name;
+      addPublicity() {
         this.dialog.show = true;
       }
     }

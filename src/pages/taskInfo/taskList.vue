@@ -16,15 +16,17 @@
       <el-table-column prop="risk_evaluate_emergency" label="应急处理"></el-table-column>
       <el-table-column prop="risk_level" label="风险等级"></el-table-column>
       <el-table-column prop="row" label="法规依据"></el-table-column>
-      <el-table-column label="操作" width="180px">
+      <el-table-column label="操作" width="250px">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row)"
             title="编辑"></el-button>
           <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
             title="删除"></el-button>
+          <el-button size="mini" type="primary" @click="dialogQCode(scope.row)">二维码</el-button>
         </template>
       </el-table-column>
     </el-table>
+
 
     <!-- 分页 -->
     <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.current"
@@ -40,19 +42,32 @@
       @success="dialogSuccess">
     </task-handle>
 
+    <el-dialog
+      title="二维码"
+      :visible.sync="dialogVisible"
+      width="400px">
+        <div class="text-center">
+          <vue-qr :text="qrVal"></vue-qr>
+        </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import * as Http from "@/api/home";
 import TaskHandle from './TaskHandle';
+import VueQr from 'vue-qr'
+
 export default {
   components: {
-    TaskHandle
+    TaskHandle,
+    VueQr
   },
   inject: ["reload"],
   data() {
     return {
+      dialogVisible: false,
       loading: false,
       listData: [],
       page: {
@@ -64,7 +79,8 @@ export default {
         show: false,
         type: "",
         taskParent: {}
-      }
+      },
+      qrVal: ''
     };
   },
   created() {
@@ -81,7 +97,7 @@ export default {
           this.loading = false;
           this.$handleResponse(res, res => {
             this.listData = res.data;
-            this.page.total = res.total_page;
+            this.page.total = res.total;
           });
         })
         .catch(err => {
@@ -145,6 +161,10 @@ export default {
       // 新增或修改成功后关闭窗口
       this.dialog.show = false;
       this.getListData();
+    },
+    dialogQCode(val) {
+      this.qrVal = String(val.task_desc_id);
+      this.dialogVisible = true;
     }
   }
 };

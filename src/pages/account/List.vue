@@ -63,7 +63,7 @@ export default {
           this.loading = false;
           this.$handleResponse(res, res => {
             this.listData = res.data;
-            this.page.total = res.total_page;
+            this.page.total = res.total;
           });
         })
         .catch(err => {

@@ -1,5 +1,5 @@
 export function handleResponse(res,callback, isHandleError = false){
-  let { error } = res.data ? res.data : {};
+  let { error, token } = res.data ? res.data : {};
   if (error){
     this.$message({
       showClose: true,
@@ -9,7 +9,13 @@ export function handleResponse(res,callback, isHandleError = false){
     if(typeof callback === 'function' && isHandleError){
       callback([]);
     }
-  }else {
+  } else if (token == 'expired') {
+    this.$message({
+      showClose: true,
+      message: '请退出后，刷新页面，重新登录',
+      type: 'error'
+    });
+  } else {
     if(typeof callback === 'function'){
       callback(res.data);
     }

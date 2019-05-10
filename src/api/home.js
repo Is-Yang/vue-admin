@@ -3,8 +3,7 @@ import * as userInfo from "@/utils/commonService/getUserInfo";
 
 let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
 
-// 统计-搜索选项
-export function getIndexOption(params) {
+export function getIndexPage(params) {
   return http.getAjax('/manager_first_page?token=' + user_info.token, params)
 }
 
@@ -98,6 +97,11 @@ export function getMessageList(params) {
   return http.getAjax('/manager_message_list?token=' + user_info.token, params)
 }
 
+// 删除应急消息
+export function delMessage(params) {
+  return http.postAjax('/manager_delete_message?token=' + user_info.token, params);
+}
+
 // 获取任务详细信息
 export function getTaskDesc(params) {
   return http.postAjax('/manager_get_task_desc?token=' + user_info.token, params)
@@ -152,7 +156,8 @@ export function getImgList(params) {
 
 // 上传图片
 export function uploadImg(params) {
-  return http.postAjax('/manager_upload_img', params)
+  console.log(params)
+  return http.postAjax('/manager_upload_img?token=' + user_info.token, params)
 }
 
 // 下载图片

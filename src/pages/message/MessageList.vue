@@ -66,7 +66,7 @@ export default {
           this.loading = false;
           this.$handleResponse(res, res => {
             this.listData = res.data;
-            this.page.total = res.total_page;
+            this.page.total = res.total;
           });
         })
         .catch(err => {
@@ -81,16 +81,16 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.doDelete(data.task_desc_id);
+          this.doDelete(data.message_id);
         })
         .catch(() => {});
     },
     doDelete(id) {
       this.loading = true;
       let params = {
-        task_desc_id: id
+        message_id: id
       };
-      Http.delTaskDesc(params)
+      Http.delMessage(params)
         .then(res => {
           this.$handleResponse(res, res => {
             this.$message.success("删除成功");
