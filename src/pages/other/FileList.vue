@@ -13,7 +13,7 @@
       <el-table-column prop="create_time" label="创建时间"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-            <el-button size="mini" type="primary" plain icon="el-icon-download" @click="downloadFn(scope.row)" title="下载">
+            <el-button size="mini" type="success" plain icon="el-icon-download" @click="downloadFn(scope.row)" title="下载">
             </el-button>
             <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)" title="删除">
             </el-button>
@@ -84,13 +84,18 @@
           .then(res => {
             if (res.status === 200) {
               this.loading = false;
-              const blob = new Blob([res.data]);
-              const a = document.createElement('a');
-              a.href = window.URL.createObjectURL(blob);
-              a.download = `${data.name}`;
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
+              // 创建隐藏的可下载链接
+              var eleLink = document.createElement('a');
+              eleLink.download = data.name;
+              eleLink.style.display = 'none';
+              // 字符内容转变成blob地址
+              var blob = new Blob([res.data]);
+              eleLink.href = URL.createObjectURL(blob);
+              // 触发点击
+              document.body.appendChild(eleLink);
+              eleLink.click();
+              // 然后移除
+              document.body.removeChild(eleLink);
             } else {
               this.$message.error("请刷新页面重试！");
             }

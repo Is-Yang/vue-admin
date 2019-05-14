@@ -162,10 +162,15 @@ export function uploadImg(params) {
 
 // 下载图片
 export function getImg(params) {
-  return http.getAjax('/manager_get_img?token=' + user_info.token, params);
+  return http.getAjax('/manager_get_img'+ params.img);
 }
 
 // 删除图片
 export function delImg(params) {
   return http.postAjax('/manager_img_delete?token=' + user_info.token, params)
+}
+
+// 更新图片标题
+export function updateManageImg(params) {
+  return http.postAjax('/manager_update_img_title?token=' + user_info.token, params)
 }

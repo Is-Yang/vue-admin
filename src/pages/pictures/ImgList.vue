@@ -1,14 +1,22 @@
 <template>
   <div>
     <div class="margin-bottom-20 text-right">
-        <el-button size="small" type="primary" @click="addPublicity">添加宣传图</el-button>
+        <el-button size="small" type="primary" @click="dialogShow('add', {})">添加宣传图</el-button>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column prop="title" label="宣传标题"></el-table-column>
-      <el-table-column prop="img" label="宣传图片"></el-table-column>
+      <el-table-column label="宣传图片">
+        <template slot-scope="scope">
+            <div style="width:60px; height:60px;">
+              <img :src="scope.row.img" />
+            </div>
+        </template>
+      </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-            <el-button size="mini" type="primary" plain icon="el-icon-download" @click="downloadFn(scope.row)" title="下载">
+            <el-button size="mini" type="success" plain icon="el-icon-download" @click="downloadFn(scope.row)" title="下载">
+            </el-button>
+            <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row)" title="编辑">
             </el-button>
             <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)" title="删除">
             </el-button>
@@ -22,22 +30,25 @@
       layout="total, sizes, prev, pager, next, jumper"></el-pagination>
 
     <!-- 图片预览 -->
-    <add-pictures
+    <pictures-handle
         v-if="dialog.show"
-        @cancel="dialog.show = !dialog.show">
-    </add-pictures>
+        :type="dialog.type"
+        :imgParent="dialog.imgParent"
+        @cancel="dialog.show = !dialog.show"
+        @success="dialogSuccess">
+    </pictures-handle>
   </div>
 </template>
 
 <script>
   import * as Http from "@/api/home";
   import moment from "moment";
-  import AddPictures from './AddPictures.vue'
+  import PicturesHandle from './PicturesHandle';
   import * as userInfo from "@/utils/commonService/getUserInfo";
   let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
   export default {
     components: {
-        AddPictures
+        PicturesHandle
     },
     inject: ["reload"],
     data() {
@@ -51,7 +62,8 @@
         },
         dialog: {
           show: false,
-          imgName: ""
+          type: "",
+          imgParent: {}
         }
       };
     },
@@ -59,6 +71,17 @@
       this.getListData();
     },
     methods: {
+      dialogSuccess() {
+        // 新增或修改成功后关闭窗口
+        this.dialog.show = false;
+        this.getListData();
+      },
+      // 新增，编辑弹窗显示
+      dialogShow(type, initData){ 
+        this.dialog.type = type;
+        this.dialog.imgParent = initData;
+        this.dialog.show = true;
+      },
       getListData() {
         // 菜单列表数据
         this.loading = true;
@@ -78,20 +101,31 @@
             this.loading = false;
           });
       },
+      updateFn(data) {
+        
+      },
       downloadFn(data) {
         this.loading = true;
+        let img = data.img ? data.img.substring(data.img.lastIndexOf('/')) : '';
+        let ext = data.img.substring(data.img.lastIndexOf(".") + 1);
         Http.getImg({
-            img: data.img
+            img: img
           })
           .then(res => {
             if (res.status === 200) {
               this.loading = false;
-              // const a = document.createElement('a');
-              // a.href = window.URL.createObjectURL(blob);
-              // a.download = `${data.img}`;
-              // document.body.appendChild(a);
-              // a.click();
-              // document.body.removeChild(a);
+              // 创建隐藏的可下载链接
+              var eleLink = document.createElement('a');
+              eleLink.download = data.title + '.' + ext;
+              eleLink.style.display = 'none';
+              // 字符内容转变成blob地址
+              var blob = new Blob([res.data]);
+              eleLink.href = URL.createObjectURL(blob);
+              // 触发点击
+              document.body.appendChild(eleLink);
+              eleLink.click();
+              // 然后移除
+              document.body.removeChild(eleLink);
             } else {
               this.$message.error("请刷新页面重试！");
             }
@@ -135,11 +169,15 @@
       currentChange(val) {
         this.page.current = val;
         this.getListData();
-      },
-      addPublicity() {
-        this.dialog.show = true;
       }
     }
   };
 
 </script>
+
+<style lang="scss" scoped>
+  img {
+    width: 100%;
+    height: 100%;
+  }
+</style>
