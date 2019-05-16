@@ -67,9 +67,9 @@ export default {
       Http.getIndexPage().then(res => {
           this.loading = false;
           this.$handleResponse(res, res => {
-              this.dataCount = res.data;
-              this.check.has_check = res.data.has_check;
-              this.check.un_check = res.data.un_check;
+                this.dataCount = res.data;
+                this.check.has_check = res.data.has_check;
+                this.check.un_check = res.data.un_check;
           })
       }).catch(err => {
           this.loading = false;
@@ -151,10 +151,15 @@ export default {
                 }
                 &:nth-child(5) {
                     .el-card {
-                        background-image: linear-gradient(to bottom, #4fc08d, #85d6b1);
+                        background-image: linear-gradient(to bottom, #4fc08d, #63e8ac);
                     }
                 }
                 &:nth-child(6) {
+                    .el-card {
+                        background-image: linear-gradient(to bottom, #4fc08d, #63e8ac);
+                    }
+                }
+                &:nth-child(7) {
                     .el-card {
                         background-image: linear-gradient(to bottom, #697179, #98A6B5);
                     }

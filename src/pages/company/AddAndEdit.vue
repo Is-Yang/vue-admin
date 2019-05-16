@@ -53,6 +53,10 @@
             {
                 label: '工贸行业',
                 value: 3,
+            },
+            {
+                label: '其他',
+                value: 4,
             }
         ],
         rules: {

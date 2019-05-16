@@ -5,7 +5,7 @@
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column prop="company_name" label="公司名字"></el-table-column>
-      <el-table-column prop="company_type" label="公司类型"></el-table-column>
+      <el-table-column prop="company_type_text" label="公司类型"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row)"
