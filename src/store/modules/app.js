@@ -5,7 +5,7 @@ const app = {
       opened: !+localStorage.getItem('sidebarStatus'), // 是否打开侧边栏
       show: '', // 是否显示侧边栏
     },
-    org: '',  // 组织信息,
+    userInfo: '', // 用户信息
     showLoading: {
       full: {},  // 全局的loading
       local: false, // 局部 main组件的loading
@@ -20,8 +20,8 @@ const app = {
       }
       state.sidebar.opened = !state.sidebar.opened;
     },
-    GET_ORG: (state, data) => {
-      state.sidebar.org = data;
+    SAVE_USER: (state, data) => {
+      state.userInfo = data;
     },
     SHOW_SIDEBAR: (state, data) => {
       state.sidebar.show = data;
@@ -55,8 +55,8 @@ const app = {
     ToggleSideBar: ({ commit }) => {
       commit('TOGGLE_SIDEBAR');
     },
-    GetOrg: ({ commit }, data) => {
-      commit('GET_ORG', data);
+    saveUser: ({ commit }, data) => {
+      commit('SAVE_USER', data);
     },
     ShowSidebar: ({ commit }, data) => {
       commit('SHOW_SIDEBAR', data);

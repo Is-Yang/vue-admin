@@ -43,7 +43,8 @@
     },
     methods: {
       initData(){
-        localStorage.removeItem('userInfo');
+         localStorage.removeItem('userInfo');
+        this.$store.dispatch('saveUser', '');
         if (localStorage.getItem('RememberMe')) {
           this.rememberme = true;
           const user = JSON.parse(localStorage.getItem('RememberMe'));
@@ -75,8 +76,14 @@
           this.loading = false;
           this.$handleResponse(res, res=>{
             let { token } = res;
-            localStorage.setItem('userInfo', JSON.stringify({token: token, userName: user_name}));
-            this.$router.push({path: '/index'});
+            let setData = {token: token, userName: user_name}
+            localStorage.setItem('userInfo', JSON.stringify(setData));
+            this.$store.dispatch('saveUser', setData);
+            if (user_name == 'zhangwuji') {
+              this.$router.push({path: '/index'});
+            } else {
+              this.$router.push({path: '/company'});
+            }
           });
         }).catch(res => {
           this.loading = false;

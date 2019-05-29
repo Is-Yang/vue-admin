@@ -117,21 +117,9 @@
       },
       doLogout() { // 执行退出操作
         localStorage.removeItem('userInfo'); // 清除用户信息
+        this.$store.dispatch('saveUser', '');
         this.$router.push('/login');
-
-        // this.loading = true;
-        // Http.logout().then(res => {
-        //   this.loading = false;
-        //   this.$handleResponse(res, res => {
-        //     if (res) {
-        //       localStorage.removeItem('userInfo'); // 清除用户信息
-        //       sessionStorage.removeItem('visited'); // 清除拜访过的菜单
-        //       this.$router.push('/login');
-        //     }
-        //   });
-        // }).catch(res => {
-        //   this.loading = false;
-        // })
+        window.location.reload();
       },
       handleSelect(key, keyPath) {  // 当前选中高亮
         this.path = key;
@@ -151,17 +139,6 @@
             if (key == ('/' + this.menus[i].url)) {
               let child = this.menus[i].child && this.menus[i].child.length ? this.menus[i].child : []
               this.$eventHub.$emit('getNav', child, true);
-              // if(!child || !child.length){  // 接收的地方使用判断，由于index首页触发也需要，所以写在接收出判断
-              //   this.$store.dispatch('ShowSidebar', false);
-              //   // this.$store.dispatch('ToggleSideBar')
-              // }else{
-              //   this.$store.dispatch('ShowSidebar', true);
-              // }
-              /* if(child && child.length){
-                this.$eventHub.$emit('getNav', child)
-              }else{
-                this.$router.push(key);
-              } */
               return;
             }
           }
@@ -184,7 +161,6 @@
             }
           }
         } else {
-          this.$router.push("/xg/basic/all");
           this.$eventHub.$emit('getNav', []);
         }
       },

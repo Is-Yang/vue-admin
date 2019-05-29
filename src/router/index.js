@@ -25,13 +25,7 @@ router.beforeEach(function (to, from, next) {
     return;
   }
   if (login) { // 判断是否登录，防止未登录时浏览器后退回到上一个页面
-    if (path === '/') {
-      next({
-        path: '/index'
-      })
-    } else {
       next()
-    }
   } else {
     next({
       path: '/login'

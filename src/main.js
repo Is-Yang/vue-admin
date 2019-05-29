@@ -16,17 +16,6 @@ import './assets/css/element-reset.scss';
 import './assets/fontIcon/iconfont.css'; // 自定义图标
 
 
-// 引入Ueidtor
-import '../static/scripts/cropper/cropper.css'; // 裁剪功能
-import '../static/scripts/ueditor/themes/default/css/ueditor.css'; // 编辑器的样式
-
-import '../static/scripts/ueditor/ueditor.config';
-import '../static/scripts/ueditor/ueditor.all';
-import '../static/scripts/ueditor/lang/zh-cn/zh-cn';
-import '../static/scripts/ueditor/third-party/codemirror/codemirror.js'
-import '../static/scripts/ueditor/third-party/zeroclipboard/ZeroClipboard.js'
-
-
 Vue.use(api)
 Vue.use(ElementUI);
 Vue.filter('dateFilter', function (value, format = 'YYYY-MM-DD HH:mm:ss') {
@@ -42,6 +31,21 @@ Object.keys(component).forEach(key => {
   var name = key.replace(/(\w)/, (v) => v.toUpperCase()); // 首字母大写
   Vue.component(`${name}`, component[key]);
 });
+
+router.beforeResolve((to, from, next) => { // 全局路由钩子
+  if (to.path == '/login') {
+    localStorage.removeItem('userInfo');
+    store.dispatch('saveUser', '');
+  } else {
+    let userInfo = store.getters.userInfo;
+    if (!userInfo.token){
+      let user_info = localStorage.getItem('userInfo');
+       user_info = JSON.parse(user_info);
+       store.dispatch('saveUser', user_info)
+    }
+  }
+  next()
+})
 
 new Vue({
   el: '#app',

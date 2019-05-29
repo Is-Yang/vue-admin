@@ -64,7 +64,9 @@
                     type: 'warning'
                 }).then(() => {
                     localStorage.removeItem('userInfo'); // 清除用户信息
+                    this.$store.dispatch('saveUser', '');
                     this.$router.push('/login');
+                    window.location.reload();
                 }).catch(() => {
 
                 });
