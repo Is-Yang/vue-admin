@@ -2,7 +2,7 @@
   <div class="home-index">
     <div class="card-num">
       <el-row :gutter="15">
-        <el-col :span="8" class="flow-item" v-for="(item, key, index) in dataCount" :key="index" v-if="item.company_type_name">
+        <el-col :span="8" class="flow-item" v-for="(item, key, index) in dataCount.riskInfo" :key="index">
           <el-card shadow="never">
             <h3>{{item.company_type_name}}</h3>
             <div class="info">
@@ -25,22 +25,22 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="8" class="flow-item" v-if="check.has_check">
+        <el-col :span="8" class="flow-item">
            <router-link :to="{path: '/monitoring/have'}">
             <el-card shadow="never">
               <h3>已监控</h3>
               <div class="info">
-                  <span>{{check.has_check}}</span>
+                  <span>{{dataCount.has_check}}</span>
               </div>
             </el-card>
            </router-link>
         </el-col>
-        <el-col :span="8" class="flow-item" v-if="check.un_check">
+        <el-col :span="8" class="flow-item">
           <router-link :to="{path: '/monitoring/not'}">
           <el-card shadow="never">
               <h3>未监控</h3>
               <div class="info">
-                  <span>{{check.un_check}}</span>
+                  <span>{{dataCount.un_check}}</span>
               </div>
             </el-card>
           </router-link>
@@ -55,8 +55,7 @@ import * as Http from '@/api/home'
 export default {
   data () {
     return {
-      dataCount: {},
-      check: {}
+      dataCount: {}
     }
   },
   created () {
@@ -68,8 +67,6 @@ export default {
           this.loading = false;
           this.$handleResponse(res, res => {
                 this.dataCount = res.data;
-                this.check.has_check = res.data.has_check;
-                this.check.un_check = res.data.un_check;
           })
       }).catch(err => {
           this.loading = false;

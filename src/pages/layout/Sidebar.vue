@@ -6,17 +6,17 @@
       @open="handleOpen"
       @close="handleClose" 
       :collapse="!sidebar.opened">
-      <el-menu-item index="/index" v-if="level == 2">
+      <el-menu-item index="/index" v-if="level == 1">
         <i class="fa fa-home"></i> 
         <span slot="title">首页</span>
       </el-menu-item>
 
-      <el-menu-item index="/company" v-if="level == 1">
+      <el-menu-item index="/company" v-if="level == 2">
         <i class="fa fa-building"></i> 
         <span slot="title">公司列表</span>
       </el-menu-item>
 
-      <el-menu-item index="/account" v-if="level == 1">
+      <el-menu-item index="/account" v-if="level == 2">
         <i class="fa fa-users"></i> 
         <span slot="title">用户列表</span>
       </el-menu-item>
@@ -34,22 +34,22 @@
         </el-menu-item>
       </el-submenu>
 
-      <el-menu-item index="/message" v-if="level == 1">
+      <el-menu-item index="/message" v-if="level == 2">
         <i class="fa fa-thumbtack"></i> 
         <span slot="title">应急消息列表</span>
       </el-menu-item>
 
-      <el-menu-item index="/tasks" v-if="level == 1">
+      <el-menu-item index="/tasks" v-if="level == 2">
         <i class="fa fa-tasks"></i> 
         <span slot="title">任务信息</span>
       </el-menu-item>
 
-      <el-menu-item index="/pictures" v-if="level == 1">
+      <el-menu-item index="/pictures" v-if="level == 2">
         <i class="fa el-icon-picture"></i> 
         <span slot="title">宣传图片</span>
       </el-menu-item>
 
-      <el-menu-item index="/other" v-if="level == 1">
+      <el-menu-item index="/other" v-if="level == 2">
         <i class="fa el-icon-info"></i> 
         <span slot="title">其他资料列表</span>
       </el-menu-item>
@@ -84,8 +84,8 @@
     },
     created () {
       let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
-      if (user_info && user_info.userName) {
-        this.level = user_info.userName == 'zhangsanfen' ? 1 : user_info.userName == 'zhangwuji' ? 2 : 0
+      if (user_info && user_info.propity) {
+        this.level = user_info.propity;
       }
     },
     methods: {

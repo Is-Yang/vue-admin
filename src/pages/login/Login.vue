@@ -75,11 +75,11 @@
         Http.login(params).then(res => {
           this.loading = false;
           this.$handleResponse(res, res=>{
-            let { token } = res;
-            let setData = {token: token, userName: user_name}
+            let { token, propity } = res;
+            let setData = {token: token, userName: user_name, propity: propity}
             localStorage.setItem('userInfo', JSON.stringify(setData));
             this.$store.dispatch('saveUser', setData);
-            if (user_name == 'zhangwuji') {
+            if (propity == 1) {
               this.$router.push({path: '/index'});
             } else {
               this.$router.push({path: '/company'});
