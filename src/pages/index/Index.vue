@@ -6,19 +6,19 @@
           <el-card shadow="never">
             <h3>{{item.company_type_name}}</h3>
             <div class="info">
-                <div>
+                <div @click="showCompanySelect(item.company_type, 3)">
                     严重风险
                     <div>{{item.risk_serious}}</div>
                 </div>
-                <div>
+                <div @click="showCompanySelect(item.company_type, 2)">
                     高风险
                     <div>{{item.risk_high}}</div>
                 </div>
-                <div>
+                <div @click="showCompanySelect(item.company_type, 1)">
                     一般风险
                     <div>{{item.risk_normal}}</div>
                 </div>
-                <div>
+                <div @click="showCompanySelect(item.company_type, 0)">
                     低风险
                     <div>{{item.risk_low}}</div>
                 </div>
@@ -47,6 +47,16 @@
         </el-col>
       </el-row>
     </div>
+
+    <el-dialog
+        title="请选择公司"
+        :visible.sync="dialogVisible"
+        width="30%">
+            <el-select v-model="companyId" placeholder="请选择公司" size="medium" style="width: 100%;" @change="selectCompany">
+                <el-option v-for="item in typeList" :key="item.company_id" :label="item.company_name" :value="item.company_id">
+                </el-option>
+            </el-select>
+    </el-dialog>
   </div>
 </template>
 
@@ -55,13 +65,43 @@ import * as Http from '@/api/home'
 export default {
   data () {
     return {
-      dataCount: {}
+      dataCount: {},
+      dialogVisible: false,
+      typeList: [],
+      companyId: ''
     }
   },
   created () {
     this.init();
   },
   methods: {
+    selectCompany() {
+        if(this.companyId) {
+            this.$router.push({
+                path: "monitoring/not",
+                query: {
+                    company_id: this.companyId
+                }
+            });
+        }
+    },
+    showCompanySelect(type, level) {
+        let params = {
+            risk_level: level,
+            type: type
+        }
+        Http.companyByType(params).then(res => {
+            this.$handleResponse(res, res => {
+                if (res.data) {
+                    this.typeList = res.data;
+                    this.dialogVisible = true;
+                }
+            })
+      }).catch(err => {
+          this.loading = false;
+          console.log(err)
+      });
+    }, 
     init() {
       Http.getIndexPage().then(res => {
           this.loading = false;
@@ -114,9 +154,15 @@ export default {
                         }
                         &>div{
                             width: 50%;
-                            margin: 10px 0;
+                            padding: 10px 0;
                             font-size: 13px;
                             text-align: center;
+                            cursor: pointer;
+                            transition: all .3s linear;
+                            
+                            &:hover {
+                                padding: 0 0 20px 0;
+                            }
                             &>div{
                                 margin-top: 8px;
                                 font-size: 28px;

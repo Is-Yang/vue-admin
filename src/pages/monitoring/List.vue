@@ -1,11 +1,20 @@
 <template>
   <div>
+    <div v-if="companyInfo && companyInfo.company_name">
+      <el-alert style="margin-bottom: 20px;"
+        title=""
+        type="warning">
+        <p>{{companyInfo.company_name}}&nbsp;&nbsp;
+          <span v-if="companyInfo.company_type_text">({{companyInfo.company_type_text}})</span>
+        </p>
+      </el-alert>
+    </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
       <el-table-column prop="position_sname" label="大分类"></el-table-column>
       <el-table-column prop="position_detail_name" label="小分类"></el-table-column>
       <el-table-column prop="task_name" label="分类名称"></el-table-column>
-      <el-table-column prop="task_status" label="任务状态"></el-table-column>
-      <el-table-column prop="task_risk_level" label="隐患等级"></el-table-column>
+      <el-table-column prop="task_status_text" label="任务状态"></el-table-column>
+      <el-table-column prop="task_risk_level_text" label="隐患等级"></el-table-column>
       <el-table-column prop="create_time" label="创建时间"></el-table-column>
     </el-table>
 
@@ -40,7 +49,9 @@ export default {
         show: false,
         type: "",
         taskId: 0
-      }
+      },
+      companyId: '',
+      companyInfo: {}
     };
   },
   created() {
@@ -50,6 +61,9 @@ export default {
         this.tableType = 1;
     } else if (route.path === '/monitoring/not') {
         this.tableType = 2;
+        if (route.query && route.query.company_id) {
+          this.companyId = route.query.company_id;
+        }
     } 
 
     this.getListData();
@@ -61,18 +75,26 @@ export default {
       let params = {
         page: this.page.current
       };
-      let queryDataName = this.tableType === 1 ? 'getCheckList': 'getUCheckList';
-      Http[queryDataName](params)
-        .then(res => {
-          this.loading = false;
-          this.$handleResponse(res, res => {
-            this.listData = res.data;
-            this.page.total = res.total;
+      let queryDataName = this.tableType === 1 ? 'getCheckList': 
+                          this.tableType === 2 && !this.companyId ? 'getUCheckList' : 
+                          this.tableType === 2 && this.companyId ? 'companyUncheck' : '';
+      this.companyId ? params.company_id = this.companyId : params
+      if (queryDataName) {
+        Http[queryDataName](params)
+          .then(res => {
+            this.loading = false;
+            this.$handleResponse(res, res => {
+              this.listData = res.data;
+              this.page.total = res.total;
+              if (res.company) {
+                this.companyInfo = res.company;
+              }
+            });
+          })
+          .catch(err => {
+            this.loading = false;
           });
-        })
-        .catch(err => {
-          this.loading = false;
-        });
+      }
     },
     onSearch() {
       // 搜索
