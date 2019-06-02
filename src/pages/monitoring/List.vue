@@ -3,10 +3,11 @@
     <div v-if="companyInfo && companyInfo.company_name">
       <el-alert style="margin-bottom: 20px;"
         title=""
+        :closable="false"
         type="warning">
-        <p>{{companyInfo.company_name}}&nbsp;&nbsp;
+        <h3>{{companyInfo.company_name}}&nbsp;&nbsp;
           <span v-if="companyInfo.company_type_text">({{companyInfo.company_type_text}})</span>
-        </p>
+        </h3>
       </el-alert>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
@@ -16,6 +17,12 @@
       <el-table-column prop="task_status_text" label="任务状态"></el-table-column>
       <el-table-column prop="task_risk_level_text" label="隐患等级"></el-table-column>
       <el-table-column prop="create_time" label="创建时间"></el-table-column>
+      <el-table-column label="操作" width="80px">
+        <template slot-scope="scope">
+            <el-button size="mini" type="primary" plain icon="el-icon-view" @click="viewDetails(scope.row)" title="查看任务详情">
+            </el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <!-- 分页 -->
@@ -95,6 +102,14 @@ export default {
             this.loading = false;
           });
       }
+    },
+    viewDetails(data){
+      this.$router.push({
+        path: "details",
+        query: {
+          taskId: data.task_id
+        }
+      });
     },
     onSearch() {
       // 搜索
