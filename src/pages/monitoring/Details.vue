@@ -12,19 +12,19 @@
                 <p>应对分类： {{descData.risk_type}}</p>
       </el-alert>
 
-        <!-- <el-row  type="flex" :gutter="15">
+        <el-row  type="flex" :gutter="15">
             <el-col>
                 <div class="info-wrap">
                     <h3>上报隐患</h3>
                     <div>上报人：<span>{{infoData.name}}</span></div>
-                    <div>台账：<span>{{infoData}}</span></div>
-                    <div>照片：<img :src="infoData" /></div>
+                    <div>台账：<span>{{infoData.task_complete_input}}</span></div>
+                    <div>照片：<img :src="infoData.task_complete_img" /></div>
                 </div>
             </el-col>
              <el-col>
                 <div class="info-wrap">
                     <h3>隐患处理</h3>
-                    <div>隐患等级：<span>{{configData}}</span></div>
+                    <div>隐患等级：<span>{{configData.task_risk_level}}</span></div>
                     <div>整改人：<span>{{configData}}</span></div>
                     <div>整改期限：<span>{{configData.eliminate_risk_time}}</span></div>
                     <div>整改资金：<span>{{configData.eliminate_risk_money}}</span></div>
@@ -35,11 +35,11 @@
                 <div class="info-wrap">
                     <h3>整改隐患</h3>
                     <div>上报人：<span>{{submitData}}</span></div>
-                    <div>台账：<span>{{submitData}}</span></div>
-                    <div>照片：<img :src="submitData" /></div>
+                    <div>台账：<span>{{submitData.task_input_forsure}}</span></div>
+                    <div>照片：<img :src="submitData.task_complete_img" /></div>
                 </div>
             </el-col>
-        </el-row> -->
+        </el-row>
     </div>
 </template>
 
@@ -127,7 +127,7 @@ export default {
             Http.getCheckSubmit(params).then(res => {
                 this.loading = false;
                 this.$handleResponse(res, res => {
-                    this.submitData = res.data;
+                    this.submitData = res;
                 });
             }).catch(err => {
                 this.loading = false;
