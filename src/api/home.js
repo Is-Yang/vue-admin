@@ -106,7 +106,7 @@ export function delMessage(params) {
 
 // 获取任务详细信息
 export function getTaskDesc(params) {
-    return http.postAjax('/manager_get_task_desc?token=' + token, params)
+    return http.getAjax('/manager_get_task_desc?token=' + token, params)
 }
 
 // 任务详细解释添加
