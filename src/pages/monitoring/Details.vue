@@ -17,16 +17,19 @@
                 <div class="info-wrap">
                     <h3>上报隐患</h3>
                     <div>上报人：<span>{{infoData.name}}</span></div>
-                    <div>台账：<span>{{infoData.task_complete_input}}</span></div>
-                    <div>照片：<img :src="infoData.task_complete_img" /></div>
+                    <div>台&nbsp;&nbsp;&nbsp;账：<span>{{infoData.task_complete_input}}</span></div>
+                    <div>照&nbsp;&nbsp;&nbsp;片：<img :src="infoData.task_complete_img" /></div>
                 </div>
             </el-col>
              <el-col>
                 <div class="info-wrap">
                     <h3>隐患处理</h3>
-                    <div>隐患等级：<span>{{configData.task_risk_level}}</span></div>
-                    <div>整改人：<span>{{configData}}</span></div>
-                    <div>整改期限：<span>{{configData.eliminate_risk_time}}</span></div>
+                    <div>隐患等级：<span>{{configData.task_risk_level == 0 ? '低风险' : 
+                        configData.task_risk_level == 1 ? '一般风险' : 
+                        configData.task_risk_level == 2 ? '高风险' : 
+                        configData.task_risk_level == 3 ? '严重风险' : ''}}</span></div>
+                    <div>整&nbsp;改&nbsp;人：<span>{{configData.eliminate_risk_name}}</span></div>
+                    <div>整改期限：<span>{{configData.eliminate_risk_time_text}}</span></div>
                     <div>整改资金：<span>{{configData.eliminate_risk_money}}</span></div>
                     <div>整改措施：<span>{{configData.eliminate_risk_desc}}</span></div>
                 </div>
@@ -34,9 +37,9 @@
              <el-col>
                 <div class="info-wrap">
                     <h3>整改隐患</h3>
-                    <div>上报人：<span>{{submitData}}</span></div>
-                    <div>台账：<span>{{submitData.task_input_forsure}}</span></div>
-                    <div>照片：<img :src="submitData.task_complete_img" /></div>
+                    <div>上报人：<span>{{submitData.eliminate_risk_name}}</span></div>
+                    <div>台&nbsp;&nbsp;&nbsp;账：<span>{{submitData.task_input_forsure}}</span></div>
+                    <div>照&nbsp;&nbsp;&nbsp;片：<img :src="submitData.task_complete_img" /></div>
                 </div>
             </el-col>
         </el-row>
@@ -139,18 +142,21 @@ export default {
 
 <style lang="scss">
     .details-wrapper {
-        .el-alert__description {
+        .el-alert__description,.el-alert__content {
             p {
                 font-size: 14px;
                 margin: 5px 0;
             }
         }
         .info-wrap {
-            margin: 20px 0;
+            margin: 25px 0;
             padding: 10px 12px;
             border: 1px solid #eee;
+            &>h3{
+                margin-bottom: 10px;
+            }
             &>div {
-                margin: 5px 0;
+                margin: 6px 0;
                 img {
                     width: 80px;
                     height: 80px;
