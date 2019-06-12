@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/': {
-        target: 'http://47.94.255.163:8080', 
+        target: 'http://wapi.yifeng2016.com', 
         changeOrigin: true
       }
     },

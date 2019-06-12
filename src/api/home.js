@@ -205,3 +205,23 @@ export function getCheckConfig(params) {
 export function getCheckSubmit(params) {
     return http.getAjax('/manager_check_submit?token=' + token, params);
 }
+
+// 大分类位置数据
+export function getPositionList(params) {
+    return http.getAjax('/manager_position_list?token=' + token, params);
+}
+
+// 小分类位置数据
+export function getPositionDetailList(params) {
+    return http.getAjax('/manager_position_detail_list?token=' + token, params);
+}
+
+// 大分类数据删除
+export function delPosition(params) {
+    return http.postAjax('/manager_position_delete?token=' + token, params)
+}
+
+// 小分类数据删除
+export function delPositionDetail(params) {
+    return http.postAjax('/manager_position_detail_delete?token=' + token, params)
+}

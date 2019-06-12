@@ -24,6 +24,9 @@ import {
 import {
     MessageList
 } from '../pages/message'
+import {
+    ClassifyList
+} from '../pages/classify'
 
 /**
  * name: 标题
@@ -87,4 +90,19 @@ export default [{
             name: '任务详情'
         }
     ]
-}]
+}, {
+    path: '/classify',
+    component: Layout,
+    children: [{
+            path: 'big',
+            component: ClassifyList,
+            name: '大分类列表',
+        },
+        {
+            path: 'small',
+            component: ClassifyList,
+            name: '小分类列表'
+        }
+    ]
+}
+]

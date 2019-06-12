@@ -21,6 +21,19 @@
         <span slot="title">用户列表</span>
       </el-menu-item>
 
+      <el-submenu index="/classify" v-if="level == 2">
+        <template slot="title">
+          <i class="fa fa-tasks"></i> 
+          <span slot="title">分类列表</span>
+        </template>
+        <el-menu-item index="/classify/big">
+          <span slot="title">大分类</span>
+        </el-menu-item>
+        <el-menu-item index="/classify/small">
+          <span slot="title">小分类</span>
+        </el-menu-item>
+      </el-submenu>
+
       <el-submenu index="/monitoring" v-if="level == 1 || level == 2">
         <template slot="title">
           <i class="fa fa-cogs"></i> 
@@ -53,6 +66,7 @@
         <i class="fa el-icon-info"></i> 
         <span slot="title">其他资料列表</span>
       </el-menu-item>
+      
     </el-menu>
     
   </div>
