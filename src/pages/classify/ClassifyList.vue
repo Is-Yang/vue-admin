@@ -1,9 +1,15 @@
 <template>
   <div>
+    <div class="margin-bottom-20 text-right">
+      <el-button v-if="tableType === 1" type="primary" size="small" @click="dialogShow('add', {}, 'big')">创建大分类</el-button>
+      <el-button v-if="tableType === 2" type="primary" size="small" @click="dialogShow('add', {}, 'small')">创建小分类</el-button>
+    </div>
     <el-table v-if="tableType === 1" v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
       <el-table-column prop="position_name" label="标题"></el-table-column>
-      <el-table-column label="操作" width="120px">
+      <el-table-column label="操作" width="180px">
         <template slot-scope="scope">
+          <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row, 'big')"
+            title="编辑"></el-button>
           <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row.position_id, 'position_id')"
             title="删除"></el-button>
         </template>
@@ -13,22 +19,34 @@
     <el-table v-if="tableType === 2" v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
       <el-table-column prop="position_detail_name" label="长标题"></el-table-column>
       <el-table-column prop="position_detail_sname" label="短标题"></el-table-column>
-      <el-table-column label="操作" width="120px">
+      <el-table-column label="操作" width="180px">
         <template slot-scope="scope">
-          <!-- <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row)"
-            title="编辑"></el-button> -->
+          <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row, 'small')"
+            title="编辑"></el-button>
           <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row.position_detail_id, 'position_detail_id')"
             title="删除"></el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <!-- 新增与编辑 -->
+    <classify-handle
+      v-if="dialog.show"
+      :type="dialog.type"
+      :position="dialog.position"
+      :classParent="dialog.classParent"
+      @cancel="dialog.show = !dialog.show"
+      @success="dialogSuccess">
+    </classify-handle>
   </div>
 </template>
 
 <script>
 import * as Http from "@/api/home";
+import ClassifyHandle from './ClassifyHandle';
 export default {
   components: {
+    ClassifyHandle
   },
   inject: ["reload"],
   data() {
@@ -39,7 +57,8 @@ export default {
       dialog: {
         show: false,
         type: "",
-        taskId: 0
+        classParent: {},
+        position: ''
       },
     };
   },
@@ -75,10 +94,10 @@ export default {
           });
       }
     },
-    dialogShow(type, id) {
-      // 新增，编辑菜单弹窗显示
+    dialogShow(type, initData, position) {
       this.dialog.type = type;
-      this.dialog.taskId = id;
+      this.dialog.classParent = initData;
+      this.dialog.position = position;
       this.dialog.show = true;
     },
     deleteFn(id, type) {
@@ -127,4 +146,5 @@ export default {
   }
 };
 </script>
+
 

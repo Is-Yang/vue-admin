@@ -122,7 +122,6 @@ export default {
       this.getListData();
     },
     dialogShow(type, id) {
-      // 新增，编辑菜单弹窗显示
       this.dialog.type = type;
       this.dialog.taskId = id;
       this.dialog.show = true;

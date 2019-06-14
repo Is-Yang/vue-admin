@@ -225,3 +225,23 @@ export function delPosition(params) {
 export function delPositionDetail(params) {
     return http.postAjax('/manager_position_detail_delete?token=' + token, params)
 }
+
+// 大分类数据添加
+export function addPosition(params) {
+    return http.postAjax('/manager_position_add?token=' + token, params)
+}
+
+// 小分类数据添加
+export function addPositionDetail(params) {
+    return http.postAjax('/manager_position_detail_add?token=' + token, params)
+}
+
+// 大分类数据更新
+export function uploadPosition(params) {
+    return http.postAjax('/manager_position_update?token=' + token, params)
+}
+
+// 小分类数据更新
+export function uploadPositionDetail(params) {
+    return http.postAjax('/manager_position_detail_update?token=' + token, params)
+}
