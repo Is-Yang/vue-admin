@@ -7,7 +7,7 @@
       <el-table-column prop="message_from" label="消息发送者"></el-table-column>
       <el-table-column prop="message_title" label="消息标题"></el-table-column>
       <el-table-column prop="message_content" label="消息内容"></el-table-column>
-      <el-table-column prop="create_time" label="发送时间"></el-table-column>
+      <el-table-column prop="create_time_text" label="发送时间"></el-table-column>
       <el-table-column label="操作" width="120px">
         <template slot-scope="scope">
           <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"

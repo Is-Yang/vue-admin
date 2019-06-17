@@ -16,7 +16,7 @@
       <el-table-column prop="task_name" label="分类名称"></el-table-column>
       <el-table-column prop="task_status_text" label="任务状态"></el-table-column>
       <el-table-column prop="task_risk_level_text" label="隐患等级"></el-table-column>
-      <el-table-column prop="create_time" label="创建时间"></el-table-column>
+      <el-table-column prop="create_time_text" label="创建时间"></el-table-column>
       <el-table-column label="操作" width="80px">
         <template slot-scope="scope">
             <el-button size="mini" type="primary" plain icon="el-icon-view" @click="viewDetails(scope.row)" title="查看任务详情">

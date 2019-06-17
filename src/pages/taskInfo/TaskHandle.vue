@@ -1,11 +1,57 @@
 <template>
-  <el-dialog :title="title" :visible.sync="dialogShow"  :close-on-click-modal="false" :before-close="handleClose">
+  <el-dialog :title="title" :visible.sync="dialogShow"  :close-on-click-modal="false"  width="1000px" :before-close="handleClose">
     <el-form 
       :model="taskForm"
       :rules="rules"
       ref="taskForm"
       @keyup.enter.native="onSubmit('taskForm')"
-      label-width="100px" class="taskForm">
+      label-width="110px" class="taskForm">
+      <el-form-item label="任务初始等级" prop="task_risk_init_level">
+        <el-input v-model="taskForm.task_risk_init_level"></el-input>
+      </el-form-item>
+      <el-form-item label="任务名称" prop="task_name">
+        <el-input v-model="taskForm.task_name"></el-input>
+      </el-form-item>
+      <el-form-item label="任务截止时间">
+        <el-date-picker
+          v-model="taskForm.task_deadline_text"
+          type="datetime"
+          placeholder="选择日期时间">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item label="大分类">
+        <el-select v-model="taskForm.position_id" placeholder="请选择">
+          <el-option v-for="item in positionList" 
+            :key="item.position_id" 
+            :label="item.position_name" 
+            :value="item.position_id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="小分类">
+        <el-select v-model="taskForm.position_detail_id" placeholder="请选择">
+          <el-option v-for="item in positionDetailList" :key="item.position_detail_id" :label="item.position_detail_sname" :value="item.position_detail_id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="所属公司">
+        <el-select v-model="taskForm.company_id" placeholder="请选择公司" @change="getDepartment">
+          <el-option v-for="item in companyList" 
+            :key="item.company_id" 
+            :label="item.company_name" 
+            :value="item.company_id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="所属部门">
+        <el-select v-model="taskForm.department_id" placeholder="请选择部门">
+          <el-option v-for="item in departmentList" 
+            :key="item.department_id" 
+            :label="item.department_name" 
+            :value="item.department_id">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="风险定位" prop="risk_for">
         <el-input v-model="taskForm.risk_for"></el-input>
       </el-form-item>
@@ -42,7 +88,7 @@
       <el-form-item label="法规依据" prop="row">
         <el-input v-model="taskForm.row"></el-input>
       </el-form-item>
-      <el-form-item class="margin-top-30">
+      <el-form-item>
         <el-button type="primary" @click="submitForm('taskForm')">确定</el-button>
         <el-button @click="resetForm('taskForm')">重置</el-button>
       </el-form-item>
@@ -62,6 +108,12 @@ export default {
         loading: false,
         taskForm: {},
         rules: {
+          task_risk_init_level: [
+            { required: true, message: '请输入任务初始等级', trigger: 'blur' }
+          ],
+          task_name: [
+            { required: true, message: '请输入任务名称', trigger: 'blur' }
+          ],
           risk_for: [
             { required: true, message: '请输入风险定位', trigger: 'blur' }
           ],
@@ -92,22 +144,85 @@ export default {
           risk_level: [
             { required: true, message: '请输入风险等级', trigger: 'blur' }
           ],
+          company_id: [{ required: true, message: '请选择所属公司', trigger: 'change' }],
           row: [
             { required: true, message: '请输入法规依据', trigger: 'blur' }
           ]
-        }
+        },
+        positionList: [],
+        positionDetailList: [],
+        companyList: [],
+        departmentList: [],
       };
     },
     created() {
       this.init();
+      this.getPositionList();
+      this.getPositionDetailList();
+      // 获取公司列表
+        this.getCompany();
+        // 获取部门列表
+        this.getDepartment();
     },
     methods: {
+      getCompany() {
+        Http.getCompanyDepartment()
+          .then(res => {
+            this.loading = false;
+            this.$handleResponse(res, res => {
+              if (res.data) {
+                this.companyList = res.data;
+              }
+            });
+          })
+          .catch(err => {
+            this.loading = false;
+          });
+      },
+      getDepartment(companyId) {
+        this.taskForm.department_id = '';
+        if (companyId) {
+          let obj = {};
+          obj = this.companyList.find(function(item){
+              return item.company_id === companyId 
+          });
+          if (obj.departments) {
+            this.departmentList = obj.departments;
+          }
+        }
+      },
+      getPositionList() {
+        Http.getPositionList()
+          .then(res => {
+            this.$handleResponse(res, res => {
+              if (res) {
+                this.positionList = res;
+              }
+            });
+          })
+          .catch(err => {
+          });
+      },
+      getPositionDetailList() {
+        Http.getPositionDetailList()
+          .then(res => {
+            this.$handleResponse(res, res => {
+              if (res) {
+                this.positionDetailList = res;
+              }
+            });
+          })
+          .catch(err => {
+          });
+      },
       init() {
         if(this.type == 'edit') {
             this.title = "编辑任务";
             this.loading = true;    
             setTimeout(() => {
                 this.taskForm = Object.assign({}, this.taskParent);
+                this.getDepartment(this.taskForm.company_id);
+                this.taskForm.department_id = res.data.department_id;
                 this.loading = false;
             },0);
         }
@@ -117,6 +232,14 @@ export default {
           if (valid) {
             this.loading = true;
             let {
+              task_risk_init_level,
+              position_id,
+              position_detail_id,
+              task_name,
+              user_id,
+              department_id,
+              company_id,
+              task_deadline,
               risk_for,
               risk_desc,
               risk_to_do,
@@ -131,7 +254,38 @@ export default {
               row
             } = this.taskForm;
 
+            /*
+              "task_risk_init_level":1,
+              "position_id":1,
+              "position_detail_id":2,
+              "task_name":"检查加油管道的连接处",
+              "user_id":1,
+              "department_id":1,
+              "company_id":1,
+              "task_deadline":1553875482,
+              "risk_for":"图书馆（图书馆岗位）-5",
+              "risk_desc":"配电室导线裸露-3",
+              "risk_to_do":"检测电线-2",
+              "risk_type":"SCL-3",
+              "risk_result":"触电火灾-3",
+              "risk_evaluate_technology":"满足相应标准技术规范-3",
+              "risk_evaluate_to_do":"已经制定了措施-3",
+              "risk_evaluate_train":"已经对员工进行了培训-3",
+              "risk_evaluate_protect":"略",
+              "risk_evaluate_emergency":"略",
+              "risk_level":"重大风险-3",
+              "row":"GB1234567- 设备式-3"
+            */
+
             let params = {
+                task_risk_init_level: task_risk_init_level,
+                position_id: position_id,
+                position_detail_id: position_detail_id,
+                task_name: task_name,
+                user_id: user_id,
+                department_id: department_id,
+                company_id: company_id,
+                task_deadline: task_deadline,
                 risk_for: risk_for,
                 risk_desc: risk_desc,
                 risk_to_do: risk_to_do,
@@ -158,7 +312,7 @@ export default {
                 this.loading = false;
               });
             } else { // 修改
-                params.task_desc_id = this.taskForm.task_desc_id;
+                params.task_id = this.taskForm.task_id;
                 Http.updateTaskDesc(params).then(res => {
                     this.loading = false;
                     this.$handleResponse(res, res => {
@@ -186,7 +340,7 @@ export default {
 <style lang="scss">
   .taskForm {
     .el-form-item {
-      width: 49%;
+      width: 33%;
       display: inline-block;
     }
   }

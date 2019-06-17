@@ -106,24 +106,28 @@ export function delMessage(params) {
 
 // 获取任务详细信息
 export function getTaskDesc(params) {
-    return http.getAjax('/manager_get_task_desc?token=' + token, params)
+    // return http.getAjax('/manager_get_task_desc?token=' + token, params)
+    return http.getAjax('/manager_task_list?token=' + token, params)
 }
 
 // 任务详细解释添加
 export function addTaskDesc(params) {
     let header = { 'Content-Type': 'application/json' };
-    return http.postAjax('/manager_task_desc_add?token=' + token, params, header, true)
+    // return http.postAjax('/manager_task_desc_add?token=' + token, params, header, true)
+    return http.postAjax('/manager_task_add?token=' + token, params, header, true)
 }
 
 // 任务详细更新
 export function updateTaskDesc(params) {
     let header = { 'Content-Type': 'application/json' };
-    return http.postAjax('/manager_task_desc_update?token=' + token, params, header, true)
+    // return http.postAjax('/manager_task_desc_update?token=' + token, params, header, true)
+    return http.postAjax('/manager_task_total_update?token=' + token, params, header, true)
 }
 
 // 删除任务详细信息
 export function delTaskDesc(params) {
-    return http.postAjax('/manage_delete_task_desc?token=' + token, params)
+    // return http.postAjax('/manage_delete_task_desc?token=' + token, params)
+    return http.postAjax('/manager_delete_task?token=' + token, params)
 }
 
 // 所有公司的所有部门
@@ -245,3 +249,4 @@ export function uploadPosition(params) {
 export function uploadPositionDetail(params) {
     return http.postAjax('/manager_position_detail_update?token=' + token, params)
 }
+
