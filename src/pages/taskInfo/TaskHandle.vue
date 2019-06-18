@@ -1,10 +1,7 @@
 <template>
-  <el-dialog :title="title" :visible.sync="dialogShow"  :close-on-click-modal="false"  width="1000px" :before-close="handleClose">
-    <el-form 
-      :model="taskForm"
-      :rules="rules"
-      ref="taskForm"
-      @keyup.enter.native="onSubmit('taskForm')"
+  <el-dialog :title="title" :visible.sync="dialogShow" :close-on-click-modal="false" width="1000px"
+    :before-close="handleClose">
+    <el-form :model="taskForm" :rules="rules" ref="taskForm" @keyup.enter.native="onSubmit('taskForm')"
       label-width="110px" class="taskForm">
       <el-form-item label="任务初始等级" prop="task_risk_init_level">
         <el-input v-model="taskForm.task_risk_init_level"></el-input>
@@ -12,42 +9,41 @@
       <el-form-item label="任务名称" prop="task_name">
         <el-input v-model="taskForm.task_name"></el-input>
       </el-form-item>
+      <el-form-item label="用户列表">
+        <el-select v-model="taskForm.user_id" placeholder="请选择">
+          <el-option v-for="item in userList" :key="item.user_id" :label="item.name"
+            :value="item.user_id">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="任务截止时间">
-        <el-date-picker
-          v-model="taskForm.task_deadline_text"
-          type="datetime"
-          placeholder="选择日期时间">
+        <el-date-picker v-model="taskForm.task_deadline_text" type="datetime" placeholder="选择日期时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="大分类">
         <el-select v-model="taskForm.position_id" placeholder="请选择">
-          <el-option v-for="item in positionList" 
-            :key="item.position_id" 
-            :label="item.position_name" 
+          <el-option v-for="item in positionList" :key="item.position_id" :label="item.position_name"
             :value="item.position_id">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="小分类">
         <el-select v-model="taskForm.position_detail_id" placeholder="请选择">
-          <el-option v-for="item in positionDetailList" :key="item.position_detail_id" :label="item.position_detail_sname" :value="item.position_detail_id">
+          <el-option v-for="item in positionDetailList" :key="item.position_detail_id"
+            :label="item.position_detail_sname" :value="item.position_detail_id">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="所属公司">
         <el-select v-model="taskForm.company_id" placeholder="请选择公司" @change="getDepartment">
-          <el-option v-for="item in companyList" 
-            :key="item.company_id" 
-            :label="item.company_name" 
+          <el-option v-for="item in companyList" :key="item.company_id" :label="item.company_name"
             :value="item.company_id">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="所属部门">
         <el-select v-model="taskForm.department_id" placeholder="请选择部门">
-          <el-option v-for="item in departmentList" 
-            :key="item.department_id" 
-            :label="item.department_name" 
+          <el-option v-for="item in departmentList" :key="item.department_id" :label="item.department_name"
             :value="item.department_id">
           </el-option>
         </el-select>
@@ -97,8 +93,8 @@
 </template>
 
 <script>
-import * as Http from '@/api/home'
-export default {
+  import * as Http from '@/api/home'
+  export default {
     props: ['type', 'taskParent'],
     inject: ['reload'],
     data() {
@@ -108,51 +104,82 @@ export default {
         loading: false,
         taskForm: {},
         rules: {
-          task_risk_init_level: [
-            { required: true, message: '请输入任务初始等级', trigger: 'blur' }
-          ],
-          task_name: [
-            { required: true, message: '请输入任务名称', trigger: 'blur' }
-          ],
-          risk_for: [
-            { required: true, message: '请输入风险定位', trigger: 'blur' }
-          ],
-          risk_to_do: [
-            { required: true, message: '请输入管控措施', trigger: 'blur' }
-          ],
-          risk_type: [
-            { required: true, message: '请输入风险分类', trigger: 'blur' }
-          ],
-          risk_result: [
-            { required: true, message: '请输入导致后果', trigger: 'blur' }
-          ],
-          risk_evaluate_technology: [
-            { required: true, message: '请输入工程技术', trigger: 'blur' }
-          ],
-          risk_evaluate_to_do: [
-            { required: true, message: '请输入管控措施', trigger: 'blur' }
-          ],
-          risk_evaluate_train: [
-            { required: true, message: '请输入培训教育', trigger: 'blur' }
-          ],
-          risk_evaluate_protect: [
-            { required: true, message: '请输入个体防护', trigger: 'blur' }
-          ],
-          risk_evaluate_emergency: [
-            { required: true, message: '请输入应急处理', trigger: 'blur' }
-          ],
-          risk_level: [
-            { required: true, message: '请输入风险等级', trigger: 'blur' }
-          ],
-          company_id: [{ required: true, message: '请选择所属公司', trigger: 'change' }],
-          row: [
-            { required: true, message: '请输入法规依据', trigger: 'blur' }
-          ]
+          task_risk_init_level: [{
+            required: true,
+            message: '请输入任务初始等级',
+            trigger: 'blur'
+          }],
+          task_name: [{
+            required: true,
+            message: '请输入任务名称',
+            trigger: 'blur'
+          }],
+          risk_for: [{
+            required: true,
+            message: '请输入风险定位',
+            trigger: 'blur'
+          }],
+          risk_to_do: [{
+            required: true,
+            message: '请输入管控措施',
+            trigger: 'blur'
+          }],
+          risk_type: [{
+            required: true,
+            message: '请输入风险分类',
+            trigger: 'blur'
+          }],
+          risk_result: [{
+            required: true,
+            message: '请输入导致后果',
+            trigger: 'blur'
+          }],
+          risk_evaluate_technology: [{
+            required: true,
+            message: '请输入工程技术',
+            trigger: 'blur'
+          }],
+          risk_evaluate_to_do: [{
+            required: true,
+            message: '请输入管控措施',
+            trigger: 'blur'
+          }],
+          risk_evaluate_train: [{
+            required: true,
+            message: '请输入培训教育',
+            trigger: 'blur'
+          }],
+          risk_evaluate_protect: [{
+            required: true,
+            message: '请输入个体防护',
+            trigger: 'blur'
+          }],
+          risk_evaluate_emergency: [{
+            required: true,
+            message: '请输入应急处理',
+            trigger: 'blur'
+          }],
+          risk_level: [{
+            required: true,
+            message: '请输入风险等级',
+            trigger: 'blur'
+          }],
+          company_id: [{
+            required: true,
+            message: '请选择所属公司',
+            trigger: 'change'
+          }],
+          row: [{
+            required: true,
+            message: '请输入法规依据',
+            trigger: 'blur'
+          }]
         },
         positionList: [],
         positionDetailList: [],
         companyList: [],
         departmentList: [],
+        userList: []
       };
     },
     created() {
@@ -160,11 +187,27 @@ export default {
       this.getPositionList();
       this.getPositionDetailList();
       // 获取公司列表
-        this.getCompany();
-        // 获取部门列表
-        this.getDepartment();
+      this.getCompany();
+      // 获取部门列表
+      this.getDepartment();
+      // 用户列表
+      this.getUserList();
     },
     methods: {
+      getUserList() {
+        Http.checkTask()
+          .then(res => {
+            this.loading = false;
+            this.$handleResponse(res, res => {
+              if (res.users) {
+                this.userList = res.users;
+              }
+            });
+          })
+          .catch(err => {
+            this.loading = false;
+          });
+      },
       getCompany() {
         Http.getCompanyDepartment()
           .then(res => {
@@ -183,8 +226,8 @@ export default {
         this.taskForm.department_id = '';
         if (companyId) {
           let obj = {};
-          obj = this.companyList.find(function(item){
-              return item.company_id === companyId 
+          obj = this.companyList.find(function (item) {
+            return item.company_id === companyId
           });
           if (obj.departments) {
             this.departmentList = obj.departments;
@@ -200,8 +243,7 @@ export default {
               }
             });
           })
-          .catch(err => {
-          });
+          .catch(err => {});
       },
       getPositionDetailList() {
         Http.getPositionDetailList()
@@ -212,19 +254,18 @@ export default {
               }
             });
           })
-          .catch(err => {
-          });
+          .catch(err => {});
       },
       init() {
-        if(this.type == 'edit') {
-            this.title = "编辑任务";
-            this.loading = true;    
-            setTimeout(() => {
-                this.taskForm = Object.assign({}, this.taskParent);
-                this.getDepartment(this.taskForm.company_id);
-                this.taskForm.department_id = res.data.department_id;
-                this.loading = false;
-            },0);
+        if (this.type == 'edit') {
+          this.title = "编辑任务";
+          this.loading = true;
+          setTimeout(() => {
+            this.taskForm = Object.assign({}, this.taskParent);
+            this.getDepartment(this.taskForm.company_id);
+            this.taskForm.department_id = res.data.department_id;
+            this.loading = false;
+          }, 0);
         }
       },
       submitForm(formName) {
@@ -254,50 +295,27 @@ export default {
               row
             } = this.taskForm;
 
-            /*
-              "task_risk_init_level":1,
-              "position_id":1,
-              "position_detail_id":2,
-              "task_name":"检查加油管道的连接处",
-              "user_id":1,
-              "department_id":1,
-              "company_id":1,
-              "task_deadline":1553875482,
-              "risk_for":"图书馆（图书馆岗位）-5",
-              "risk_desc":"配电室导线裸露-3",
-              "risk_to_do":"检测电线-2",
-              "risk_type":"SCL-3",
-              "risk_result":"触电火灾-3",
-              "risk_evaluate_technology":"满足相应标准技术规范-3",
-              "risk_evaluate_to_do":"已经制定了措施-3",
-              "risk_evaluate_train":"已经对员工进行了培训-3",
-              "risk_evaluate_protect":"略",
-              "risk_evaluate_emergency":"略",
-              "risk_level":"重大风险-3",
-              "row":"GB1234567- 设备式-3"
-            */
-
             let params = {
-                task_risk_init_level: task_risk_init_level,
-                position_id: position_id,
-                position_detail_id: position_detail_id,
-                task_name: task_name,
-                user_id: user_id,
-                department_id: department_id,
-                company_id: company_id,
-                task_deadline: task_deadline,
-                risk_for: risk_for,
-                risk_desc: risk_desc,
-                risk_to_do: risk_to_do,
-                risk_type: risk_type,
-                risk_result: risk_result,
-                risk_evaluate_technology: risk_evaluate_technology,
-                risk_evaluate_to_do: risk_evaluate_to_do,
-                risk_evaluate_train: risk_evaluate_train,
-                risk_evaluate_protect: risk_evaluate_protect,
-                risk_evaluate_emergency: risk_evaluate_emergency,
-                risk_level: risk_level,
-                row: row
+              task_risk_init_level: task_risk_init_level,
+              position_id: position_id,
+              position_detail_id: position_detail_id,
+              task_name: task_name,
+              user_id: user_id,
+              department_id: department_id,
+              company_id: company_id,
+              task_deadline: task_deadline,
+              risk_for: risk_for,
+              risk_desc: risk_desc,
+              risk_to_do: risk_to_do,
+              risk_type: risk_type,
+              risk_result: risk_result,
+              risk_evaluate_technology: risk_evaluate_technology,
+              risk_evaluate_to_do: risk_evaluate_to_do,
+              risk_evaluate_train: risk_evaluate_train,
+              risk_evaluate_protect: risk_evaluate_protect,
+              risk_evaluate_emergency: risk_evaluate_emergency,
+              risk_level: risk_level,
+              row: row
             }
 
             if (this.type == 'add') { // 新增
@@ -312,17 +330,17 @@ export default {
                 this.loading = false;
               });
             } else { // 修改
-                params.task_id = this.taskForm.task_id;
-                Http.updateTaskDesc(params).then(res => {
-                    this.loading = false;
-                    this.$handleResponse(res, res => {
-                    this.$message.success('修改成功');
-                    this.handleClose();
-                    this.reload();
-                    })
-                }).catch(err => {
-                    this.loading = false;
-                });
+              params.task_id = this.taskForm.task_id;
+              Http.updateTaskDesc(params).then(res => {
+                this.loading = false;
+                this.$handleResponse(res, res => {
+                  this.$message.success('修改成功');
+                  this.handleClose();
+                  this.reload();
+                })
+              }).catch(err => {
+                this.loading = false;
+              });
             }
           }
         });
@@ -335,6 +353,7 @@ export default {
       }
     }
   }
+
 </script>
 
 <style lang="scss">
@@ -344,4 +363,5 @@ export default {
       display: inline-block;
     }
   }
+
 </style>

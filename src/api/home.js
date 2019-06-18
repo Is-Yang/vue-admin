@@ -250,3 +250,7 @@ export function uploadPositionDetail(params) {
     return http.postAjax('/manager_position_detail_update?token=' + token, params)
 }
 
+// 用户列表
+export function checkTask() {
+    return http.getAjax('/manager_check_task_request?token=' + token);
+}
