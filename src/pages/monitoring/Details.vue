@@ -18,7 +18,7 @@
                     <h3>上报隐患</h3>
                     <div>上报人：<span>{{infoData.name}}</span></div>
                     <div>台&nbsp;&nbsp;&nbsp;账：<span>{{infoData.task_complete_input}}</span></div>
-                    <div>照&nbsp;&nbsp;&nbsp;片：<img :src="infoData.task_complete_img" /></div>
+                    <div>照&nbsp;&nbsp;&nbsp;片：<a :href="infoData.task_complete_img" target="_blank"><img :src="infoData.task_complete_img" /></a></div>
                 </div>
             </el-col>
              <el-col>
@@ -39,7 +39,7 @@
                     <h3>整改隐患</h3>
                     <div>上报人：<span>{{submitData.eliminate_risk_name}}</span></div>
                     <div>台&nbsp;&nbsp;&nbsp;账：<span>{{submitData.task_input_forsure}}</span></div>
-                    <div>照&nbsp;&nbsp;&nbsp;片：<img :src="submitData.task_complete_img" /></div>
+                    <div>照&nbsp;&nbsp;&nbsp;片：<a :href="submitData.task_complete_img" target="_blank"><img :src="submitData.task_complete_img" /></a></div>
                 </div>
             </el-col>
         </el-row>

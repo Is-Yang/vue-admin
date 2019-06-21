@@ -105,33 +105,23 @@
         
       },
       downloadFn(data) {
-        this.loading = true;
-        let img = data.img ? data.img.substring(data.img.lastIndexOf('/')) : '';
-        let ext = data.img.substring(data.img.lastIndexOf(".") + 1);
-        Http.getImg({
-            img: img
-          })
-          .then(res => {
-            if (res.status === 200) {
-              this.loading = false;
-              // 创建隐藏的可下载链接
-              var eleLink = document.createElement('a');
-              eleLink.download = data.title + '.' + ext;
-              eleLink.style.display = 'none';
-              // 字符内容转变成blob地址
-              var blob = new Blob([res.data]);
-              eleLink.href = URL.createObjectURL(blob);
-              // 触发点击
-              document.body.appendChild(eleLink);
-              eleLink.click();
-              // 然后移除
-              document.body.removeChild(eleLink);
-            } else {
-              this.$message.error("请刷新页面重试！");
-            }
-          }).catch(error => {
-            console.log(error);
-          });
+        let image = new Image();
+        // 解决跨域 Canvas 污染问题
+        image.setAttribute("crossOrigin", "anonymous");
+        image.onload = function() {
+            let canvas = document.createElement("canvas");
+            canvas.width = image.width;
+            canvas.height = image.height;
+            let context = canvas.getContext("2d");
+            context.drawImage(image, 0, 0, image.width, image.height);
+            let url = canvas.toDataURL("image/png"); //得到图片的base64编码数据
+            let a = document.createElement("a"); // 生成一个a元素
+            let event = new MouseEvent("click"); // 创建一个单击事件
+            a.download = data.title || 'image'; // 设置图片名称
+            a.href = url; // 将生成的URL设置为a.href属性
+            a.dispatchEvent(event); // 触发a的单击事件
+        };
+        image.src = data.img;
       },
       deleteFn(data) {
         // 删除

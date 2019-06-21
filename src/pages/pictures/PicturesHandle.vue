@@ -89,20 +89,20 @@ export default {
             } = this.picturesForm;
 
             let params = {
-               title
+               title: title
             }
 
             if (this.type == 'add') { // 新增
-              // Http.addTaskDesc(params).then(res => {
-              //   this.loading = false;
-              //   this.$handleResponse(res, res => {
-              //     this.$message.success('新增成功');
-              //     this.handleClose();
-              //     this.reload();
-              //   })
-              // }).catch(err => {
-              //   this.loading = false;
-              // });
+              Http.addTaskDesc(params).then(res => {
+                this.loading = false;
+                this.$handleResponse(res, res => {
+                  this.$message.success('新增成功');
+                  this.handleClose();
+                  this.reload();
+                })
+              }).catch(err => {
+                this.loading = false;
+              });
             } else { // 修改
                 params.id = this.picturesForm.id;
                 Http.updateManageImg(params).then(res => {
