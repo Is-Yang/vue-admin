@@ -13,7 +13,7 @@
             <el-upload
                 class="uploader"
                 :action="uploadUrl"
-                :data="params"
+                :data="{'title': picturesForm.title}"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess">
                 <div v-if="picturesForm.img" :style="{backgroundImage: 'url('+ picturesForm.img +')'}" class="picture"></div>

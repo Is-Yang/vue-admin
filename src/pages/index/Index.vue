@@ -98,20 +98,20 @@ export default {
                 }
             })
       }).catch(err => {
-          this.loading = false;
           console.log(err)
       });
     }, 
     init() {
-      Http.getIndexPage().then(res => {
-          this.loading = false;
-          this.$handleResponse(res, res => {
-                this.dataCount = res.data;
-          })
-      }).catch(err => {
-          this.loading = false;
-          console.log(err)
-      });
+        this.$store.dispatch('openLoading', 'full');
+        Http.getIndexPage().then(res => {
+            this.$store.dispatch('closeLoading', 'full');
+            this.$handleResponse(res, res => {
+                    this.dataCount = res.data;
+            })
+        }).catch(err => {
+            this.$store.dispatch('closeLoading', 'full');
+            console.log(err)
+        });
     }
   }
 }
