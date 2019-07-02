@@ -46,9 +46,12 @@
           if (this.visitedViews.navs.length === 1) {
             this.visitedViews.navs.splice(index, 1);
             this.visitedViews.actived = 0;
-            this.$router.push({
-              path: '/index'
-            });
+            let userInfo = localStorage.getItem('userInfo') && JSON.parse(localStorage.getItem('userInfo'));
+            if (userInfo.propity == 1) {
+              this.$router.push({path: '/index'});
+            } else {
+              this.$router.push({path: '/company'});
+            }
             this.reload();
           } else if (this.visitedViews.navs.length > 1) {
             this.visitedViews.navs.splice(index, 1);
