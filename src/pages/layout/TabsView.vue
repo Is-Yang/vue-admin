@@ -31,8 +31,8 @@
       }
     },
     created() {
-      let visitedViews = window.sessionStorage.getItem('visited');
-      this.visitedViews = visitedViews ? JSON.parse(visitedViews) : this.visitedViews;
+      // let visitedViews = window.localStorage.getItem('visited');
+      // this.visitedViews = visitedViews ? JSON.parse(visitedViews) : this.visitedViews;
       // this.$eventHub.$on('vistedNav', (data) => {
         // this.dealNavs(data);
       // })
@@ -54,7 +54,7 @@
             this.visitedViews.navs.splice(index, 1);
             let indexPath = index - 1;
             indexPath < 0 ? this.visitedViews.actived = 0 : this.visitedViews.actived = indexPath;
-            window.sessionStorage.setItem('visited', JSON.stringify(this.visitedViews));
+            window.localStorage.setItem('visited', JSON.stringify(this.visitedViews));
             this.$eventHub.$emit('navFromVisted', '/' + this.visitedViews.navs[this.visitedViews.actived].url); // 改变父元素的当前选中状态
             this.$router.push({
               path: '/' + this.visitedViews.navs[this.visitedViews.actived].url
@@ -64,7 +64,7 @@
           this.visitedViews.navs.splice(index, 1);
           this.visitedViews.actived--;
         }
-        window.sessionStorage.setItem('visited', JSON.stringify(this.visitedViews));
+        window.localStorage.setItem('visited', JSON.stringify(this.visitedViews));
       },
       dealNavs(data) {
         if (this.isHasData(data)) {
@@ -78,7 +78,7 @@
           this.visitedViews.navs.push(data);
           this.visitedViews.actived = this.visitedViews.navs.length - 1;
         }
-        window.sessionStorage.setItem('visited', JSON.stringify(this.visitedViews));
+        window.localStorage.setItem('visited', JSON.stringify(this.visitedViews));
       },
       isHasData(data) {
         let navs = this.visitedViews.navs;
@@ -94,7 +94,7 @@
       goPath(tag, index) {
         this.visitedViews.actived = index;
         this.$eventHub.$emit('navFromVisted', '/' + tag.url); // 改变父元素的当前选中状态
-        window.sessionStorage.setItem('visited', JSON.stringify(this.visitedViews));
+        window.localStorage.setItem('visited', JSON.stringify(this.visitedViews));
         this.$router.push({
           path: '/' + tag.url
         });
