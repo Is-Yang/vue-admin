@@ -17,7 +17,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="任务截止时间">
-        <el-date-picker v-model="taskForm.task_deadline_text" type="datetime" placeholder="选择日期时间">
+        <el-date-picker v-model="taskForm.task_deadline_text" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="大分类">
@@ -42,7 +42,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="所属部门">
-        <el-select v-model="taskForm.department_id" placeholder="请选择部门">
+        <el-select v-model="taskForm.department_id" placeholder="请选择部门" @change="changeDepart">
           <el-option v-for="item in departmentList" :key="item.department_id" :label="item.department_name"
             :value="item.department_id">
           </el-option>
@@ -94,6 +94,7 @@
 
 <script>
   import * as Http from '@/api/home'
+  import moment from 'moment';
   export default {
     props: ['type', 'taskParent'],
     inject: ['reload'],
@@ -194,6 +195,10 @@
       this.getUserList();
     },
     methods: {
+      changeDepart(data) {
+        this.$set(this.taskForm, 'department_id', data);
+        this.$forceUpdate();
+      },
       getUserList() {
         Http.checkTask()
           .then(res => {
@@ -229,7 +234,7 @@
           obj = this.companyList.find(function (item) {
             return item.company_id === companyId
           });
-          if (obj.departments) {
+          if (obj && obj.departments) {
             this.departmentList = obj.departments;
           }
         }
@@ -280,7 +285,7 @@
               user_id,
               department_id,
               company_id,
-              task_deadline,
+              task_deadline_text,
               risk_for,
               risk_desc,
               risk_to_do,
@@ -303,7 +308,7 @@
               user_id: user_id,
               department_id: department_id,
               company_id: company_id,
-              task_deadline: task_deadline,
+              task_deadline: task_deadline_text,
               risk_for: risk_for,
               risk_desc: risk_desc,
               risk_to_do: risk_to_do,

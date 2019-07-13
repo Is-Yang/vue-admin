@@ -78,12 +78,14 @@ export function getDepartmentList(params) {
 
 // 部门信息添加
 export function addDepartment(params) {
-    return http.postAjax('/manager_department_add?token=' + getToken(), params)
+    let header = { 'Content-Type': 'application/json' };
+    return http.postAjax('/manager_department_add?token=' + getToken(), params, header, true)
 }
 
 // 修改部门信息
 export function updateDepartment(params) {
-    return http.postAjax('/manager_department_change?token=' + getToken(), params)
+    let header = { 'Content-Type': 'application/json' };
+    return http.postAjax('/manager_department_change?token=' + getToken(), params, header, true)
 }
 
 // 删除部门信息

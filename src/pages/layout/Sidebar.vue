@@ -11,6 +11,11 @@
         <span slot="title">首页</span>
       </el-menu-item>
 
+      <el-menu-item index="/department" v-if="level == 2">
+        <i class="fa fa-building"></i> 
+        <span slot="title">部门列表</span>
+      </el-menu-item>
+
       <el-menu-item index="/company" v-if="level == 2">
         <i class="fa fa-building"></i> 
         <span slot="title">公司列表</span>

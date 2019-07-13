@@ -27,7 +27,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="所属部门：">
-        <el-select v-model="account.department_id" placeholder="请选择部门">
+        <el-select v-model="account.department_id" placeholder="请选择部门" @change="changeDepart">
           <el-option v-for="item in departmentList" 
             :key="item.department_id" 
             :label="item.department_name" 
@@ -36,7 +36,7 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="job_level" label="岗位等级：">
-        <el-select v-model="account.job_level" placeholder="请选择部门">
+        <el-select v-model="account.job_level" placeholder="请选择岗位">
           <el-option v-for="item in jobList" :key="item.value" :label="item.name" :value="item.value">
           </el-option>
         </el-select>
@@ -123,6 +123,10 @@
           });
           this.departmentList = obj.departments;
         }
+      },
+      changeDepart(data) {
+        this.$set(this.account, 'department_id', data);
+        this.$forceUpdate();
       },
       init() {
         // 获取公司列表

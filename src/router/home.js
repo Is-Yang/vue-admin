@@ -27,6 +27,9 @@ import {
 import {
     ClassifyList
 } from '../pages/classify'
+import {
+    DepartmentList
+} from '../pages/department'
 
 /**
  * name: 标题
@@ -55,6 +58,10 @@ export default [{
         path: 'company',
         component: CompanyList,
         name: '公司列表'
+    }, {
+        path: 'department',
+        component: DepartmentList,
+        name: '部门列表'
     }, {
         path: 'tasks',
         component: TaskList,
