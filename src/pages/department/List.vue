@@ -1,13 +1,14 @@
 <template>
   <div>
     <div class="margin-bottom-20 text-right">
-    <el-button type="primary" size="small" @click="createDepartment">创建部门</el-button>
+      <el-button type="primary" size="small" @click="dialogShow('add', {})">创建部门</el-button>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
+      <el-table-column prop="company_name" label="公司名称"></el-table-column>
       <el-table-column prop="department_name" label="部门名称"></el-table-column>
       <el-table-column label="操作" width="160px">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="editFn(scope.row)"
+          <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row)"
             title="编辑"></el-button>
           <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
             title="删除"></el-button>
@@ -19,14 +20,27 @@
     <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.current"
       :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
       layout="total, sizes, prev, pager, next, jumper"></el-pagination>
+
+    <!-- 新增和编辑 -->
+    <add-and-edit
+      v-if="dialog.show"
+      :type="dialog.type"
+      :departmentParent="dialog.departmentParent" 
+      @cancel="dialog.show = !dialog.show"
+      @success="dialogSuccess"
+    ></add-and-edit>
   
   </div>
 </template>
 
 <script>
 import * as Http from "@/api/home";
+import AddAndEdit from "./AddAndEdit";
 export default {
   inject: ["reload"],
+  components: {
+    AddAndEdit
+  },
   data() {
     return {
       loading: false,
@@ -38,7 +52,8 @@ export default {
       },
       dialog: {
         show: false,
-        type: ""
+        type: "",
+        departmentParent: {}
       }
     };
   },
@@ -64,15 +79,11 @@ export default {
           this.loading = false;
         });
     },
-    onSearch() {
-      // 搜索
-      this.page.current = 1;
-      this.getListData();
-    },
-    onReset() {
-      // 清空
-      this.menuCon.keyword = "";
-      this.getListData();
+    // 新增，编辑弹窗显示
+    dialogShow(type, initData){ 
+      this.dialog.type = type;
+      this.dialog.departmentParent = initData;
+      this.dialog.show = true;
     },
     createDepartment() {
          this.$prompt('', '添加部门', {
@@ -83,7 +94,6 @@ export default {
                 department_name: value
             }).then(res => {
                 this.loading = false;
-                console.log(res)
                 this.$handleResponse(res, res => {
                     this.$message.success('添加成功');
                     this.reload();
@@ -108,7 +118,6 @@ export default {
             }
             Http.updateDepartment(params).then(res => {
                 this.loading = false;
-                console.log(res)
                 this.$handleResponse(res, res => {
                     this.$message.success('修改成功');
                     this.reload();
