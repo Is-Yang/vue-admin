@@ -67,7 +67,7 @@
         let params = {
           page: 1
         };
-        Http.getCompanyList(params)
+        Http.getAllCompanyList(params)
           .then(res => {
             this.$handleResponse(res, res => {
               if (res) {

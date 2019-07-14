@@ -54,6 +54,12 @@ export function getCompanyList(params) {
     return http.getAjax('/manager_company_list?token=' + getToken(), params)
 }
 
+// 获取所有公司
+export function getAllCompanyList(params) {
+    return http.getAjax('/manager_company_list_total?token=' + getToken(), params)
+}
+
+
 // 创建公司信息
 export function addCompany(params) {
     let header = { 'Content-Type': 'application/json' };

@@ -17,7 +17,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="任务截止时间">
-        <el-date-picker v-model="taskForm.task_deadline" type="datetime" value-format="timestamp" placeholder="选择日期时间">
+        <el-date-picker v-model="taskForm.task_deadline_text" type="datetime" placeholder="选择日期时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="大分类">
@@ -304,7 +304,7 @@
               user_id,
               department_id,
               company_id,
-              task_deadline,
+              task_deadline_text,
               risk_for,
               risk_desc,
               risk_to_do,
@@ -319,6 +319,8 @@
               row
             } = this.taskForm;
 
+            let task_deadline = moment(task_deadline_text).hours(23).minutes(59).seconds(59).valueOf();
+
             let params = {
               task_risk_init_level: task_risk_init_level,
               position_id: position_id,
@@ -327,7 +329,7 @@
               user_id: user_id,
               department_id: department_id,
               company_id: company_id,
-              task_deadline: task_deadline / 1000,
+              task_deadline: parseInt(task_deadline/1000),
               risk_for: risk_for,
               risk_desc: risk_desc,
               risk_to_do: risk_to_do,

@@ -9,6 +9,12 @@
       <el-form-item label="标题" prop="position_name" v-if="position == 'big'">
         <el-input v-model="classForm.position_name"></el-input>
       </el-form-item>
+      <el-form-item label="所属大分类" prop="position_id" v-if="position == 'small'">
+        <el-select v-model="classForm.position_id" placeholder="请选择" size="medium">
+            <el-option v-for="item in bigPositionList" :key="item.position_id" :label="item.position_name" :value="item.position_id">
+            </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="长标题" prop="position_detail_name" v-if="position == 'small'">
         <el-input v-model="classForm.position_detail_name"></el-input>
       </el-form-item>
@@ -34,7 +40,11 @@ export default {
         dialogShow: true,
         loading: false,
         classForm: {},
+        bigPositionList: [],
         rules: {
+          position_id: [
+            { required: true, message: '请选择所属大分类', trigger: 'change' }
+          ],
           position_name: [
             { required: true, message: '请输入标题', trigger: 'blur' }
           ],
@@ -48,9 +58,22 @@ export default {
       };
     },
     created() {
+      this.getPositionList();
       this.init();
     },
     methods: {
+      getPositionList() {
+        Http.getPositionList()
+          .then(res => {
+            this.loading = false;
+            this.$handleResponse(res, res => {
+                this.bigPositionList = res;
+            });
+          })
+          .catch(err => {
+            this.loading = false;
+          });
+      },
       init() {
         if(this.type == 'edit') {
             this.title = "编辑分类";
@@ -97,6 +120,7 @@ export default {
                 }
             } else {  // 小分类
                 let params = {
+                    position_id: this.classForm.position_id,
                     position_detail_name: this.classForm.position_detail_name,
                     position_detail_sname: this.classForm.position_detail_sname
                 }
