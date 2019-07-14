@@ -17,7 +17,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="任务截止时间">
-        <el-date-picker v-model="taskForm.task_deadline_text" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间">
+        <el-date-picker v-model="taskForm.task_deadline" type="datetime" value-format="timestamp" placeholder="选择日期时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="大分类">
@@ -184,15 +184,15 @@
       };
     },
     created() {
-      this.init();
-      this.getPositionList();
-      this.getPositionDetailList();
       // 获取公司列表
       this.getCompany();
       // 获取部门列表
       this.getDepartment();
       // 用户列表
       this.getUserList();
+      this.getPositionList();
+      this.getPositionDetailList();
+      this.init();
     },
     methods: {
       changeDepart(data) {
@@ -267,10 +267,29 @@
           this.loading = true;
           setTimeout(() => {
             this.taskForm = Object.assign({}, this.taskParent);
-            this.getDepartment(this.taskForm.company_id);
-            this.taskForm.department_id = res.data.department_id;
+            this.taskForm.risk_for = this.taskParent.task_desc.risk_for;
+            this.taskForm.risk_desc = this.taskParent.task_desc.risk_desc;
+            this.taskForm.risk_to_do = this.taskParent.task_desc.risk_to_do;
+            this.taskForm.risk_type = this.taskParent.task_desc.risk_type;
+            this.taskForm.risk_result = this.taskParent.task_desc.risk_result;
+            this.taskForm.risk_evaluate_technology = this.taskParent.task_desc.risk_evaluate_technology;
+            this.taskForm.risk_evaluate_to_do = this.taskParent.task_desc.risk_evaluate_to_do;
+            this.taskForm.risk_evaluate_train = this.taskParent.task_desc.risk_evaluate_train;
+            this.taskForm.risk_evaluate_protect = this.taskParent.task_desc.risk_evaluate_protect;
+            this.taskForm.risk_evaluate_emergency = this.taskParent.task_desc.risk_evaluate_emergency;
+            this.taskForm.risk_level = this.taskParent.task_desc.risk_level;
+            this.taskForm.row = this.taskParent.task_desc.row;
+
+            // // 部门列表
+            let obj = {};
+            obj = this.companyList.find((item) => {
+              return item.company_id ===  this.taskForm.company_id;
+            });
+            if (obj && obj.departments) {
+              this.departmentList = obj.departments;
+            }
             this.loading = false;
-          }, 0);
+          }, 500);
         }
       },
       submitForm(formName) {
@@ -285,7 +304,7 @@
               user_id,
               department_id,
               company_id,
-              task_deadline_text,
+              task_deadline,
               risk_for,
               risk_desc,
               risk_to_do,
@@ -308,7 +327,7 @@
               user_id: user_id,
               department_id: department_id,
               company_id: company_id,
-              task_deadline: task_deadline_text,
+              task_deadline: task_deadline / 1000,
               risk_for: risk_for,
               risk_desc: risk_desc,
               risk_to_do: risk_to_do,

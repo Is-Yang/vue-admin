@@ -10,7 +10,7 @@
                   </el-select>
               </el-form-item>
               <el-form-item prop="department_name" label="部门名称：">
-                  <el-input type="text" v-model.trim="department.department_name" placeholder="请输入公司名称"></el-input>
+                  <el-input type="text" v-model.trim="department.department_name" placeholder="请输入部门名称"></el-input>
               </el-form-item>
             </el-form>
         </div>
@@ -29,7 +29,7 @@
     inject: ['reload'],
     data() {
       return {
-        title: "创建公司",
+        title: "创建部门",
         dialogShow: true,
         department: {
           department_name: '',
@@ -44,7 +44,7 @@
             message: '部门名称不能为空',
             trigger: 'blur'
           }],
-          company_id: [{required: true, message: '公司不能为空', trigger: 'change'}]
+          company_id: [{required: true, message: '请选择公司', trigger: 'change'}]
         },
       }
     },
@@ -55,7 +55,7 @@
     methods: {
       init() {
          if(this.type == 'edit') {
-            this.title = "编辑公司";
+            this.title = "编辑部门";
             this.loading = true;    
             setTimeout(() => {
                 this.department = Object.assign({}, this.departmentParent);

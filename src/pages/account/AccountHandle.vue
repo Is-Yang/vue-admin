@@ -136,6 +136,7 @@
 
         setTimeout(() =>{
           if (this.paramsId) { // 编辑
+            this.title = "编辑账号"
             this.loading = true;
             Http.getAccountById({user_id: this.paramsId}).then(res => {
               this.loading = false;
@@ -143,8 +144,15 @@
                 if (res.data) {
                   Object({}, this.account)
                   this.account = res.data;
-                  this.getDepartment(this.account.company_id);
+                  // 部门列表
+                  let obj = {};
+                  obj = this.companyList.find(function(item){
+                      return item.company_id === res.data.company_id 
+                  });
+                  this.departmentList = obj.departments;
+                  // 部门所选
                   this.account.department_id = res.data.department_id;
+
                 }
               })
             })

@@ -12,7 +12,7 @@
       </el-menu-item>
 
       <el-menu-item index="/department" v-if="level == 2">
-        <i class="fa fa-building"></i> 
+        <i class="fa fa-code-branch"></i> 
         <span slot="title">部门列表</span>
       </el-menu-item>
 

@@ -23,6 +23,7 @@
       <el-table-column prop="task_desc.risk_evaluate_emergency" label="应急处理"></el-table-column>
       <el-table-column prop="task_desc.risk_level" label="风险等级" width="100px"></el-table-column>
       <el-table-column prop="task_desc.row" label="法规依据" width="180px"></el-table-column>
+      <el-table-column prop="task_deadline_text" label="任务截止时间" width="150px"></el-table-column>
       <el-table-column prop="create_time_text" label="创建时间" width="150px"></el-table-column>
       <el-table-column label="操作" width="210px">
         <template slot-scope="scope">
