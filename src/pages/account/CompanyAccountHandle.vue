@@ -1,0 +1,174 @@
+<template>
+    <el-form :model="account" 
+      :label-position="'right'" 
+      v-loading="loading"
+      ref="accountInfo" 
+      :rules="rules" 
+      @keyup.enter.native="onSubmit('accountInfo')"
+      label-width="120px"
+      size="medium"
+      style="width:380px" class="padding-top-30">
+      <el-form-item prop="user_name" label="企业名称：">
+        <el-input type="text" v-model.trim="account.user_name" placeholder="请输入企业名称"></el-input>
+      </el-form-item>
+      <el-form-item prop="pwd" label="密码：">
+        <el-input type="password" v-model.trim="account.pwd" placeholder="请输入密码"></el-input>
+      </el-form-item>
+      <el-form-item prop="manager_index" label="管理地区：">
+        <el-select v-model="account.manager_index" placeholder="请选择地区" @change="getSelectInfo">
+          <el-option v-for="item in areaList" 
+            :key="item.manager_index" 
+            :label="item.area_name" 
+            :value="item.manager_index">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="company_id" label="所属公司：">
+        <el-select v-model="account.company_id" placeholder="请选择公司">
+          <el-option v-for="item in companyList" 
+            :key="item.company_id" 
+            :label="item.company_name" 
+            :value="item.company_id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="允许登录：">
+        <el-radio-group v-model="account.can_be_login">
+          <el-radio :label="1">允许</el-radio>
+          <el-radio :label="0">不允许</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item class="margin-top-30">
+        <el-button @click="handleClose">取 消</el-button>
+        <el-button @click="resetForm('accountInfo')">重置</el-button>
+        <el-button type="primary" @click="onSubmit('accountInfo')">确定</el-button>
+      </el-form-item>
+    </el-form>
+</template>
+
+<script>
+  import * as Http from '@/api/home'
+  import md5 from 'js-md5';
+  export default {
+    props: ['type', 'accountParent'],
+    inject: ['reload'],
+    data() {
+      return {
+        title: "创建账号",
+        dialogShow: true,
+        account: {
+          can_be_login: 1,
+        },
+        loading: false,
+        companyList: [],
+        areaList: [],
+        rules: {
+          user_name: [{required: true, message: '用户名称不能为空', trigger: 'blur'}],
+          pwd: [{required: true, message: '密码不能为空', trigger: 'blur'}],
+          company_id: [{ required: true, message: '请选择所属公司', trigger: 'change' }],
+          manager_index: [{ required: true, message: '请选择管理地区', trigger: 'change' }]
+        },
+      }
+    },
+    created() {
+      this.paramsId = this.$route.query && this.$route.query.userId;
+      this.init();
+    },
+    methods: {
+      init() {
+        // 获取下拉框信息
+        this.getSelectInfo();
+
+        setTimeout(() =>{
+          if (this.paramsId) { // 编辑
+            this.title = "编辑账号"
+            this.loading = true;
+            Http.getAccountById({user_id: this.paramsId}).then(res => {
+              this.loading = false;
+              this.$handleResponse(res, res => {
+                if (res.data) {
+                  Object({}, this.account)
+                  this.account = res.data;
+                  // 部门列表
+                  let obj = {};
+                  obj = this.companyList.find(function(item){
+                      return item.company_id === res.data.company_id 
+                  });
+                  this.departmentList = obj.departments;
+                  // 部门所选
+                  this.account.department_id = res.data.department_id;
+
+                }
+              })
+            })
+          }
+        }, 500)
+      },
+      getSelectInfo() {
+          Http.getSelectInfo().then(res => {
+            this.$handleResponse(res, res => {
+              if (res.areas) {
+                this.areaList = res.areas;
+                this.companyList = res.companies;
+              }
+            });
+          })
+      },
+      onSubmit(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.loading = true;
+            let {
+              user_name,
+              pwd,
+              manager_index,
+              company_id,
+              can_be_login
+            } = this.account;
+
+            let params = {
+                user_name: user_name,
+                pwd: md5(pwd),
+                propity: 3,  // 公司级
+                manager_index: manager_index,
+                company_id: company_id,
+                can_be_login: can_be_login
+            }
+
+            if (!this.paramsId) { // 新增
+              Http.addCompanyAccount(params).then(res => {
+                this.loading = false;
+                this.$handleResponse(res, res => {
+                  this.$message.success('新增成功');
+                  this.handleClose();
+                })
+              }).catch(err => {
+                this.loading = false;
+              });
+            } else { // 修改
+                params.user_id = this.paramsId;
+                Http.updateAccountM(params).then(res => {
+                    this.loading = false;
+                    this.$handleResponse(res, res => {
+                    this.$message.success('修改成功');
+                    this.handleClose();
+                    })
+                }).catch(err => {
+                    this.loading = false;
+                });
+            }
+          }
+        })
+      },
+      handleClose() {
+        this.$router.push({
+          path: '../account/company'
+        });
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields();
+      }
+    }
+  }
+
+</script>

@@ -19,7 +19,7 @@
       <el-table-column prop="create_time_text" label="创建时间"></el-table-column>
       <el-table-column label="操作" width="80px">
         <template slot-scope="scope">
-            <el-button size="mini" type="primary" plain icon="el-icon-view" @click="viewDetails(scope.row)" title="查看任务详情">
+            <el-button size="mini" type="primary" plain icon="el-icon-view" @click="viewDetails(scope.row)" title="查看隐患整改详情">
             </el-button>
         </template>
       </el-table-column>
@@ -71,7 +71,14 @@ export default {
         if (route.query && route.query.company_id) {
           this.companyId = route.query.company_id;
         }
-    } 
+    } else if (route.path === '/monitoring/have/company') {
+        this.tableType = 3;
+    } else if (route.path === '/monitoring/not/company') {
+        this.tableType = 4;
+        if (route.query && route.query.company_id) {
+          this.companyId = route.query.company_id;
+        }
+    }
 
     this.getListData();
   },
@@ -84,7 +91,9 @@ export default {
       };
       let queryDataName = this.tableType === 1 ? 'getCheckList': 
                           this.tableType === 2 && !this.companyId ? 'getUCheckList' : 
-                          this.tableType === 2 && this.companyId ? 'companyUncheck' : '';
+                          this.tableType === 2 && this.companyId ? 'companyUncheck' : 
+                          this.tableType === 3 ? 'companyCheckList' : 
+                          this.tableType === 4 ? 'companyUncheckList' : '';
       this.companyId ? params.company_id = this.companyId : params
       if (queryDataName) {
         Http[queryDataName](params)

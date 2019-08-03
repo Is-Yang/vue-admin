@@ -5,6 +5,7 @@
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column prop="company_name" label="公司名称" width="150px"></el-table-column>
+      <el-table-column prop="department_name" label="部门名称" width="150px"></el-table-column>
       <el-table-column prop="position_detail_sname" label="小分类短名称" width="120px"></el-table-column>
       <el-table-column prop="position_detail_name" label="小分类长名称" width="120px"></el-table-column>
       <el-table-column prop="task_name" label="任务名称" width="140px"></el-table-column>
@@ -93,6 +94,13 @@ export default {
     };
   },
   created() {
+    // 根据当前路由，对应不同统计表
+    const route = this.$route;
+    if (route.path === '/tasks') {
+        this.tableType = 1;
+    } else if (route.path === '/tasks/company') {
+        this.tableType = 2;
+    } 
     this.getListData();
   },
   methods: {
@@ -101,7 +109,11 @@ export default {
       let params = {
         page: this.page.current
       };
-      Http.getTaskDesc(params)
+
+      let queryDataName = this.tableType === 1 ? 'getTaskDesc': 
+                          this.tableType === 2 ? 'companyTaskList' : '';
+
+      Http[queryDataName](params)
         .then(res => {
           this.loading = false;
           this.$handleResponse(res, res => {
@@ -112,16 +124,6 @@ export default {
         .catch(err => {
           this.loading = false;
         });
-    },
-    onSearch() {
-      // 搜索
-      this.page.current = 1;
-      this.getListData();
-    },
-    onReset() {
-      // 清空
-      this.menuCon.keyword = "";
-      this.getListData();
     },
     // 新增，编辑弹窗显示
     dialogShow(type, initData){ 

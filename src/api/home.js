@@ -265,3 +265,80 @@ export function uploadPositionDetail(params) {
 export function checkTask() {
     return http.getAjax('/manager_check_task_request?token=' + getToken());
 }
+
+/**
+ * 2019-07-19
+ * 企业端
+ * is-yang
+ **/
+// 添加企业账号接口
+export function addCompanyAccount(params) {
+    let header = { 'Content-Type': 'application/json' };
+    return http.postAjax('/manager_add_company_account?token=' + getToken(), params, header, true)
+}
+
+// 获取企业账号列表
+export function getCompanyAccount(params) {
+    return http.getAjax('/manager_get_company_account_list?token=' + getToken(), params);
+}
+
+// 添加企业账户所需下拉框信息
+export function getSelectInfo() {
+    return http.getAjax('/manager_company_add_info?token=' + getToken());
+}
+
+// 地理信息列表（所属区域）
+export function getAreaList(params) {
+    return http.getAjax('/manager_area_list?token=' + getToken(), params);
+}
+
+// 企业未监控列表
+export function companyUncheckList(params) {
+    return http.getAjax('/manager_company_uncheck?token=' + getToken(), params);
+}
+
+// 企业监控列表
+export function companyCheckList(params) {
+    return http.getAjax('/manager_company_check?token=' + getToken(), params);
+}
+
+// 任务信息列表  创建任务所需求请求的下拉框数据
+export function requestCompanyCheckInfo(params) {
+    return http.getAjax('/manager_request_company_check_info?token=' + getToken(), params);
+}
+
+// 任务信息列表 
+export function companyTaskList(params) {
+    return http.getAjax('/manager_company_task_list?token=' + getToken(), params);
+}
+
+// 隐患整改过程导出
+export function exportWord(params) {
+    let header = { responseType: 'arraybuffer' }
+    return http.postAjax('/export_word?token=' + getToken(), params, header, true);
+}
+
+// 添加企业管理端账号
+export function addAccountM(params) {
+    let header = { 'Content-Type': 'application/json' };
+    return http.postAjax('/manager_add_accuont_m?token=' + getToken(), params, header, true)
+}
+
+// 修改企业管理端账号
+export function updateAccountM(params) {
+    let header = { 'Content-Type': 'application/json' };
+    return http.postAjax('/manager_update_accuont_m?token=' + getToken(), params, header, true)
+}
+
+// 删除企业管理端账号
+export function deleteAccountM(params) {
+    let header = { 'Content-Type': 'application/json' };
+    return http.postAjax('/manager_delete_accuont_m?token=' + getToken(), params, header, true)
+}
+
+// 政府端发送消息
+export function sendMessage(params) {
+    let header = { 'Content-Type': 'application/json' };
+    return http.postAjax('/manager_sent_message?token=' + getToken(), params, header, true)
+}
+

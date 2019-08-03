@@ -192,9 +192,22 @@
       this.getUserList();
       this.getPositionList();
       this.getPositionDetailList();
+      // this.requestCompanyCheckInfo();
       this.init();
     },
     methods: {
+      requestCompanyCheckInfo() {
+        Http.requestCompanyCheckInfo()
+          .then(res => {
+            this.loading = false;
+            this.$handleResponse(res, res => {
+              console.log(res)
+            });
+          })
+          .catch(err => {
+            this.loading = false;
+          });
+      },
       changeDepart(data) {
         this.$set(this.taskForm, 'department_id', data);
         this.$forceUpdate();

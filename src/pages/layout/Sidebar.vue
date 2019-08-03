@@ -21,10 +21,21 @@
         <span slot="title">公司列表</span>
       </el-menu-item>
 
-      <el-menu-item index="/account" v-if="level == 2">
-        <i class="fa fa-users"></i> 
-        <span slot="title">用户列表</span>
-      </el-menu-item>
+      <el-submenu index="/account" v-if="level == 2">
+        <template slot="title">
+          <i class="fa fa-users"></i> 
+          <span slot="title">账号列表</span>
+        </template>
+        <el-menu-item index="/account">
+          <span slot="title">员工账号</span>
+        </el-menu-item>
+        <el-menu-item index="/account/company">
+          <span slot="title">企业账号</span>
+        </el-menu-item>
+        <el-menu-item>
+          <span slot="title">政府账号</span>
+        </el-menu-item>
+      </el-submenu>
 
       <el-submenu index="/classify" v-if="level == 2">
         <template slot="title">
@@ -39,15 +50,15 @@
         </el-menu-item>
       </el-submenu>
 
-      <el-submenu index="/monitoring" v-if="level == 1 || level == 2">
+      <el-submenu index="/monitoring" v-if="level == 1 || level == 2 || level == 3">
         <template slot="title">
           <i class="fa fa-cogs"></i> 
           <span slot="title">监控列表</span>
         </template>
-        <el-menu-item index="/monitoring/have">
+        <el-menu-item :index="level === 3 ? '/monitoring/have/company' : '/monitoring/have'">
           <span slot="title">已监控</span>
         </el-menu-item>
-        <el-menu-item index="/monitoring/not">
+        <el-menu-item :index="level === 3 ? '/monitoring/not/company' : '/monitoring/not'">
           <span slot="title">未监控</span>
         </el-menu-item>
       </el-submenu>
@@ -57,7 +68,12 @@
         <span slot="title">应急消息列表</span>
       </el-menu-item>
 
-      <el-menu-item index="/tasks" v-if="level == 2">
+      <el-menu-item index="/tasks" v-if="level == 3">
+        <i class="fa fa-tasks"></i> 
+        <span slot="title">任务信息</span>
+      </el-menu-item>
+
+      <el-menu-item index="/tasks/company" v-if="level == 2">
         <i class="fa fa-tasks"></i> 
         <span slot="title">任务信息</span>
       </el-menu-item>

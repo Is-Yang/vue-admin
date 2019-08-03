@@ -7,11 +7,11 @@
             <h3>{{item.company_type_name}}</h3>
             <div class="info">
                 <div @click="showCompanySelect(item.company_type, 3)">
-                    严重风险
+                    {{item.company_type === 1 ? '重大风险' : '严重风险'}}
                     <div>{{item.risk_serious}}</div>
                 </div>
                 <div @click="showCompanySelect(item.company_type, 2)">
-                    高风险
+                    {{item.company_type === 1 ? '较大风险' : '高风险'}}
                     <div>{{item.risk_high}}</div>
                 </div>
                 <div @click="showCompanySelect(item.company_type, 1)">
@@ -194,7 +194,7 @@ export default {
                 }
                 &:nth-child(5) {
                     .el-card {
-                        background-image: linear-gradient(to bottom, #4fc08d, #63e8ac);
+                        background-image: linear-gradient(to bottom, #607D8B, #9fb2bb);
                     }
                 }
                 &:nth-child(6) {

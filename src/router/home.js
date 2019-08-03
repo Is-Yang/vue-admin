@@ -7,7 +7,9 @@ import {
 
 import {
     AccountList,
-    AccountHandle
+    AccountHandle,
+    CompanyAccount,
+    CompanyAccountHandle
 } from '../pages/account'
 import {
     CompanyList
@@ -47,13 +49,25 @@ export default [{
         component: AccountList,
         name: '账号列表'
     }, {
+        path: 'account/company',
+        component: CompanyAccount,
+        name: '企业账号'
+    }, {
         path: 'account/add',
         component: AccountHandle,
-        name: '新增账号'
+        name: '创建账号'
     }, {
         path: 'account/edit',
         component: AccountHandle,
         name: '编辑账号'
+    }, {
+        path: 'account/addCompany',
+        component: CompanyAccountHandle,
+        name: '创建企业账号'
+    }, {
+        path: 'account/editCompany',
+        component: CompanyAccountHandle,
+        name: '编辑企业账号'
     }, {
         path: 'company',
         component: CompanyList,
@@ -64,6 +78,10 @@ export default [{
         name: '部门列表'
     }, {
         path: 'tasks',
+        component: TaskList,
+        name: '任务信息'
+    }, {
+        path: 'tasks/company',
         component: TaskList,
         name: '任务信息'
     }, {
@@ -92,9 +110,18 @@ export default [{
             component: MonitoringList,
             name: '未监控'
         }, {
+            path: 'have/company',
+            component: MonitoringList,
+            name: '已监控',
+        },
+        {
+            path: 'not/company',
+            component: MonitoringList,
+            name: '未监控'
+        }, {
             path: 'details',
             component: MonitoringDetails,
-            name: '任务详情'
+            name: '隐患整改详情'
         }
     ]
 }, {

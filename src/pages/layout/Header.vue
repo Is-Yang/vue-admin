@@ -177,7 +177,7 @@
         Http.editAccount(params).then(res => {
           this.loading = false;
           this.$handleResponse(res, res => {
-             this.$alert('修改账户密码后需重新登录', '提示', {
+             this.$alert('修改账号密码后需重新登录', '提示', {
               confirmButtonText: '确定',
             }).then(() => {
               this.$router.replace('/login');

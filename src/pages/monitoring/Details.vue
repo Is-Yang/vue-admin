@@ -52,6 +52,7 @@ export default {
     data() {
         return {
             taskId: '',
+            position_id: '',
             descData: {},
             infoData: {},
             configData: {},
@@ -60,7 +61,7 @@ export default {
     },
     created() {
         const route = this.$route;
-        if (route.query && route.query.taskId) {
+        if (route.query) {
             this.taskId = route.query.taskId;
         };
         this.init();

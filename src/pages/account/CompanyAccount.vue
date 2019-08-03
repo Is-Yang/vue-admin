@@ -1,16 +1,17 @@
 <template>
   <div>
-    <div class="margin-bottom-20 text-right">
-      <router-link to="account/add">
-        <el-button type="primary" size="small">创建员工账号</el-button>
-      </router-link>
-    </div>
+    <el-row type="flex" class="margin-bottom-20" justify="space-between">
+      <!-- <el-col style="font-size: 16px; color: #67C23A;">管理地区: {{areaInfo.area_name}}</el-col> -->
+      <el-col class="text-right">
+        <router-link to="addCompany">
+          <el-button type="primary" size="small">创建企业账号</el-button>
+        </router-link></el-col>
+    </el-row>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-      <el-table-column prop="company" label="公司"></el-table-column>
-      <el-table-column prop="department" label="部门"></el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="user_name" label="用户名"></el-table-column>
-      <el-table-column prop="job" label="岗位等级"></el-table-column>
+      <el-table-column prop="company.company_name" label="公司"></el-table-column>
+      <el-table-column prop="user_name" label="名称"></el-table-column>
+      <el-table-column prop="area_name" label="区域"></el-table-column>
+      <el-table-column prop="propity_text" label="用户等级"></el-table-column>
       <el-table-column label="是否允许登录">
         <template slot-scope="scope">
          {{scope.row.can_be_login === 1 ? '允许' : '不允许'}}
@@ -42,6 +43,7 @@ export default {
     return {
       loading: false,
       listData: [],
+      areaInfo: '',
       page: {
         current: 1,
         size: 10,
@@ -63,11 +65,12 @@ export default {
       let params = {
         page: this.page.current
       };
-      Http.getAccountList(params)
+      Http.getCompanyAccount(params)
         .then(res => {
           this.loading = false;
           this.$handleResponse(res, res => {
             this.listData = res.data;
+            this.areaInfo = res.area;
             this.page.total = res.total;
           });
         })
@@ -75,20 +78,10 @@ export default {
           this.loading = false;
         });
     },
-    onSearch() {
-      // 搜索
-      this.page.current = 1;
-      this.getListData();
-    },
-    onReset() {
-      // 清空
-      this.menuCon.keyword = "";
-      this.getListData();
-    },
     editFn(user_id) {
       // 编辑
       this.$router.push({
-        path: "account/edit",
+        path: "/account/editCompany",
         query: {
           userId: user_id
         }
@@ -111,7 +104,7 @@ export default {
       let params = {
         user_id: id
       };
-      Http.delAccount(params)
+      Http.deleteAccountM(params)
         .then(res => {
           this.$handleResponse(res, res => {
             this.$message.success("删除成功");
@@ -139,4 +132,3 @@ export default {
   }
 };
 </script>
-

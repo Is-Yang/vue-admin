@@ -6,12 +6,14 @@
     </div>
     <el-table v-if="tableType === 1" v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
       <el-table-column prop="position_name" label="标题"></el-table-column>
-      <el-table-column label="操作" width="180px">
+      <el-table-column label="操作" width="220px">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row, 'big')"
             title="编辑"></el-button>
           <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row.position_id, 'position_id')"
             title="删除"></el-button>
+          <el-button size="mini" type="success" plain icon="el-icon-download" @click="exportFn(scope.row)"
+            title="导出"></el-button>  
         </template>
       </el-table-column>
     </el-table>
@@ -75,6 +77,30 @@ export default {
     this.getListData();
   },
   methods: {
+    // 导出
+    exportFn(data) {
+        this.loading = true;
+        Http.exportWord(
+            {
+              position_id: data.position_id
+            }
+          ).then(res => {
+            this.$handleResponse(res, res => {
+              this.loading = false;
+              let blob = new Blob([res], {type: "application/msword;charset=utf-8"});
+              let objectUrl = URL.createObjectURL(blob);
+              let link = document.createElement("a");
+              let fname = data.position_name;
+              link.href = objectUrl;
+              link.setAttribute("download", fname);
+              document.body.appendChild(link);
+              link.click();
+            });
+          })
+          .catch(err => {
+            this.loading = false;
+          });
+    },
     getListData() {
       // 菜单列表数据
       this.loading = true;
@@ -87,7 +113,6 @@ export default {
             this.$handleResponse(res, res => {
               this.listData = res;
               this.page.total = res.total;
-              console.log(this.listData)
             });
           })
           .catch(err => {
