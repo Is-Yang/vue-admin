@@ -7,14 +7,17 @@
       @keyup.enter.native="onSubmit('accountInfo')"
       label-width="120px"
       size="medium"
-      style="width:380px" class="padding-top-30">
+      style="width:380px">
+      <el-form-item label="所属区域：">
+        {{areaInfo.area_name}}
+      </el-form-item>
       <el-form-item prop="user_name" label="企业名称：">
         <el-input type="text" v-model.trim="account.user_name" placeholder="请输入企业名称"></el-input>
       </el-form-item>
       <el-form-item prop="pwd" label="密码：">
         <el-input type="password" v-model.trim="account.pwd" placeholder="请输入密码"></el-input>
       </el-form-item>
-      <el-form-item prop="manager_index" label="管理地区：">
+      <!-- <el-form-item prop="manager_index" label="管理地区：">
         <el-select v-model="account.manager_index" placeholder="请选择地区" @change="getSelectInfo">
           <el-option v-for="item in areaList" 
             :key="item.manager_index" 
@@ -22,7 +25,7 @@
             :value="item.manager_index">
           </el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item prop="company_id" label="所属公司：">
         <el-select v-model="account.company_id" placeholder="请选择公司">
           <el-option v-for="item in companyList" 
@@ -61,12 +64,12 @@
         },
         loading: false,
         companyList: [],
-        areaList: [],
+        areaInfo: {},
         rules: {
           user_name: [{required: true, message: '用户名称不能为空', trigger: 'blur'}],
           pwd: [{required: true, message: '密码不能为空', trigger: 'blur'}],
           company_id: [{ required: true, message: '请选择所属公司', trigger: 'change' }],
-          manager_index: [{ required: true, message: '请选择管理地区', trigger: 'change' }]
+          // manager_index: [{ required: true, message: '请选择管理地区', trigger: 'change' }]
         },
       }
     },
@@ -108,7 +111,7 @@
           Http.getSelectInfo().then(res => {
             this.$handleResponse(res, res => {
               if (res.areas) {
-                this.areaList = res.areas;
+                this.areaInfo = res.areas;
                 this.companyList = res.companies;
               }
             });
@@ -121,7 +124,6 @@
             let {
               user_name,
               pwd,
-              manager_index,
               company_id,
               can_be_login
             } = this.account;
@@ -130,7 +132,7 @@
                 user_name: user_name,
                 pwd: md5(pwd),
                 propity: 3,  // 公司级
-                manager_index: manager_index,
+                manager_index: this.areaInfo.manager_index,
                 company_id: company_id,
                 can_be_login: can_be_login
             }

@@ -59,7 +59,6 @@ export function getAllCompanyList(params) {
     return http.getAjax('/manager_company_list_total?token=' + getToken(), params)
 }
 
-
 // 创建公司信息
 export function addCompany(params) {
     let header = { 'Content-Type': 'application/json' };
@@ -333,7 +332,7 @@ export function updateAccountM(params) {
 // 删除企业管理端账号
 export function deleteAccountM(params) {
     let header = { 'Content-Type': 'application/json' };
-    return http.postAjax('/manager_delete_accuont_m?token=' + getToken(), params, header, true)
+    return http.postAjax('/manager_delete_accuont_m?token=' + getToken() + '&user_id=' + params.user_id, header, true)
 }
 
 // 政府端发送消息
@@ -341,4 +340,3 @@ export function sendMessage(params) {
     let header = { 'Content-Type': 'application/json' };
     return http.postAjax('/manager_sent_message?token=' + getToken(), params, header, true)
 }
-

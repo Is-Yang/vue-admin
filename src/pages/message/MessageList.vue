@@ -24,6 +24,7 @@
     <!-- 发送应急消息 -->
     <message-handle
       v-if="dialog.show"
+      :pageType = '2'
       @cancel="dialog.show = !dialog.show"
       @success="dialogSuccess">
     </message-handle>

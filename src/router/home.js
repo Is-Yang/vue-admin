@@ -24,7 +24,8 @@ import {
     ImgList
 } from '../pages/pictures'
 import {
-    MessageList
+    MessageList,
+    GovernmentMessage
 } from '../pages/message'
 import {
     ClassifyList
@@ -69,6 +70,18 @@ export default [{
         component: CompanyAccountHandle,
         name: '编辑企业账号'
     }, {
+        path: 'account/government',
+        component: CompanyAccount,
+        name: '政府账号'
+    }, {
+        path: 'account/addGovernment',
+        component: CompanyAccountHandle,
+        name: '创建政府账号'
+    }, {
+        path: 'account/editGovernment',
+        component: CompanyAccountHandle,
+        name: '编辑政府账号'
+    }, {
         path: 'company',
         component: CompanyList,
         name: '公司列表'
@@ -95,6 +108,10 @@ export default [{
     }, {
         path: 'message',
         component: MessageList,
+        name: '应急消息'
+    }, {
+        path: 'message/government',
+        component: GovernmentMessage,
         name: '应急消息'
     }]
 }, {
@@ -138,5 +155,4 @@ export default [{
             name: '小分类列表'
         }
     ]
-}
-]
+}]

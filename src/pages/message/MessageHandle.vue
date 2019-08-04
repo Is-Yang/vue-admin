@@ -25,12 +25,13 @@
 
 <script>
 import * as Http from '@/api/home'
+import moment from 'moment';
 export default {
-    props: ['type', 'taskParent'],
+    props: ['pageType'],
     inject: ['reload'],
     data() {
       return {
-        title: "创建任务",
+        title: "创建消息",
         dialogShow: true,
         loading: false,
         messageForm: {},
@@ -58,13 +59,25 @@ export default {
               message_from
             } = this.messageForm;
 
-            let params = {
+            let create_time = moment(new Date()).hours(23).minutes(59).seconds(59).valueOf();
+
+            // 平台端
+            let pinParams = {
                 message_title: message_title,
                 message_content: message_content,
                 message_from: message_from,
             }
-
-            Http.genMessage(params).then(res => {
+            // 政府端
+            let goverParams = {
+                company_id: 1,
+                title: message_title,
+                content: message_content,
+                create_time: create_time
+            }
+            // pageType 1:政府端， 2:平台端
+            let queryName = this.pageType == 1 ? 'sendMessage' : 'genMessage';
+            let params = this.pageType == 1 ? goverParams : pinParams;
+            Http[queryName](params).then(res => {
                 this.loading = false;
                 this.$handleResponse(res, res => {
                     this.$message.success('发送成功');

@@ -32,7 +32,7 @@
         <el-menu-item index="/account/company">
           <span slot="title">企业账号</span>
         </el-menu-item>
-        <el-menu-item>
+        <el-menu-item index="/account/government">
           <span slot="title">政府账号</span>
         </el-menu-item>
       </el-submenu>
@@ -63,7 +63,7 @@
         </el-menu-item>
       </el-submenu>
 
-      <el-menu-item index="/message" v-if="level == 2">
+      <el-menu-item :index="level === 1 ? '/message/government' : '/message'" v-if="level == 1 || level == 2">
         <i class="fa fa-thumbtack"></i> 
         <span slot="title">应急消息列表</span>
       </el-menu-item>

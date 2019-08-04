@@ -4,7 +4,7 @@
       <!-- <el-col style="font-size: 16px; color: #67C23A;">管理地区: {{areaInfo.area_name}}</el-col> -->
       <el-col class="text-right">
         <router-link to="addCompany">
-          <el-button type="primary" size="small">创建企业账号</el-button>
+          <el-button type="primary" size="small">{{pageType == 2 ? '创建政府账号':'创建企业账号'}}</el-button>
         </router-link></el-col>
     </el-row>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
@@ -37,6 +37,7 @@
 
 <script>
 import * as Http from "@/api/home";
+import * as userInfo from "@/utils/commonService/getUserInfo";
 export default {
   inject: ["reload"],
   data() {
@@ -49,21 +50,36 @@ export default {
         size: 10,
         total: 0
       },
+      userInfo: {},
       dialog: {
         show: false,
         type: ""
-      }
+      },
+      pageType: 3
     };
   },
   created() {
+    this.userInfo = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
+
+    const route = this.$route;
+    if (route.path === '/account/company') {
+        this.pageType = 3;
+    } else if (route.path === '/account/government') {
+        this.pageType = 2;
+    } 
     this.getListData();
   },
   methods: {
     getListData() {
-      // 菜单列表数据
       this.loading = true;
+      let propity = 0;
+      if (this.userInfo && this.userInfo.propity) {
+        propity = this.userInfo.propity;
+      }
       let params = {
-        page: this.page.current
+        page: this.page.current,
+        type: propity == 2 ? 1 : '',  // type未1表示平台端，默认为0表示政府端
+        propity: this.pageType   // 企业账户3， 政府账户2，平台账户列表1
       };
       Http.getCompanyAccount(params)
         .then(res => {

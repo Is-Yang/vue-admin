@@ -1,42 +1,41 @@
 <template>
   <div>
     <div class="margin-bottom-20 text-right">
-      <router-link to="account/add">
-        <el-button type="primary" size="small">创建员工账号</el-button>
-      </router-link>
+      <el-button type="primary" size="small" @click="dialog.show = true">发送消息</el-button>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-      <el-table-column prop="company" label="公司"></el-table-column>
-      <el-table-column prop="department" label="部门"></el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="user_name" label="用户名"></el-table-column>
-      <el-table-column prop="job" label="岗位等级"></el-table-column>
-      <el-table-column label="是否允许登录">
+      <el-table-column prop="message_from" label="消息发送者"></el-table-column>
+      <el-table-column prop="message_title" label="消息标题"></el-table-column>
+      <el-table-column prop="message_content" label="消息内容"></el-table-column>
+      <el-table-column prop="create_time_text" label="发送时间"></el-table-column>
+      <el-table-column label="操作" width="120px">
         <template slot-scope="scope">
-         {{scope.row.can_be_login === 1 ? '允许' : '不允许'}}
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="150px">
-        <template slot-scope="scope">
-          <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="editFn(scope.row.user_id)"
-            title="编辑"></el-button>
           <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
             title="删除"></el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <!-- 分页 -->
     <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.current"
       :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
       layout="total, sizes, prev, pager, next, jumper"></el-pagination>
-  
+    
+    <message-handle
+      v-if="dialog.show"
+      :pageType = '1'
+      @cancel="dialog.show = !dialog.show"
+      @success="dialogSuccess">
+    </message-handle>
   </div>
 </template>
 
 <script>
 import * as Http from "@/api/home";
+import MessageHandle from './MessageHandle';
 export default {
+  components: {
+    MessageHandle
+  },
   inject: ["reload"],
   data() {
     return {
@@ -49,12 +48,11 @@ export default {
       },
       dialog: {
         show: false,
-        type: ""
       }
     };
   },
   created() {
-    this.getListData();
+    // this.getListData();
   },
   methods: {
     getListData() {
@@ -62,7 +60,7 @@ export default {
       let params = {
         page: this.page.current
       };
-      Http.getAccountList(params)
+      Http.getMessageList(params)
         .then(res => {
           this.loading = false;
           this.$handleResponse(res, res => {
@@ -74,25 +72,6 @@ export default {
           this.loading = false;
         });
     },
-    onSearch() {
-      // 搜索
-      this.page.current = 1;
-      this.getListData();
-    },
-    onReset() {
-      // 清空
-      this.menuCon.keyword = "";
-      this.getListData();
-    },
-    editFn(user_id) {
-      // 编辑
-      this.$router.push({
-        path: "account/edit",
-        query: {
-          userId: user_id
-        }
-      });
-    },
     deleteFn(data) {
       // 删除
       this.$confirm("请确认是否继续删除?", "提示", {
@@ -101,16 +80,16 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.doDelete(data.user_id);
+          this.doDelete(data.message_id);
         })
         .catch(() => {});
     },
     doDelete(id) {
       this.loading = true;
       let params = {
-        user_id: id
+        message_id: id
       };
-      Http.delAccount(params)
+      Http.delMessage(params)
         .then(res => {
           this.$handleResponse(res, res => {
             this.$message.success("删除成功");
@@ -131,7 +110,6 @@ export default {
       this.getListData();
     },
     dialogSuccess() {
-      // 新增或修改成功后关闭窗口
       this.dialog.show = false;
       this.getListData();
     }
