@@ -12,7 +12,7 @@
             title="编辑"></el-button>
           <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row.position_id, 'position_id')"
             title="删除"></el-button>
-          <el-button size="mini" type="success" plain icon="el-icon-download" @click="exportFn(scope.row)"
+          <el-button v-if="userInfo.propity === 3" size="mini" type="success" plain icon="el-icon-download" @click="exportFn(scope.row)"
             title="导出"></el-button>  
         </template>
       </el-table-column>
@@ -47,6 +47,7 @@
 <script>
 import * as Http from "@/api/home";
 import ClassifyHandle from './ClassifyHandle';
+import * as userInfo from "@/utils/commonService/getUserInfo";
 export default {
   components: {
     ClassifyHandle
@@ -66,6 +67,8 @@ export default {
     };
   },
   created() {
+    this.userInfo = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
+
     // 根据当前路由，对应不同分类数据
     const route = this.$route;
     if (route.path === '/classify/big') {

@@ -21,23 +21,28 @@
         <span slot="title">公司列表</span>
       </el-menu-item>
 
-      <el-submenu index="/account" v-if="level == 2">
+      <el-menu-item index="/company" v-if="level == 1">
+        <i class="fa fa-building"></i> 
+        <span slot="title">企业列表</span>
+      </el-menu-item>
+
+      <el-submenu index="/account" v-if="level !=1">
         <template slot="title">
           <i class="fa fa-users"></i> 
           <span slot="title">账号列表</span>
         </template>
-        <el-menu-item index="/account">
+        <el-menu-item index="/account" v-if="level == 2">
           <span slot="title">员工账号</span>
         </el-menu-item>
-        <el-menu-item index="/account/company">
+        <el-menu-item index="/account/company" v-if="level == 2">
           <span slot="title">企业账号</span>
         </el-menu-item>
-        <el-menu-item index="/account/government">
+        <el-menu-item index="/account/government" v-if="level == 2">
           <span slot="title">政府账号</span>
         </el-menu-item>
       </el-submenu>
 
-      <el-submenu index="/classify" v-if="level == 2">
+      <el-submenu index="/classify" v-if="level != 1">
         <template slot="title">
           <i class="fa fa-tasks"></i> 
           <span slot="title">分类列表</span>

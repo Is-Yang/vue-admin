@@ -78,7 +78,7 @@ export default {
       }
       let params = {
         page: this.page.current,
-        type: propity == 2 ? 1 : '',  // type未1表示平台端，默认为0表示政府端
+        type: propity == 2 ? 1 : 0,  // type未1表示平台端，默认为0表示政府端
         propity: this.pageType   // 企业账户3， 政府账户2，平台账户列表1
       };
       Http.getCompanyAccount(params)
