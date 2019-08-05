@@ -1,38 +1,42 @@
 <template>
   <div>
     <div class="margin-bottom-20 text-right">
-      <el-upload
-        :action="uploadUrl"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess">
-        <el-button size="small" type="primary">上传文件</el-button>
-      </el-upload>
+        <el-button size="small" type="primary" @click="dialogShow('add', {})">上传资料</el-button>
     </div>
-    <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-      <el-table-column prop="name" label="宣传图"></el-table-column>
-      <el-table-column prop="create_time" label="创建时间"></el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <a :href="scope.row.url" download>
-            <el-button size="mini" type="success" plain icon="el-icon-download" @click="downloadFn(scope.row)" title="下载">
-            </el-button>
-          </a>
+
+    <el-tabs v-model="active" type="card" @tab-click="getListData">
+      <el-tab-pane label="安全生产培训" name="1"></el-tab-pane>
+      <el-tab-pane label="应急救援" name="2"></el-tab-pane>
+      <el-tab-pane label="安全生产标准化" name="3"></el-tab-pane>
+
+      <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
+        <el-table-column prop="name" label="宣传图"></el-table-column>
+        <el-table-column prop="create_time" label="创建时间"></el-table-column>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <a :href="scope.row.url" download>
+              <el-button size="mini" type="success" plain icon="el-icon-download" @click="downloadFn(scope.row)"
+                title="下载">
+              </el-button>
+            </a>
             <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)" title="删除">
             </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+          </template>
+        </el-table-column>
+      </el-table>
 
-    <!-- 分页 -->
-    <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.current"
-      :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
-      layout="total, sizes, prev, pager, next, jumper"></el-pagination>
+      <!-- 分页 -->
+      <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.current"
+        :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
+        layout="total, sizes, prev, pager, next, jumper"></el-pagination>
+    </el-tabs>
 
-    <!-- 文件新增或修改 -->
+     <!-- 文件新增或修改 -->
     <file-handle
         v-if="dialog.show"
         :type="dialog.type"
         :fileParent="dialog.fileParent"
+        :currentActive="active"
         @cancel="dialog.show = !dialog.show"
         @success="dialogSuccess">
     </file-handle>
@@ -52,6 +56,7 @@
     data() {
       return {
         loading: false,
+        active: '1',
         listData: [],
         page: {
           current: 1,
@@ -61,6 +66,7 @@
         dialog: {
           show: false,
           type: "",
+          active: '1',
           fileParent: {}
         },
         uploadUrl: window.scrmApi + '/manager_file_upload?token=' + user_info.token,
@@ -94,7 +100,7 @@
         this.loading = true;
         let params = {
           page: this.page.current,
-          type: 0
+          type: this.active
         };
         Http.getFileList(params)
           .then(res => {

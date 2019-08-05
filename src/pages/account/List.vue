@@ -5,12 +5,29 @@
         <el-button type="primary" size="small">创建员工账号</el-button>
       </router-link>
     </div>
-    <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
+    <el-table v-if="propity !== 3" v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column prop="company" label="公司"></el-table-column>
       <el-table-column prop="department" label="部门"></el-table-column>
       <el-table-column prop="name" label="姓名"></el-table-column>
       <el-table-column prop="user_name" label="用户名"></el-table-column>
       <el-table-column prop="job" label="岗位等级"></el-table-column>
+      <el-table-column label="是否允许登录">
+        <template slot-scope="scope">
+         {{scope.row.can_be_login === 1 ? '允许' : '不允许'}}
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="150px">
+        <template slot-scope="scope">
+          <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="editFn(scope.row.user_id)"
+            title="编辑"></el-button>
+          <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
+            title="删除"></el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <el-table v-if="propity === 3" v-loading="loading" border :data="listData" tooltip-effect="dark">
+      <el-table-column prop="user_name" label="用户名"></el-table-column>
       <el-table-column label="是否允许登录">
         <template slot-scope="scope">
          {{scope.row.can_be_login === 1 ? '允许' : '不允许'}}
@@ -36,6 +53,7 @@
 
 <script>
 import * as Http from "@/api/home";
+import * as userInfo from "@/utils/commonService/getUserInfo";
 export default {
   inject: ["reload"],
   data() {
@@ -50,10 +68,17 @@ export default {
       dialog: {
         show: false,
         type: ""
-      }
+      },
+      userInfo: {},
+      propity: 0,
     };
   },
   created() {
+    this.userInfo = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
+    if (this.userInfo && this.userInfo.propity) {
+        this.propity = this.userInfo.propity;
+    }
+
     this.getListData();
   },
   methods: {
@@ -62,11 +87,12 @@ export default {
       let params = {
         page: this.page.current
       };
-      Http.getAccountList(params)
+      let queryName = this.propity === 3 ? 'getManagerUserList' : 'getManagerUserList';
+      Http[queryName](params)
         .then(res => {
           this.loading = false;
           this.$handleResponse(res, res => {
-            this.listData = res.data;
+            this.listData = this.propity === 3 ? res.managerUsers : res.data;
             this.page.total = res.total;
           });
         })

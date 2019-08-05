@@ -18,17 +18,18 @@
         <el-input type="password" v-model.trim="account.pwd" placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item prop="company_id" label="所属公司：">
-        <el-select v-model="account.company_id" placeholder="请选择公司" @change="getDepartment">
+        {{companyInfo.company_name}}
+        <!-- <el-select v-model="account.company_id" placeholder="请选择公司" @change="getDepartment">
           <el-option v-for="item in companyList" 
             :key="item.company_id" 
             :label="item.company_name" 
             :value="item.company_id">
           </el-option>
-        </el-select>
+        </el-select> -->
       </el-form-item>
       <el-form-item label="所属部门：">
         <el-select v-model="account.department_id" placeholder="请选择部门" @change="changeDepart">
-          <el-option v-for="item in departmentList" 
+          <el-option v-for="item in propity !== 3 ? departmentList : companyInfo.departments" 
             :key="item.department_id" 
             :label="item.department_name" 
             :value="item.department_id">
@@ -37,7 +38,7 @@
       </el-form-item>
       <el-form-item prop="job_level" label="岗位等级：">
         <el-select v-model="account.job_level" placeholder="请选择岗位">
-          <el-option v-for="item in jobList" :key="item.value" :label="item.name" :value="item.value">
+          <el-option v-if="propity !== 3 ? true : item.value !== 3" v-for="item in jobList" :key="item.value" :label="item.name" :value="item.value">
           </el-option>
         </el-select>
       </el-form-item>
@@ -58,6 +59,7 @@
 <script>
   import * as Http from '@/api/home'
   import md5 from 'js-md5';
+  import * as userInfo from "@/utils/commonService/getUserInfo";
   export default {
     props: ['type', 'accountParent'],
     inject: ['reload'],
@@ -71,6 +73,7 @@
         loading: false,
         companyList: [],
         departmentList: [],
+        companyInfo: {},
         jobList: [
           {
             name: '岗位级',
@@ -93,17 +96,22 @@
           // department_id: [{ required: true, message: '请选择所属部门', trigger: 'change' }],
           job_level: [{ required: true, message: '请选择岗位等级', trigger: 'change' }]
         },
+        userInfo: {},
+        propity: {}
       }
     },
     created() {
       this.paramsId = this.$route.query && this.$route.query.userId;
+      this.userInfo = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
+      if (this.userInfo && this.userInfo.propity) {
+          this.propity = this.userInfo.propity;
+      }
       this.init();
     },
     methods: {
       getCompany() {
         Http.getCompanyDepartment()
           .then(res => {
-            this.loading = false;
             this.$handleResponse(res, res => {
               if (res.data) {
                 this.companyList = res.data;
@@ -111,7 +119,6 @@
             });
           })
           .catch(err => {
-            this.loading = false;
           });
       },
       getDepartment(companyId) {
@@ -128,12 +135,27 @@
         this.$set(this.account, 'department_id', data);
         this.$forceUpdate();
       },
+      getManagerCompanyDepartMent() {
+        Http.getManagerCompanyDepartMent()
+          .then(res => {
+            this.$handleResponse(res, res => {
+              if (res.data) {
+                this.companyInfo = res.data;
+                this.account.company_id = res.data.company_id;
+              }
+            });
+          }).catch(err => { });
+      },
       init() {
-        // 获取公司列表
-        this.getCompany();
-        // 获取部门列表
-        this.getDepartment();
-
+        if (this.propity !== 3) {
+          // 获取公司列表
+          this.getCompany();
+          // 获取部门列表
+          this.getDepartment();
+        } else {
+          this.getManagerCompanyDepartMent();
+        }
+        
         setTimeout(() =>{
           if (this.paramsId) { // 编辑
             this.title = "编辑账号"

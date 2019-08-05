@@ -31,7 +31,7 @@
           <i class="fa fa-users"></i> 
           <span slot="title">账号列表</span>
         </template>
-        <el-menu-item index="/account" v-if="level == 2">
+        <el-menu-item index="/account" v-if="level == 2 || level == 3">
           <span slot="title">员工账号</span>
         </el-menu-item>
         <el-menu-item index="/account/company" v-if="level == 2">
@@ -91,6 +91,11 @@
       <el-menu-item index="/other" v-if="level == 2">
         <i class="fa el-icon-info"></i> 
         <span slot="title">其他资料列表</span>
+      </el-menu-item>
+
+      <el-menu-item index="/company/info" v-if="level == 3">
+        <i class="fa el-icon-info"></i> 
+        <span slot="title">企业资料</span>
       </el-menu-item>
       
     </el-menu>

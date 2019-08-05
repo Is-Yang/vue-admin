@@ -29,7 +29,7 @@
       :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
       layout="total, sizes, prev, pager, next, jumper"></el-pagination>
 
-    <!-- 图片预览 -->
+    <!-- 宣传图新增或修改 -->
     <pictures-handle
         v-if="dialog.show"
         :type="dialog.type"

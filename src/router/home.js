@@ -12,7 +12,8 @@ import {
     CompanyAccountHandle
 } from '../pages/account'
 import {
-    CompanyList
+    CompanyList,
+    CompanyInfo
 } from '../pages/company'
 import {
     TaskList
@@ -85,6 +86,10 @@ export default [{
         path: 'company',
         component: CompanyList,
         name: '公司列表'
+    }, {
+        path: 'company/info',
+        component: CompanyInfo,
+        name: '企业资料'
     }, {
         path: 'department',
         component: DepartmentList,

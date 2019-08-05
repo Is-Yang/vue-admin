@@ -340,3 +340,13 @@ export function sendMessage(params) {
     let header = { 'Content-Type': 'application/json' };
     return http.postAjax('/manager_sent_message?token=' + getToken(), params, header, true)
 }
+
+// 企业端账户列表
+export function getManagerUserList(params) {
+   return http.getAjax('/manager_manager_user_list?token=' + getToken(), params); 
+}
+
+// 企业端添加修改账号的下拉框数据
+export function getManagerCompanyDepartMent(params) {
+    return http.getAjax('/manager_company_department_info?token=' + getToken(), params); 
+}

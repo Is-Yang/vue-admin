@@ -81,6 +81,8 @@
             this.$store.dispatch('saveUser', setData);
             if (propity == 1) {
               this.$router.push({path: '/index'});
+            } else if (propity == 3) {
+              this.$router.push({path: '/account'});
             } else {
               this.$router.push({path: '/company'});
             }
