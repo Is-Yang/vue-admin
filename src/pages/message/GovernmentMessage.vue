@@ -5,6 +5,7 @@
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column prop="message_from" label="消息发送者"></el-table-column>
+      <el-table-column prop="message_to" label="发送对象"></el-table-column>
       <el-table-column prop="message_title" label="消息标题"></el-table-column>
       <el-table-column prop="message_content" label="消息内容"></el-table-column>
       <el-table-column prop="create_time_text" label="发送时间"></el-table-column>
@@ -58,7 +59,8 @@ export default {
     getListData() {
       this.loading = true;
       let params = {
-        page: this.page.current
+        page: this.page.current,
+        propity: 1 // 1->政府，2->平台
       };
       Http.getMessageList(params)
         .then(res => {

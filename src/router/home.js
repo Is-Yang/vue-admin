@@ -13,7 +13,8 @@ import {
 } from '../pages/account'
 import {
     CompanyList,
-    CompanyInfo
+    CompanyInfo,
+    CompanyHandle
 } from '../pages/company'
 import {
     TaskList
@@ -86,6 +87,14 @@ export default [{
         path: 'company',
         component: CompanyList,
         name: '公司列表'
+    }, {
+        path: 'company/add',
+        component: CompanyHandle,
+        name: '创建公司'
+    }, {
+        path: 'company/edit',
+        component: CompanyHandle,
+        name: '编辑公司'
     }, {
         path: 'company/info',
         component: CompanyInfo,

@@ -9,6 +9,12 @@
        <el-form-item label="消息发送者" prop="message_from">
         <el-input v-model="messageForm.message_from"></el-input>
       </el-form-item>
+      <el-form-item v-if="pageType === 1" prop="company_id" label="发送对象：">
+          <el-select v-model="messageForm.company_id" placeholder="请选择发送企业" size="medium">
+          <el-option v-for="item in companyList" :key="item.company_id" :label="item.company_name" :value="item.company_id">
+          </el-option>
+          </el-select>
+      </el-form-item>
       <el-form-item label="消息标题" prop="message_title">
         <el-input v-model="messageForm.message_title"></el-input>
       </el-form-item>
@@ -35,9 +41,13 @@ export default {
         dialogShow: true,
         loading: false,
         messageForm: {},
+        companyList: [],
         rules: {
           message_title: [
             { required: true, message: '请输入消息标题', trigger: 'blur' }
+          ],
+          company_id: [
+            { required: true, message: '请选择发送对象', trigger: 'change' }
           ],
           message_content: [
             { required: true, message: '请输入消息内容', trigger: 'blur' }
@@ -48,7 +58,28 @@ export default {
         }
       };
     },
+    created() {
+      // 如果是政府端需指定发送对象
+      if (this.pageType == 1) {
+          this.getCompanySelect()
+      }
+    },
     methods: {
+      // 获取所有公司列表
+      getCompanySelect() {
+        let params = {
+          page: 1
+        };
+        Http.getAllCompanyList(params)
+          .then(res => {
+            this.$handleResponse(res, res => {
+              if (res) {
+                this.companyList = res.data;
+              }
+            });
+          })
+          .catch(err => {});
+      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -69,7 +100,7 @@ export default {
             }
             // 政府端
             let goverParams = {
-                company_id: 1,
+                company_id: this.messageForm.company_id,
                 title: message_title,
                 content: message_content,
                 create_time: create_time

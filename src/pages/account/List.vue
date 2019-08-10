@@ -87,7 +87,7 @@ export default {
       let params = {
         page: this.page.current
       };
-      let queryName = this.propity === 3 ? 'getManagerUserList' : 'getManagerUserList';
+      let queryName = this.propity === 3 ? 'getManagerUserList' : 'getAccountList';
       Http[queryName](params)
         .then(res => {
           this.loading = false;
