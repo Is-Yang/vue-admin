@@ -350,3 +350,13 @@ export function getManagerUserList(params) {
 export function getManagerCompanyDepartMent(params) {
     return http.getAjax('/manager_company_department_info?token=' + getToken(), params); 
 }
+
+// 企业端获取员工账号列表
+export function getManagerAccountList(params) {
+    return http.getAjax('/manager_company_account_list?token=' + getToken(), params); 
+}
+
+// 平台端-政府账号根据user_id获取详情
+export function getMAccountById(params) {
+    return http.getAjax('/manager_get_account_m?token=' + getToken(), params); 
+}

@@ -86,7 +86,7 @@
           if (this.paramsId) { // 编辑
             this.title = "编辑账号"
             this.loading = true;
-            Http.getAccountById({user_id: this.paramsId}).then(res => {
+            Http.getMAccountById({user_id: this.paramsId}).then(res => {
               this.loading = false;
               this.$handleResponse(res, res => {
                 if (res.data) {
