@@ -1,14 +1,16 @@
 <template>
   <div>
     <div class="margin-bottom-20 text-right">
-      <el-button type="primary" size="small" @click="dialogShow('add', {})">创建公司</el-button>
+      <router-link to="company/add">
+        <el-button type="primary" size="small">创建公司</el-button>
+      </router-link>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column prop="company_name" label="公司名字"></el-table-column>
       <el-table-column prop="company_type_text" label="公司类型"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row)"
+          <el-button size="mini" type="primary" plain icon="el-icon-edit"  @click="editFn(scope.row)"
             title="编辑"></el-button>
           <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
             title="删除"></el-button>
@@ -21,23 +23,14 @@
       :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
       layout="total, sizes, prev, pager, next, jumper"></el-pagination>
   
-    <!-- 新增和编辑 -->
-    <add-and-edit
-      v-if="dialog.show"
-      :type="dialog.type"
-      :companyParent="dialog.companyParent" 
-      @cancel="dialog.show = !dialog.show"
-      @success="dialogSuccess"
-    ></add-and-edit>
   </div>
 </template>
 
 <script>
 import * as Http from "@/api/home";
-import AddAndEdit from "./AddAndEdit";
+import * as userInfo from "@/utils/commonService/getUserInfo";
 export default {
   components: {
-    AddAndEdit
   },
   inject: ["reload"],
   data() {
@@ -63,8 +56,12 @@ export default {
     getListData() {
       // 菜单列表数据
       this.loading = true;
+      let propity = 2;
+      let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
+      propity = user_info && user_info.propity;
       
       let params = {
+        propity: propity,
         page: this.page.current
       };
       Http.getCompanyList(params)
@@ -79,21 +76,14 @@ export default {
           this.loading = false;
         });
     },
-    onSearch() {
-      // 搜索
-      this.page.current = 1;
-      this.getListData();
-    },
-    onReset() {
-      // 清空
-      this.menuCon.keyword = "";
-      this.getListData();
-    },
-    // 新增，编辑弹窗显示
-    dialogShow(type, initData){ 
-      this.dialog.type = type;
-      this.dialog.companyParent = initData;
-      this.dialog.show = true;
+    editFn(data){ 
+       // 编辑
+      this.$router.push({
+        path: "company/edit",
+        query: {
+          companyId: data.company_id
+        }
+      });
     },
     deleteFn(data) {
       // 删除
@@ -128,11 +118,6 @@ export default {
     },
     currentChange(val) {
       this.page.current = val;
-      this.getListData();
-    },
-    dialogSuccess() {
-      // 新增或修改成功后关闭窗口
-      this.dialog.show = false;
       this.getListData();
     }
   }

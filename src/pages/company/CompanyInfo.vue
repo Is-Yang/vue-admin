@@ -10,7 +10,7 @@
       <el-tab-pane label="安全生产标准化" name="3"></el-tab-pane>
 
       <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-        <el-table-column prop="name" label="宣传图"></el-table-column>
+        <el-table-column prop="name" label="资料标题"></el-table-column>
         <el-table-column prop="create_time" label="创建时间"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">

@@ -10,19 +10,16 @@
           <el-form-item label="标题" prop="title">
             <el-input v-model="picturesForm.title" style="width: 300px"></el-input>
           </el-form-item>
-          <el-form-item label="图片" prop="img">
-                <el-upload
-                    class="uploader"
-                    :action="uploadUrl"
-                    :data="{
-                      'title': picturesForm.title,
-                      'type': currentActive
-                    }"
-                    :show-file-list="false"
-                    :on-success="handleAvatarSuccess">
-                    <div v-if="picturesForm.img" :style="{backgroundImage: 'url('+ picturesForm.img +')'}" class="picture"></div>
-                    <i v-else class="el-icon-plus"></i>
-                </el-upload>
+          <el-form-item label="">
+            <el-upload
+              :action="uploadUrl"
+              :auto-upload="false"
+              :before-remove="beforeRemove"
+              :on-change="fileChange"
+              :limit="1"
+              :file-list="fileList">
+              <el-button size="small" type="primary">上传文件</el-button>
+            </el-upload>
           </el-form-item>
           <el-form-item class="margin-top-40">
             <el-button type="primary" @click="submitForm('picturesForm')">确定</el-button>
@@ -45,14 +42,15 @@ export default {
         title: "上传资料",
         dialogShow: true,
         loading: false,
+        fileList: [],
         picturesForm: {
           title: '',
-          img: ''
+          file: ''
         },
         params: {
           title: '',
         },
-        uploadUrl: window.scrmApi + '/manager_upload_img?token=' + user_info.token,
+        uploadUrl: window.scrmApi + '/manager_file_upload?token=' + user_info.token,
         rules: {
           title: [
             { required: true, message: '请输入标题', trigger: 'blur' }
@@ -77,25 +75,26 @@ export default {
             },0);
         }
       },
-      handleAvatarSuccess(res, file) {
-        if (res.ok) {
-          this.picturesForm.img = URL.createObjectURL(file.raw);
-          this.$message.success("上传成功");
-        } else {
-          this.$message.error("上传失败");
-        }
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      },
+      fileChange(file, fileList) {
+        this.picturesForm.file = URL.createObjectURL(file.raw);
+        
       },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.loading = true;
             let {
-              title
+              title,
+              file
             } = this.picturesForm;
 
             let params = {
                title: title,
-               type: this.currentActive
+               type: this.currentActive,
+               file: file
             }
 
             if (this.type == 'add') { // 新增

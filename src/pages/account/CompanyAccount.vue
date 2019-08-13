@@ -9,7 +9,7 @@
     </el-row>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column prop="company.company_name" label="公司"></el-table-column>
-      <el-table-column prop="user_name" label="名称"></el-table-column>
+      <el-table-column prop="user_name" label="用户名"></el-table-column>
       <el-table-column prop="area_name" label="区域"></el-table-column>
       <el-table-column prop="propity" label="用户等级"></el-table-column>
       <el-table-column label="是否允许登录">
@@ -17,7 +17,7 @@
          {{scope.row.can_be_login === 1 ? '允许' : '不允许'}}
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="150px">
+      <el-table-column label="操作" width="200px">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="editFn(scope.row.user_id)"
             title="编辑"></el-button>

@@ -4,12 +4,12 @@
       <el-upload
         :action="uploadUrl"
         :show-file-list="false"
-        :on-success="handleAvatarSuccess">
+        :on-success="handleFileSuccess">
         <el-button size="small" type="primary">上传文件</el-button>
       </el-upload>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-      <el-table-column prop="name" label="宣传图"></el-table-column>
+      <el-table-column prop="name" label="宣传资料"></el-table-column>
       <el-table-column prop="create_time" label="创建时间"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
@@ -81,7 +81,7 @@
         this.dialog.fileParent = initData;
         this.dialog.show = true;
       },
-      handleAvatarSuccess(res, file) {
+      handleFileSuccess(res, file) {
         if (res.result == 'ok') {
           this.$message.success("上传成功");
           this.reload();
