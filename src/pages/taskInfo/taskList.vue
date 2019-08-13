@@ -47,6 +47,7 @@
     <task-handle
       v-if="dialog.show"
       :type="dialog.type"
+      :companyId="dialog.companyId"
       :taskParent="dialog.taskParent"
       @cancel="dialog.show = !dialog.show"
       @success="dialogSuccess">
@@ -60,6 +61,8 @@
           <vue-qr :text="qrVal"></vue-qr>
         </div>
     </el-dialog>
+
+    <table-slider-bar></table-slider-bar>
 
   </div>
 </template>
@@ -88,6 +91,7 @@ export default {
       dialog: {
         show: false,
         type: "",
+        companyId: '',
         taskParent: {}
       },
       qrVal: ''
@@ -129,6 +133,10 @@ export default {
     dialogShow(type, initData){ 
       this.dialog.type = type;
       this.dialog.taskParent = initData;
+      // 如果为企业端，则传一个companyId
+      if (this.tableType === 1) {
+        this.dialog.companyId = this.listData[0].company_id;
+      }
       this.dialog.show = true;
     },
     deleteFn(data) {

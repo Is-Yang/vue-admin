@@ -11,7 +11,7 @@
       </el-form-item>
       <el-form-item v-if="pageType === 1" prop="company_id" label="发送对象：">
           <el-select v-model="messageForm.company_id" placeholder="请选择发送企业" size="medium">
-          <el-option v-for="item in companyList" :key="item.company_id" :label="item.company_name" :value="item.company_id">
+          <el-option v-for="(item, index) in companyList" :key="index" :label="item.company_name" :value="item.company_id">
           </el-option>
           </el-select>
       </el-form-item>
@@ -67,10 +67,7 @@ export default {
     methods: {
       // 获取所有公司列表
       getCompanySelect() {
-        let params = {
-          page: 1
-        };
-        Http.getAllCompanyList(params)
+        Http.getGovCompanySelect()
           .then(res => {
             this.$handleResponse(res, res => {
               if (res) {

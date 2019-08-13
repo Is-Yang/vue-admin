@@ -267,7 +267,6 @@ export function checkTask() {
 
 /**
  * 2019-07-19
- * 企业端
  * is-yang
  **/
 // 添加企业账号接口
@@ -360,3 +359,19 @@ export function getManagerAccountList(params) {
 export function getMAccountById(params) {
     return http.getAjax('/manager_get_account_m?token=' + getToken(), params); 
 }
+
+// 政府端-列表消息接口
+export function getCompanyMessageList(params) {
+    return http.getAjax('/manager_get_company_message_list?token=' + getToken(), params); 
+}
+
+// 政府端-删除消息
+export function delCompanyMessage(params) {
+    return http.postAjax('/manager_company_message_delete?token=' + getToken(), params); 
+}
+
+// 政府端-获取公司下拉框
+export function getGovCompanySelect() {
+    return http.getAjax('/manager_get_gov_company?token=' + getToken()); 
+}
+

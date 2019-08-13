@@ -60,8 +60,7 @@ export default {
     getListData() {
       this.loading = true;
       let params = {
-        page: this.page.current,
-        propity: 2  // 1->政府，2->平台
+        page: this.page.current
       };
       Http.getMessageList(params)
         .then(res => {

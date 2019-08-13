@@ -4,7 +4,11 @@
     <el-form :model="taskForm" :rules="rules" ref="taskForm" @keyup.enter.native="onSubmit('taskForm')"
       label-width="110px" class="taskForm">
       <el-form-item label="任务初始等级" prop="task_risk_init_level">
-        <el-input v-model="taskForm.task_risk_init_level"></el-input>
+        <el-select v-model="taskForm.task_risk_init_level" placeholder="请选择">
+          <el-option v-for="item in riskLevel" :key="item.value" :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="任务名称" prop="task_name">
         <el-input v-model="taskForm.task_name"></el-input>
@@ -34,7 +38,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="所属公司">
+      <el-form-item label="所属公司" v-if="!companyId">
         <el-select v-model="taskForm.company_id" placeholder="请选择公司" @change="getDepartment">
           <el-option v-for="item in companyList" :key="item.company_id" :label="item.company_name"
             :value="item.company_id">
@@ -78,9 +82,9 @@
       <el-form-item label="应急处理" prop="risk_evaluate_emergency">
         <el-input v-model="taskForm.risk_evaluate_emergency"></el-input>
       </el-form-item>
-      <el-form-item label="风险等级" prop="risk_level">
+      <!-- <el-form-item label="风险等级" prop="risk_level">
         <el-input v-model="taskForm.risk_level"></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="法规依据" prop="row">
         <el-input v-model="taskForm.row"></el-input>
       </el-form-item>
@@ -96,7 +100,7 @@
   import * as Http from '@/api/home'
   import moment from 'moment';
   export default {
-    props: ['type', 'taskParent'],
+    props: ['type', 'taskParent', 'companyId'],
     inject: ['reload'],
     data() {
       return {
@@ -104,6 +108,21 @@
         dialogShow: true,
         loading: false,
         taskForm: {},
+        riskLevel: [
+          {
+            label: '低风险',
+            value: 0
+          },{
+            label: '一般风险',
+            value: 1
+          },{
+            label: '较大风险',
+            value: 2
+          },{
+            label: '重大风险',
+            value: 3
+          }
+        ],
         rules: {
           task_risk_init_level: [{
             required: true,
@@ -160,11 +179,11 @@
             message: '请输入应急处理',
             trigger: 'blur'
           }],
-          risk_level: [{
-            required: true,
-            message: '请输入风险等级',
-            trigger: 'blur'
-          }],
+          // risk_level: [{
+          //   required: true,
+          //   message: '请输入风险等级',
+          //   trigger: 'blur'
+          // }],
           company_id: [{
             required: true,
             message: '请选择所属公司',
@@ -180,19 +199,28 @@
         positionDetailList: [],
         companyList: [],
         departmentList: [],
-        userList: []
+        userList: [],
+        propity: ''
       };
     },
     created() {
       // 获取公司列表
       this.getCompany();
-      // 获取部门列表
-      this.getDepartment();
+      setTimeout(() => {
+        if (this.companyId) {
+          this.getDepartment(this.companyId);
+        } else {
+          // 获取部门列表
+          this.getDepartment();
+        }
+      }, 500);
+      
       // 用户列表
       this.getUserList();
       this.getPositionList();
       this.getPositionDetailList();
       // this.requestCompanyCheckInfo();
+      
       this.init();
     },
     methods: {
@@ -232,7 +260,7 @@
             this.loading = false;
             this.$handleResponse(res, res => {
               if (res.data) {
-                this.companyList = res.data;
+               this.companyList = res.data;
               }
             });
           })
