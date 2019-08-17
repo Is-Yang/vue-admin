@@ -24,6 +24,11 @@
 <script>
   import BMap from 'BMap'
   export default {
+    props: {
+      mapXY: {
+        type: Object
+      }
+    },
     data() {
       return {
         location: {
@@ -40,6 +45,12 @@
           this.drawLocation()
         },
         deep: true
+      }, 
+      mapXY: {
+        handler() {
+          this.getData()
+        },
+        deep: true
       }
     },
     mounted() {
@@ -47,9 +58,21 @@
       this.setSearch()
     },
     created() {
-
+      
     },
     methods: {
+      getData() {
+        console.log(this.mapXY)
+        setTimeout(()=> {
+          if (this.mapXY && this.mapXY.xData && this.mapXY.yData) {
+            this.location.lng = parseFloat(this.mapXY.xData).toFixed(3) || '';
+            this.location.lat = parseFloat(this.mapXY.yData).toFixed(3) || '';
+          } else {
+            this.location.lng = '';
+            this.location.lat = '';
+          }
+        }, 500);
+      },
       // 初始化地图
       setMap() {
         this.map = new BMap.Map('map-core')

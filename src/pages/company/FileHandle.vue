@@ -79,7 +79,7 @@ export default {
         return this.$confirm(`确定移除 ${ file.name }？`);
       },
       fileChange(file, fileList) {
-        this.picturesForm.file = URL.createObjectURL(file.raw);
+        this.picturesForm.file = file.raw;
         
       },
       submitForm(formName) {
@@ -91,14 +91,13 @@ export default {
               file
             } = this.picturesForm;
 
-            let params = {
-               title: title,
-               type: this.currentActive,
-               file: file
-            }
+            let formData = new FormData();
+            formData.append('title', title);
+            formData.append('type', this.currentActive);
+            formData.append('file', file);
 
             if (this.type == 'add') { // 新增
-              Http.addTaskDesc(params).then(res => {
+              Http.uploadFile(formData).then(res => {
                 this.loading = false;
                 this.$handleResponse(res, res => {
                   this.$message.success('新增成功');
@@ -109,8 +108,8 @@ export default {
                 this.loading = false;
               });
             } else { // 修改
-                params.id = this.picturesForm.id;
-                Http.updateManageImg(params).then(res => {
+                formData.append('id', this.picturesForm.id);
+                Http.updateManageImg(formData).then(res => {
                     this.loading = false;
                     this.$handleResponse(res, res => {
                     this.$message.success('修改成功');

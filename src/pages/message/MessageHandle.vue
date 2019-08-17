@@ -87,7 +87,7 @@ export default {
               message_from
             } = this.messageForm;
 
-            let create_time = moment(new Date()).hours(23).minutes(59).seconds(59).valueOf();
+            let create_time = Math.round(new Date().getTime()/1000);
 
             // 平台端
             let pinParams = {
@@ -97,6 +97,7 @@ export default {
             }
             // 政府端
             let goverParams = {
+                message_from: message_from,
                 company_id: this.messageForm.company_id,
                 title: message_title,
                 content: message_content,

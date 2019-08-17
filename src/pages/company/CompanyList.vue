@@ -1,18 +1,54 @@
 <template>
   <div>
     <div class="margin-bottom-20 text-right">
-      <router-link to="company/add">
+      <router-link to="company/add" v-if="propity === 2">
         <el-button type="primary" size="small">创建公司</el-button>
       </router-link>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column prop="company_name" label="公司名字"></el-table-column>
       <el-table-column prop="company_type_text" label="公司类型"></el-table-column>
+      <el-table-column label="四色图1">
+        <template slot-scope="scope">
+          <a :href="scope.row.url" download>
+            <img :src="scope.row.company_img_1" />
+          </a>
+        </template>
+      </el-table-column>
+      <el-table-column label="四色图2">
+        <template slot-scope="scope">
+          <a :href="scope.row.url" download>
+            <img :src="scope.row.company_img_2" />
+          </a>
+        </template>
+      </el-table-column>
+      <el-table-column label="四色图3">
+        <template slot-scope="scope">
+          <a :href="scope.row.url" download>
+            <img :src="scope.row.company_img_3" />
+          </a>
+        </template>
+      </el-table-column>
+      <el-table-column label="四色图4">
+        <template slot-scope="scope">
+          <a :href="scope.row.url" download>
+            <img :src="scope.row.company_img_4" />
+          </a>
+        </template>
+      </el-table-column>
+      <el-table-column prop="link1" label="友情链接1"></el-table-column>
+      <el-table-column prop="link2" label="友情链接2"></el-table-column>
+      <el-table-column prop="link3" label="友情链接3"></el-table-column>
+      <el-table-column prop="link4" label="友情链接4"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" plain icon="el-icon-edit"  @click="editFn(scope.row)"
+          <el-button size="mini" type="success" plain icon="el-icon-download" @click="downloadFn(scope.row)" title="导出">
+          </el-button>
+          <el-button size="mini" type="success" plain icon="el-icon-view" @click="viewFn(scope.row)" title="查看地图">
+          </el-button>
+          <el-button size="mini" v-if="propity === 2" type="primary" plain icon="el-icon-edit"  @click="editFn(scope.row)"
             title="编辑"></el-button>
-          <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
+          <el-button size="mini" v-if="propity === 2" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
             title="删除"></el-button>
         </template>
       </el-table-column>
@@ -23,14 +59,19 @@
       :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
       layout="total, sizes, prev, pager, next, jumper"></el-pagination>
   
+    <el-dialog title="地图点" :visible.sync="dialog.show" width="900px" :before-close="handleClose">
+        <v-map :mapXY="dialog.mapXY"></v-map>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import * as Http from "@/api/home";
 import * as userInfo from "@/utils/commonService/getUserInfo";
+import VMap from './Map'
 export default {
   components: {
+    VMap
   },
   inject: ["reload"],
   data() {
@@ -44,9 +85,9 @@ export default {
       },
       dialog: {
         show: false,
-        type: "",
-        companyParent: {}
-      }
+        mapXY: {}
+      },
+      propity: 2,
     };
   },
   created() {
@@ -56,12 +97,11 @@ export default {
     getListData() {
       // 菜单列表数据
       this.loading = true;
-      let propity = 2;
       let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
-      propity = user_info && user_info.propity;
+      this.propity = user_info && user_info.propity;
       
       let params = {
-        propity: propity,
+        propity: this.propity,
         page: this.page.current
       };
       Http.getCompanyList(params)
@@ -111,6 +151,16 @@ export default {
           this.loading = false;
           this.$message.error("删除失败");
       });
+    },
+    viewFn(data) {
+      this.dialog.mapXY = {
+        xData: data.company_x,
+        yData: data.company_y,
+      }
+      this.dialog.show = true;
+    },
+    handleClose() {
+      this.dialog.show = false;
     },
     sizeChange(val) {
       this.page.size = val;

@@ -55,7 +55,7 @@ http.getDownAjax = function(url, params) {
 }
 
 // 上传 formData格式
-http.uploadPhoto = function(url, formData) {
+http.uploadForm = function(url, formData) {
     return http.post(url, formData);
 }
 

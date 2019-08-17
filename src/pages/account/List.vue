@@ -71,12 +71,12 @@ export default {
         page: this.page.current
       };
 
-      let queryName = this.propity === 3 ? 'getManagerAccountList' : 'getManagerUserList';
+      let queryName = this.propity === 3 ? 'getManagerAccountList' : this.propity === 2 ? 'getAccountList' : 'getManagerUserList';
       Http[queryName](params)
         .then(res => {
           this.loading = false;
           this.$handleResponse(res, res => {
-            this.listData = res.data;
+            this.listData = this.propity === 1 ? res.managerUsers : res.data;
             this.page.total = res.total;
           });
         })

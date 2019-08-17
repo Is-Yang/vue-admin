@@ -69,7 +69,6 @@
           active: '1',
           fileParent: {}
         },
-        uploadUrl: window.scrmApi + '/manager_file_upload?token=' + user_info.token,
       };
     },
     created() {

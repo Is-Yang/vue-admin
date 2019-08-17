@@ -152,7 +152,7 @@ export function getFileList(params) {
 
 // 上传文件
 export function uploadFile(params) {
-    return http.postAjax('/manager_file_upload', params)
+    return http.uploadForm('/manager_file_upload?token=' + getToken(), params)
 }
 
 // 下载文件
