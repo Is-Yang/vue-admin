@@ -7,7 +7,8 @@
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column prop="company_name" label="公司名字"></el-table-column>
-      <el-table-column prop="company_type_text" label="公司类型"></el-table-column>
+      <el-table-column prop="company_type_text" label="公司类型" width="120px"></el-table-column>
+      <el-table-column prop="company_info" label="公司信息"></el-table-column>
       <el-table-column label="四色图1">
         <template slot-scope="scope">
           <a :href="scope.row.url" download>
@@ -36,11 +37,7 @@
           </a>
         </template>
       </el-table-column>
-      <el-table-column prop="link1" label="友情链接1"></el-table-column>
-      <el-table-column prop="link2" label="友情链接2"></el-table-column>
-      <el-table-column prop="link3" label="友情链接3"></el-table-column>
-      <el-table-column prop="link4" label="友情链接4"></el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="240px">
         <template slot-scope="scope">
           <el-button size="mini" type="success" plain icon="el-icon-download" @click="downloadFn(scope.row)" title="导出">
           </el-button>
@@ -61,6 +58,20 @@
   
     <el-dialog title="地图点" :visible.sync="dialog.show" width="900px" :before-close="handleClose">
         <v-map :mapXY="dialog.mapXY"></v-map>
+    </el-dialog>
+    <el-dialog title="请选择分类来进行企业信息导出" :visible.sync="dialog.typeShow" width="400px" :before-close="handleTypeClose">
+      <el-select v-model="positionId" clearable filterable placeholder="请选择" style="width: 300px">
+        <el-option
+          v-for="item in options"
+          :key="item.position_id"
+          :label="item.position_name"
+          :value="item.position_id">
+        </el-option>
+      </el-select>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleTypeClose">取 消</el-button>
+        <el-button type="primary" @click="handleTypeOk">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>
@@ -85,9 +96,12 @@ export default {
       },
       dialog: {
         show: false,
+        typeShow: false,
         mapXY: {}
       },
       propity: 2,
+      options: [],
+      positionId: ''
     };
   },
   created() {
@@ -152,6 +166,17 @@ export default {
           this.$message.error("删除失败");
       });
     },
+    downloadFn(data) {
+      Http.getCompanyPostion({
+        company_id: data.company_id
+      }).then(res => {
+          this.$handleResponse(res, res => {
+            this.options = res.data;
+            this.dialog.typeShow = true;
+          });
+      })
+
+    },  
     viewFn(data) {
       this.dialog.mapXY = {
         xData: data.company_x,
@@ -159,9 +184,36 @@ export default {
       }
       this.dialog.show = true;
     },
+    handleTypeOk() {
+        this.loading = true;
+        Http.exportWord(
+          {
+            position_id: this.positionId
+          }
+        ).then(res => {
+          this.$handleResponse(res, res => {
+            this.loading = false;
+            let blob = new Blob([res], {type: "application/msword;charset=utf-8"});
+            let objectUrl = URL.createObjectURL(blob);
+            let link = document.createElement("a");
+            let fname = data.position_name;
+            link.href = objectUrl;
+            link.setAttribute("download", fname);
+            document.body.appendChild(link);
+            link.click();
+          });
+        })
+        .catch(err => {
+          this.loading = false;
+        });
+        this.handleTypeClose();
+    },
     handleClose() {
       this.dialog.show = false;
     },
+    handleTypeClose() {
+      this.dialog.typeShow = false;
+    },  
     sizeChange(val) {
       this.page.size = val;
       this.getListData();

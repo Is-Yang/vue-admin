@@ -13,6 +13,8 @@
       <Navbar/>
       <!-- 主内容 -->
       <App-main/>
+
+      <Footer></Footer>
     </div>
   </div>
 </template>
@@ -22,7 +24,8 @@
     Header,
     Navbar,
     Sidebar,
-    AppMain
+    AppMain,
+    Footer
   } from './index'
   import { mapGetters } from 'vuex';
 
@@ -32,7 +35,8 @@
       Header,
       Navbar,
       Sidebar,
-      AppMain
+      AppMain,
+      Footer
     },
     computed: {
       ...mapGetters(['loadingLocal']),

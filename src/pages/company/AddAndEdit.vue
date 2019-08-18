@@ -13,46 +13,6 @@
     <el-form-item label="公司信息：">
       <el-input type="textarea" :rows="2" style="width: 280px;" v-model="company.company_info"></el-input>
     </el-form-item>
-    <el-form-item label="友情链接1：">
-      <el-row :gutter="10">
-        <el-col :span="4">
-          <el-input placeholder="链接" v-model="company.link1"></el-input>
-        </el-col>
-        <el-col :span="4">
-           <el-input placeholder="名称" v-model="company.link1_name"></el-input>
-        </el-col>
-      </el-row>
-    </el-form-item>
-    <el-form-item label="友情链接2：">
-      <el-row :gutter="10">
-        <el-col :span="4">
-          <el-input placeholder="链接" v-model="company.link2"></el-input>
-        </el-col>
-        <el-col :span="4">
-           <el-input placeholder="名称" v-model="company.link2_name"></el-input>
-        </el-col>
-      </el-row>
-    </el-form-item>
-    <el-form-item label="友情链接3：">
-      <el-row :gutter="10">
-        <el-col :span="4">
-          <el-input placeholder="链接" v-model="company.link3"></el-input>
-        </el-col>
-        <el-col :span="4">
-           <el-input placeholder="名称" v-model="company.link3_name"></el-input>
-        </el-col>
-      </el-row>
-    </el-form-item>
-    <el-form-item label="友情链接4：">
-      <el-row :gutter="10">
-        <el-col :span="4">
-          <el-input placeholder="链接" v-model="company.link4"></el-input>
-        </el-col>
-        <el-col :span="4">
-           <el-input placeholder="名称" v-model="company.link4_name"></el-input>
-        </el-col>
-      </el-row>
-    </el-form-item>
     <el-form-item label="四色图1：">
       <el-row type="flex" :gutter="10">
         <el-col :span="4">
@@ -112,19 +72,11 @@
     },
     data() {
       return {
-        uploadUrl: window.scrmApi + '/manager_upload_img?token=' + user_info.token,
+        uploadUrl: window.scrmApi + '/manager_upload_company_img?token=' + user_info.token,
         dialogShow: true,
         company: {
           company_name: '',
           company_type: '',
-          link1: '',
-          link2: '',
-          link3: '',
-          link4: '',
-          link1_name: '',
-          link2_name: '',
-          link3_name: '',
-          link4_name: '',
           url1: '',
           url2: '',
           url3: '',
@@ -165,7 +117,10 @@
             message: '公司类型不能为空',
             trigger: 'change'
           }],
-          companyLocation: {}
+          companyLocation: {
+            lng: '',
+            lat: ''
+          }
         },
       }
     },
@@ -184,17 +139,15 @@
         }
       },
       selectLocation (location) {
-        this.companyLocation = location;
+        if (location && location.lng && location.lat) {
+          this.companyLocation = location
+        }
       },
       handleImageSuccess1(res, file) {
         if (res.ok) {
           let self = this;
           this.company.url1 = URL.createObjectURL(file.raw);
-          var reader = new FileReader();
-          reader.readAsDataURL(file.raw);
-          reader.onload = function (e) { 
-            self.company.image1 = this.result; 
-          }
+          self.company.image1 = res.url; 
           this.$message.success("上传成功");
         } else {
           this.$message.error("上传失败");
@@ -204,11 +157,7 @@
         if (res.ok) {
           let self = this;
           this.company.url2 = URL.createObjectURL(file.raw);
-          var reader = new FileReader();
-          reader.readAsDataURL(file.raw);
-          reader.onload = function (e) { 
-            self.company.image2 = this.result; 
-          }
+          self.company.image2 = res.url; 
           this.$message.success("上传成功");
         } else {
           this.$message.error("上传失败");
@@ -218,11 +167,7 @@
         if (res.ok) {
           let self = this;
           this.company.url3 = URL.createObjectURL(file.raw);
-          var reader = new FileReader();
-          reader.readAsDataURL(file.raw);
-          reader.onload = function (e) { 
-            self.company.image3 = this.result; 
-          }
+          self.company.image3 = res.url; 
           this.$message.success("上传成功");
         } else {
           this.$message.error("上传失败");
@@ -232,11 +177,7 @@
         if (res.ok) {
           let self = this;
           this.company.url4 = URL.createObjectURL(file.raw);
-          var reader = new FileReader();
-          reader.readAsDataURL(file.raw);
-          reader.onload = function (e) { 
-            self.company.image4 = this.result; 
-          }
+          self.company.image4 = res.url; 
           this.$message.success("上传成功");
         } else {
           this.$message.error("上传失败");
@@ -254,34 +195,18 @@
               image2,
               image3,
               image4,
-              link1,
-              link2,
-              link3,
-              link4,
-              link1_name,
-              link2_name,
-              link3_name,
-              link4_name,
             } = this.company;
 
             let params = {
               company_name: company_name,
               company_type: company_type,
               company_info: company_info,
-              img1: image1,
-              img2: image2,
-              img3: image3,
-              img4: image4,
-              link1: link1,
-              link2: link2,
-              link3: link3,
-              link4: link4,
-              link1_name: link1_name,
-              link2_name:  link2_name,
-              link3_name: link3_name,
-              link4_name: link4_name,
-              company_x: parseFloat(this.companyLocation.lng),
-              company_y: parseFloat(this.companyLocation.lat)
+              company_img_1: image1,
+              company_img_2: image2,
+              company_img_3: image3,
+              company_img_4: image4,
+              company_x: this.companyLocation && this.companyLocation.lng && parseFloat(this.companyLocation.lng),
+              company_y: this.companyLocation && this.companyLocation.lat && parseFloat(this.companyLocation.lat)
             }
 
 

@@ -163,6 +163,10 @@
       },
       // 向父组件传递经纬度
       selectLocation() {
+        this.$message({
+          message: '定位成功',
+          type: 'success'
+        });
         this.$emit('selectLocation', this.location)
       },
     }

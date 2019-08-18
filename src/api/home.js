@@ -342,36 +342,51 @@ export function sendMessage(params) {
 
 // 企业端账户列表
 export function getManagerUserList(params) {
-   return http.getAjax('/manager_manager_user_list?token=' + getToken(), params); 
+    return http.getAjax('/manager_manager_user_list?token=' + getToken(), params);
 }
 
 // 企业端添加修改账号的下拉框数据
 export function getManagerCompanyDepartMent(params) {
-    return http.getAjax('/manager_company_department_info?token=' + getToken(), params); 
+    return http.getAjax('/manager_company_department_info?token=' + getToken(), params);
 }
 
 // 企业端获取员工账号列表
 export function getManagerAccountList(params) {
-    return http.getAjax('/manager_company_account_list?token=' + getToken(), params); 
+    return http.getAjax('/manager_company_account_list?token=' + getToken(), params);
 }
 
 // 平台端-政府账号根据user_id获取详情
 export function getMAccountById(params) {
-    return http.getAjax('/manager_get_account_m?token=' + getToken(), params); 
+    return http.getAjax('/manager_get_account_m?token=' + getToken(), params);
 }
 
 // 政府端-列表消息接口
 export function getCompanyMessageList(params) {
-    return http.getAjax('/manager_get_company_message_list?token=' + getToken(), params); 
+    return http.getAjax('/manager_get_company_message_list?token=' + getToken(), params);
 }
 
 // 政府端-删除消息
 export function delCompanyMessage(params) {
-    return http.postAjax('/manager_company_message_delete?token=' + getToken(), params); 
+    return http.postAjax('/manager_company_message_delete?token=' + getToken(), params);
 }
 
 // 政府端-获取公司下拉框
 export function getGovCompanySelect() {
-    return http.getAjax('/manager_get_gov_company?token=' + getToken()); 
+    return http.getAjax('/manager_get_gov_company?token=' + getToken());
 }
 
+// 获取企业的分类列表
+export function getCompanyPostion(params) {
+    return http.getAjax('/manager_get_company_position?token=' + getToken(), params);
+}
+
+// 获取友情链接接口
+export function getFriendLink() {
+    return http.getAjax('/manager_get_friend_link?token=' + getToken());
+}
+
+// 修改友情链接接口
+export function updateFriendLink(params) {
+    let header = { 'Content-Type': 'application/json' };
+    return http.postAjax('/manager_update_friend_link?token=' + getToken(), params, header, true)
+}

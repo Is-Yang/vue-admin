@@ -93,6 +93,11 @@
         <span slot="title">其他资料列表</span>
       </el-menu-item>
 
+      <el-menu-item index="/link" v-if="level == 2">
+        <i class="fa el-icon-share"></i> 
+        <span slot="title">友情链接</span>
+      </el-menu-item>
+
       <el-menu-item index="/company/info" v-if="level == 3">
         <i class="fa el-icon-info"></i> 
         <span slot="title">企业资料</span>

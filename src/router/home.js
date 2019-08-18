@@ -35,6 +35,9 @@ import {
 import {
     DepartmentList
 } from '../pages/department'
+import {
+    LinkList
+} from '../pages/FriendLink'
 
 /**
  * name: 标题
@@ -127,6 +130,10 @@ export default [{
         path: 'message/government',
         component: GovernmentMessage,
         name: '应急消息'
+    }, {
+        path: '/link',
+        component: LinkList,
+        name: '友情链接'
     }]
 }, {
     path: '/monitoring',
