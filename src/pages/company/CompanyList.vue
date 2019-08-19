@@ -11,28 +11,28 @@
       <el-table-column prop="company_info" label="公司信息"></el-table-column>
       <el-table-column label="四色图1" width="100px">
         <template slot-scope="scope">
-          <a :href="scope.row.url" download>
+          <a :href="scope.row.company_img_1" target="_blank">
             <img :src="scope.row.company_img_1" style="width: 100%;" />
           </a>
         </template>
       </el-table-column>
       <el-table-column label="四色图2" width="100px">
         <template slot-scope="scope">
-          <a :href="scope.row.url" download>
+          <a :href="scope.row.company_img_2" target="_blank">
             <img :src="scope.row.company_img_2" style="width: 100%;" />
           </a>
         </template>
       </el-table-column>
       <el-table-column label="四色图3" width="100px">
         <template slot-scope="scope">
-          <a :href="scope.row.url" download>
+          <a :href="scope.row.company_img_3" target="_blank">
             <img :src="scope.row.company_img_3" style="width: 100%;" />
           </a>
         </template>
       </el-table-column>
       <el-table-column label="四色图4" width="100px">
         <template slot-scope="scope">
-          <a :href="scope.row.url" download>
+          <a :href="scope.row.company_img_4" target="_blank">
             <img :src="scope.row.company_img_4" style="width: 100%;" />
           </a>
         </template>
@@ -56,7 +56,7 @@
       :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
       layout="total, sizes, prev, pager, next, jumper"></el-pagination>
   
-    <el-dialog title="地图点" :visible.sync="dialog.show" width="900px" :before-close="handleClose">
+    <el-dialog title="地图点" :visible.sync="dialog.show" width="1000px" :before-close="handleClose">
         <v-map :mapXY="dialog.mapXY"></v-map>
     </el-dialog>
     <el-dialog title="请选择分类来进行企业信息导出" :visible.sync="dialog.typeShow" width="400px" :before-close="handleTypeClose">
@@ -181,6 +181,7 @@ export default {
       this.dialog.mapXY = {
         xData: data.company_x,
         yData: data.company_y,
+        edit: false
       }
       this.dialog.show = true;
     },
@@ -210,6 +211,7 @@ export default {
     },
     handleClose() {
       this.dialog.show = false;
+      this.dialog.mapXY = {};
     },
     handleTypeClose() {
       this.dialog.typeShow = false;

@@ -1,10 +1,11 @@
 <template>
   <div class="map">
     <div id="map-core"></div>
-    <div class="search">
+    <div class="margin-top-10">定位地址：<strong>{{showAddress}}</strong></div>
+    <div class="search" v-show="mapXY.edit">
       <div id="r-result">
         <p>搜索定位:</p>
-        <el-input type="text" id="suggestId" style="width: 200px;" />
+        <input type="text" id="suggestId" class="el-input__inner" style="width: 200px; height: 36px; line-height: 36px;" />
       </div>
       <div class="lng-lat">
         <div class="item">
@@ -37,6 +38,7 @@
         },
         map: {},
         ac: {},
+        showAddress: ''
       }
     },
     watch: {
@@ -58,7 +60,7 @@
       this.setSearch()
     },
     created() {
-      
+      this.getData();
     },
     methods: {
       getData() {
@@ -70,12 +72,24 @@
             this.location.lng = '';
             this.location.lat = '';
           }
+          this.setMap();
         }, 500);
       },
       // 初始化地图
       setMap() {
         this.map = new BMap.Map('map-core')
-        this.map.centerAndZoom(new BMap.Point(113.275, 23.117), 10)
+        this.map.centerAndZoom(new BMap.Point(113.275, 23.117), 11);
+        // 创建地理编码实例      
+        var myGeo = new BMap.Geocoder();      
+        // 根据坐标得到地址描述    
+        let self = this;
+        let lng = this.location.lng;
+        let lat = this.location.lat;
+        myGeo.getLocation(new BMap.Point(lng, lat), function(result){    
+            if (result){     
+              self.showAddress = result.address;
+            }      
+        });
         // 地图缩放控件
         const topLeftControl = new BMap.ScaleControl({
           anchor: BMAP_ANCHOR_BOTTOM_LEFT
@@ -95,23 +109,29 @@
           _this.map.setZoom(11)
         }, 2000) // 2秒后放大到11级
         this.map.enableScrollWheelZoom(true)
+        var geoc = new BMap.Geocoder();    
         // 点击获取经纬度
         this.map.addEventListener('click', function (e) {
+          var pt = e.point;
           _this.location.lng = parseFloat(e.point.lng).toFixed(3)
           _this.location.lat = parseFloat(e.point.lat).toFixed(3)
+
+          geoc.getLocation(pt, function(rs){
+            var addComp = rs.addressComponents;
+            _this.showAddress = addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber
+          });     
         })
       },
       // 根据经纬度绘制地图中的坐标点
       drawLocation() {
         if (this.location.lng !== "" && this.location.lat !== "") {
           this.map.clearOverlays()
-          const new_point = new BMap.Point(this.location.lng, this.location.lat)
-          const marker = new BMap.Marker(new_point)
-          this.map.addOverlay(marker)
-          this.map.panTo(new_point)
+          const new_point = new BMap.Point(this.location.lng, this.location.lat);
+          const marker = new BMap.Marker(new_point);
+          this.map.addOverlay(marker);
+          this.map.panTo(new_point);
         }
       },
-      // 搜索位置功能实现
       setSearch() {
         const _this = this
         //建立一个自动完成的对象
@@ -175,13 +195,13 @@
 
 <style lang="scss" scoped>
   .map {
-    width: 850px;
+    width: 960px;
     height: 480px;
     font-size: 14px;
 
     #map-core {
       width: 100%;
-      height: 90%;
+      height: 80%;
     }
 
     .search {
@@ -215,7 +235,7 @@
           line-height: 40px;
 
           p {
-            height: 20px;
+            height: 40px;
             padding-right: 10px;
           }
 

@@ -145,6 +145,7 @@
                 this.mapXY = {
                     xData: data.company_x,
                     yData: data.company_y,
+                    edit: true
                 }
               })
           }).catch(err => {
