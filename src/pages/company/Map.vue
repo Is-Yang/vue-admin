@@ -46,7 +46,7 @@
         },
         deep: true
       }, 
-      mapXY: {
+      'mapXY': {
         handler() {
           this.getData()
         },
@@ -62,7 +62,6 @@
     },
     methods: {
       getData() {
-        console.log(this.mapXY)
         setTimeout(()=> {
           if (this.mapXY && this.mapXY.xData && this.mapXY.yData) {
             this.location.lng = parseFloat(this.mapXY.xData).toFixed(3) || '';

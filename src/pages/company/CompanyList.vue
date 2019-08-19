@@ -9,31 +9,31 @@
       <el-table-column prop="company_name" label="公司名字"></el-table-column>
       <el-table-column prop="company_type_text" label="公司类型" width="120px"></el-table-column>
       <el-table-column prop="company_info" label="公司信息"></el-table-column>
-      <el-table-column label="四色图1">
+      <el-table-column label="四色图1" width="100px">
         <template slot-scope="scope">
           <a :href="scope.row.url" download>
-            <img :src="scope.row.company_img_1" />
+            <img :src="scope.row.company_img_1" style="width: 100%;" />
           </a>
         </template>
       </el-table-column>
-      <el-table-column label="四色图2">
+      <el-table-column label="四色图2" width="100px">
         <template slot-scope="scope">
           <a :href="scope.row.url" download>
-            <img :src="scope.row.company_img_2" />
+            <img :src="scope.row.company_img_2" style="width: 100%;" />
           </a>
         </template>
       </el-table-column>
-      <el-table-column label="四色图3">
+      <el-table-column label="四色图3" width="100px">
         <template slot-scope="scope">
           <a :href="scope.row.url" download>
-            <img :src="scope.row.company_img_3" />
+            <img :src="scope.row.company_img_3" style="width: 100%;" />
           </a>
         </template>
       </el-table-column>
-      <el-table-column label="四色图4">
+      <el-table-column label="四色图4" width="100px">
         <template slot-scope="scope">
           <a :href="scope.row.url" download>
-            <img :src="scope.row.company_img_4" />
+            <img :src="scope.row.company_img_4" style="width: 100%;" />
           </a>
         </template>
       </el-table-column>
@@ -171,7 +171,7 @@ export default {
         company_id: data.company_id
       }).then(res => {
           this.$handleResponse(res, res => {
-            this.options = res.data;
+            this.options = res.data.positions;
             this.dialog.typeShow = true;
           });
       })
@@ -196,7 +196,7 @@ export default {
             let blob = new Blob([res], {type: "application/msword;charset=utf-8"});
             let objectUrl = URL.createObjectURL(blob);
             let link = document.createElement("a");
-            let fname = data.position_name;
+            let fname = '企业信息';
             link.href = objectUrl;
             link.setAttribute("download", fname);
             document.body.appendChild(link);

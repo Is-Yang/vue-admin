@@ -148,12 +148,12 @@ export default [{
             component: MonitoringList,
             name: '未监控'
         }, {
-            path: 'have/company',
+            path: 'haveCompany',
             component: MonitoringList,
             name: '已监控',
         },
         {
-            path: 'not/company',
+            path: 'notCompany',
             component: MonitoringList,
             name: '未监控'
         }, {

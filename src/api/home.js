@@ -390,3 +390,8 @@ export function updateFriendLink(params) {
     let header = { 'Content-Type': 'application/json' };
     return http.postAjax('/manager_update_friend_link?token=' + getToken(), params, header, true)
 }
+
+// 编辑时获取公司信息
+export function getCompanyById(params) {
+    return http.getAjax('/manager_get_company_by_id?token=' + getToken(), params);
+}

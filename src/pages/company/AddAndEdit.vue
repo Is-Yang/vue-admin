@@ -17,7 +17,7 @@
       <el-row type="flex" :gutter="10">
         <el-col :span="4">
           <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess1">
-            <div v-if="company.url1" :style="{backgroundImage: 'url('+ company.url1 +')'}" class="picture"></div>
+            <div v-if="imageUrl1" :style="{backgroundImage: 'url('+ imageUrl1 +')'}" class="picture"></div>
             <i v-else class="el-icon-plus"></i>
           </el-upload>
         </el-col>
@@ -25,7 +25,7 @@
           <div class="flex">
             <span style="width: 75px;">四色图2：</span>
             <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess2">
-              <div v-if="company.url2" :style="{backgroundImage: 'url('+ company.url2 +')'}" class="picture"></div>
+              <div v-if="imageUrl2" :style="{backgroundImage: 'url('+ imageUrl2 +')'}" class="picture"></div>
               <i v-else class="el-icon-plus"></i>
             </el-upload>
           </div>
@@ -34,7 +34,7 @@
           <div class="flex">
             <span style="width: 75px;">四色图3：</span>
             <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess3">
-              <div v-if="company.url3" :style="{backgroundImage: 'url('+ company.url3 +')'}" class="picture"></div>
+              <div v-if="imageUrl3" :style="{backgroundImage: 'url('+ imageUrl3 +')'}" class="picture"></div>
               <i v-else class="el-icon-plus"></i>
             </el-upload>
           </div>
@@ -43,7 +43,7 @@
           <div class="flex">
             <span style="width: 75px;">四色图4：</span>
             <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess4">
-              <div v-if="company.url4" :style="{backgroundImage: 'url('+ company.url4 +')'}" class="picture"></div>
+              <div v-if="imageUrl4" :style="{backgroundImage: 'url('+imageUrl4 +')'}" class="picture"></div>
               <i v-else class="el-icon-plus"></i>
             </el-upload>
           </div>
@@ -51,7 +51,7 @@
       </el-row>
     </el-form-item>
     <el-form-item label="地图点">
-      <v-map @selectLocation="selectLocation"></v-map>
+      <v-map @selectLocation="selectLocation" :mapXY="mapXY"></v-map>
     </el-form-item>
     <el-form-item class="margin-top-30">
       <el-button @click="handleClose">取 消</el-button>
@@ -77,11 +77,11 @@
         company: {
           company_name: '',
           company_type: '',
-          url1: '',
-          url2: '',
-          url3: '',
-          url4: '',
         },
+        imageUrl1: '',
+        imageUrl2: '',
+        imageUrl3: '',
+        imageUrl4: '',
         companyId: '',
         loading: false,
         // 公司类型列表
@@ -106,6 +106,7 @@
             value: 4,
           }
         ],
+        mapXY: {},
         rules: {
           company_name: [{
             required: true,
@@ -120,7 +121,7 @@
           companyLocation: {
             lng: '',
             lat: ''
-          }
+          },
         },
       }
     },
@@ -132,10 +133,23 @@
       init() {
         if (this.companyId) {
           this.loading = true;
-          setTimeout(() => {
-            this.company = Object.assign({}, this.companyParent);
-            this.loading = false;
-          }, 0);
+          Http.getCompanyById({company_id: this.companyId}).then(res => {
+              this.loading = false;
+              this.$handleResponse(res, res => {
+                let data = res.data;
+                this.company = data;
+                this.imageUrl1 = data.company_img_1;
+                this.imageUrl2 = data.company_img_3;
+                this.imageUrl3 = data.company_img_4;
+                this.imageUrl4 = data.company_img_4;
+                this.mapXY = {
+                    xData: data.company_x,
+                    yData: data.company_y,
+                }
+              })
+          }).catch(err => {
+              this.loading = false;
+          });
         }
       },
       selectLocation (location) {
@@ -145,9 +159,8 @@
       },
       handleImageSuccess1(res, file) {
         if (res.ok) {
-          let self = this;
-          this.company.url1 = URL.createObjectURL(file.raw);
-          self.company.image1 = res.url; 
+          this.imageUrl1 = URL.createObjectURL(file.raw);
+          this.company.company_img_1 = res.url; 
           this.$message.success("上传成功");
         } else {
           this.$message.error("上传失败");
@@ -155,9 +168,8 @@
       },
       handleImageSuccess2(res, file) {
         if (res.ok) {
-          let self = this;
-          this.company.url2 = URL.createObjectURL(file.raw);
-          self.company.image2 = res.url; 
+          this.imageUrl2 = URL.createObjectURL(file.raw);
+          this.company.company_img_2 = res.url; 
           this.$message.success("上传成功");
         } else {
           this.$message.error("上传失败");
@@ -165,9 +177,8 @@
       },
       handleImageSuccess3(res, file) {
         if (res.ok) {
-          let self = this;
-          this.company.url3 = URL.createObjectURL(file.raw);
-          self.company.image3 = res.url; 
+          this.imageUrl3 = URL.createObjectURL(file.raw);
+          this.company.company_img_3 = res.url; 
           this.$message.success("上传成功");
         } else {
           this.$message.error("上传失败");
@@ -175,9 +186,8 @@
       },
       handleImageSuccess4(res, file) {
         if (res.ok) {
-          let self = this;
-          this.company.url4 = URL.createObjectURL(file.raw);
-          self.company.image4 = res.url; 
+          this.imageUrl4 = URL.createObjectURL(file.raw);
+          this.company.company_img_4 = res.url; 
           this.$message.success("上传成功");
         } else {
           this.$message.error("上传失败");
@@ -191,20 +201,20 @@
               company_name,
               company_type,
               company_info,
-              image1,
-              image2,
-              image3,
-              image4,
+              company_img_1,
+              company_img_2,
+              company_img_3,
+              company_img_4,
             } = this.company;
 
             let params = {
               company_name: company_name,
               company_type: company_type,
               company_info: company_info,
-              company_img_1: image1,
-              company_img_2: image2,
-              company_img_3: image3,
-              company_img_4: image4,
+              company_img_1: company_img_1,
+              company_img_2: company_img_2,
+              company_img_3: company_img_3,
+              company_img_4: company_img_4,
               company_x: this.companyLocation && this.companyLocation.lng && parseFloat(this.companyLocation.lng),
               company_y: this.companyLocation && this.companyLocation.lat && parseFloat(this.companyLocation.lat)
             }

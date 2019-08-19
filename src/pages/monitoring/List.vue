@@ -71,9 +71,9 @@ export default {
         if (route.query && route.query.company_id) {
           this.companyId = route.query.company_id;
         }
-    } else if (route.path === '/monitoring/have/company') {
+    } else if (route.path === '/monitoring/haveCompany') {
         this.tableType = 3;
-    } else if (route.path === '/monitoring/not/company') {
+    } else if (route.path === '/monitoring/notCompany') {
         this.tableType = 4;
         if (route.query && route.query.company_id) {
           this.companyId = route.query.company_id;

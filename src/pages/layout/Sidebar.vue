@@ -60,10 +60,10 @@
           <i class="fa fa-cogs"></i> 
           <span slot="title">监控列表</span>
         </template>
-        <el-menu-item :index="level === 3 ? '/monitoring/have/company' : '/monitoring/have'">
+        <el-menu-item :index="level === 3 ? '/monitoring/haveCompany' : '/monitoring/have'">
           <span slot="title">已监控</span>
         </el-menu-item>
-        <el-menu-item :index="level === 3 ? '/monitoring/not/company' : '/monitoring/not'">
+        <el-menu-item :index="level === 3 ? '/monitoring/notCompany' : '/monitoring/not'">
           <span slot="title">未监控</span>
         </el-menu-item>
       </el-submenu>
