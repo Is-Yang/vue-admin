@@ -60,7 +60,7 @@
         <v-map :mapXY="dialog.mapXY"></v-map>
     </el-dialog>
     <el-dialog title="请选择分类来进行企业信息导出" :visible.sync="dialog.typeShow" width="400px" :before-close="handleTypeClose">
-      <el-select v-model="positionId" clearable filterable placeholder="请选择" style="width: 300px">
+      <el-select v-model="filter.positionId" clearable filterable placeholder="请选择" style="width: 300px">
         <el-option
           v-for="item in options"
           :key="item.position_id"
@@ -101,7 +101,10 @@ export default {
       },
       propity: 2,
       options: [],
-      positionId: ''
+      filter: {
+        positionId: '',
+        companyId: ''
+      }
     };
   },
   created() {
@@ -172,6 +175,7 @@ export default {
       }).then(res => {
           this.$handleResponse(res, res => {
             this.options = res.data.positions;
+            this.filter.companyId = res.data.company_id;
             this.dialog.typeShow = true;
           });
       })
@@ -189,7 +193,8 @@ export default {
         this.loading = true;
         Http.exportWord(
           {
-            position_id: this.positionId
+            position_id: this.filter.positionId,
+            company_id: this.filter.companyId
           }
         ).then(res => {
           this.$handleResponse(res, res => {

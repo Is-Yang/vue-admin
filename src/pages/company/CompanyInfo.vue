@@ -14,7 +14,7 @@
         <el-table-column prop="create_time" label="创建时间"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <a :href="scope.row.url" download>
+            <a :href="scope.row.url" download target="_blank">
               <el-button size="mini" type="success" plain icon="el-icon-download" @click="downloadFn(scope.row)"
                 title="下载">
               </el-button>
