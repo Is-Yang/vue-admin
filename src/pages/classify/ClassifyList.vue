@@ -6,6 +6,7 @@
     </div>
     <el-table v-if="tableType === 1" v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
       <el-table-column prop="position_name" label="标题"></el-table-column>
+      <el-table-column prop="company_name" label="公司名称"></el-table-column>
       <el-table-column label="操作" width="220px">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row, 'big')"
@@ -91,13 +92,14 @@ export default {
             this.$handleResponse(res, res => {
               this.loading = false;
               let blob = new Blob([res], {type: "application/msword;charset=utf-8"});
-              let objectUrl = URL.createObjectURL(blob);
-              let link = document.createElement("a");
-              let fname = data.position_name;
-              link.href = objectUrl;
-              link.setAttribute("download", fname);
-              document.body.appendChild(link);
-              link.click();
+              const a = document.createElement('a');
+              let ext = 'doc';
+              a.href = window.URL.createObjectURL(blob);
+              a.download = `${data.position_name}.${ext}`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              
             });
           })
           .catch(err => {

@@ -21,6 +21,12 @@
       <el-form-item label="短标题" prop="position_detail_sname" v-if="position == 'small'">
         <el-input v-model="classForm.position_detail_sname"></el-input>
       </el-form-item>
+      <el-form-item prop="company_id" label="所选公司：" v-if="position == 'big'">
+          <el-select v-model="classForm.company_id" placeholder="请选择公司" size="medium">
+            <el-option v-for="item in companyList" :key="item.company_id" :label="item.company_name" :value="item.company_id">
+            </el-option>
+          </el-select>
+      </el-form-item>
       <el-form-item class="margin-top-30">
         <el-button type="primary" @click="submitForm('classForm')">确定</el-button>
         <el-button @click="resetForm('classForm')">重置</el-button>
@@ -39,8 +45,12 @@ export default {
         title: "创建分类",
         dialogShow: true,
         loading: false,
-        classForm: {},
+        classForm: {
+          company_id: ''
+        },
         bigPositionList: [],
+        // 公司类型列表
+        companyList: [],
         rules: {
           position_id: [
             { required: true, message: '请选择所属大分类', trigger: 'change' }
@@ -58,6 +68,9 @@ export default {
       };
     },
     created() {
+      if (this.position == 'big') {
+        this.getCompanyList();
+      }
       this.getPositionList();
       this.init();
     },
@@ -73,6 +86,20 @@ export default {
           .catch(err => {
             this.loading = false;
           });
+      },
+      getCompanyList() {
+        let params = {
+          page: 1
+        };
+        Http.getAllCompanyList(params)
+          .then(res => {
+            this.$handleResponse(res, res => {
+              if (res) {
+                this.companyList = res.data;
+              }
+            });
+          })
+          .catch(err => {});
       },
       init() {
         if(this.type == 'edit') {
@@ -91,7 +118,8 @@ export default {
 
             if (this.position == 'big') {  // 大分类
                 let params = {
-                    position_name: this.classForm.position_name
+                    position_name: this.classForm.position_name,
+                    company_id: this.classForm.company_id
                 }
 
                 if (this.type == 'add') { // 新增

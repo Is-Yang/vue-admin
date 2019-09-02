@@ -13,6 +13,7 @@
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
       <el-table-column prop="position_name" label="大分类"></el-table-column>
       <el-table-column prop="position_detail_name" label="小分类"></el-table-column>
+      <el-table-column prop="company_name" label="企业名称"></el-table-column>
       <el-table-column prop="task_name" label="分类名称"></el-table-column>
       <el-table-column prop="task_status_text" label="任务状态"></el-table-column>
       <el-table-column prop="task_risk_level_text" label="隐患等级"></el-table-column>

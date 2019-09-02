@@ -11,9 +11,9 @@
         <span slot="title">首页</span>
       </el-menu-item>
 
-      <el-menu-item index="/department" v-if="level == 2">
+      <el-menu-item index="/account/government" v-if="level == 2">
         <i class="fa fa-code-branch"></i> 
-        <span slot="title">部门列表</span>
+        <span slot="title">政府管理</span>
       </el-menu-item>
 
       <el-menu-item index="/company" v-if="level == 2">
@@ -26,19 +26,13 @@
         <span slot="title">企业列表</span>
       </el-menu-item>
 
-      <el-submenu index="/account" v-if="level !=1">
+      <el-submenu index="/account" v-if="level == 3">
         <template slot="title">
           <i class="fa fa-users"></i> 
           <span slot="title">账号列表</span>
         </template>
-        <el-menu-item index="/account" v-if="level == 2 || level == 3">
+        <el-menu-item index="/account">
           <span slot="title">员工账号</span>
-        </el-menu-item>
-        <el-menu-item index="/account/company" v-if="level == 2">
-          <span slot="title">企业账号</span>
-        </el-menu-item>
-        <el-menu-item index="/account/government" v-if="level == 2">
-          <span slot="title">政府账号</span>
         </el-menu-item>
       </el-submenu>
 

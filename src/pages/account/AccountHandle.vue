@@ -18,14 +18,14 @@
         <el-input type="password" v-model.trim="account.pwd" placeholder="请输入密码"></el-input>
       </el-form-item>
       <el-form-item prop="company_id" label="所属公司：">
-        {{companyInfo.company_name}}
-        <!-- <el-select v-model="account.company_id" placeholder="请选择公司" @change="getDepartment">
+        <span v-if="companyInfo.company_name">{{companyInfo.company_name}}</span>
+        <el-select v-else v-model="account.company_id" placeholder="请选择公司" @change="getDepartment">
           <el-option v-for="item in companyList" 
             :key="item.company_id" 
             :label="item.company_name" 
             :value="item.company_id">
           </el-option>
-        </el-select> -->
+        </el-select>
       </el-form-item>
       <el-form-item label="所属部门：">
         <el-select v-model="account.department_id" placeholder="请选择部门" @change="changeDepart">

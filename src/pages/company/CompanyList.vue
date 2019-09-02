@@ -6,9 +6,9 @@
       </router-link>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-      <el-table-column prop="company_name" label="公司名字"></el-table-column>
-      <el-table-column prop="company_type_text" label="公司类型" width="120px"></el-table-column>
-      <el-table-column prop="company_info" label="公司信息"></el-table-column>
+      <el-table-column prop="company_name" label="公司名字" min-width="300"></el-table-column>
+      <el-table-column prop="company_type_text" label="公司类型" width="130px"></el-table-column>
+      <el-table-column prop="company_info" label="公司信息" min-width="280"></el-table-column>
       <el-table-column label="四色图1" width="100px">
         <template slot-scope="scope">
           <a :href="scope.row.company_img_1" target="_blank">
@@ -37,7 +37,7 @@
           </a>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="240px">
+      <el-table-column label="操作" min-width="500px">
         <template slot-scope="scope">
           <el-button size="mini" type="success" plain icon="el-icon-download" @click="downloadFn(scope.row)" title="导出">
           </el-button>
@@ -47,6 +47,15 @@
             title="编辑"></el-button>
           <el-button size="mini" v-if="propity === 2" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
             title="删除"></el-button>
+          <router-link to="/account" class="margin-left-10" v-if="propity == 2">
+            <el-button type="primary" plain size="mini">员工账号</el-button>
+          </router-link>
+          <router-link to="/account/company" v-if="propity == 2">
+            <el-button type="primary" plain size="mini">企业账号</el-button>
+          </router-link>
+          <router-link to="/department" v-if="propity == 2">
+            <el-button type="primary" plain size="mini">部门列表</el-button>
+          </router-link>
         </template>
       </el-table-column>
     </el-table>
@@ -73,6 +82,9 @@
         <el-button type="primary" @click="handleTypeOk">确 定</el-button>
       </span>
     </el-dialog>
+
+    <table-slider-bar></table-slider-bar>
+
   </div>
 </template>
 
@@ -198,15 +210,15 @@ export default {
           }
         ).then(res => {
           this.$handleResponse(res, res => {
-            this.loading = false;
-            let blob = new Blob([res], {type: "application/msword;charset=utf-8"});
-            let objectUrl = URL.createObjectURL(blob);
-            let link = document.createElement("a");
-            let fname = '企业信息';
-            link.href = objectUrl;
-            link.setAttribute("download", fname);
-            document.body.appendChild(link);
-            link.click();
+              this.loading = false;
+              let blob = new Blob([res], {type: "application/msword;charset=utf-8"});
+              const a = document.createElement('a');
+              let ext = 'doc';
+              a.href = window.URL.createObjectURL(blob);
+              a.download = `企业信息.${ext}`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
           });
         })
         .catch(err => {
