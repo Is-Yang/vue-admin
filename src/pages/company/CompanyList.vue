@@ -47,14 +47,14 @@
             title="编辑"></el-button>
           <el-button size="mini" v-if="propity === 2" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
             title="删除"></el-button>
-          <router-link to="/account" class="margin-left-10" v-if="propity == 2">
-            <el-button type="primary" plain size="mini">员工账号</el-button>
-          </router-link>
-          <router-link to="/account/company" v-if="propity == 2">
+          <router-link to="/account/company" class="margin-left-10" v-if="propity == 2">
             <el-button type="primary" plain size="mini">企业账号</el-button>
           </router-link>
           <router-link to="/department" v-if="propity == 2">
             <el-button type="primary" plain size="mini">部门列表</el-button>
+          </router-link> 
+          <router-link to="/account" v-if="propity == 2">
+            <el-button type="primary" plain size="mini">员工账号</el-button>
           </router-link>
         </template>
       </el-table-column>

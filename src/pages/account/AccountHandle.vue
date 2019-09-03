@@ -8,11 +8,11 @@
       label-width="120px"
       size="medium"
       style="width:380px" class="padding-top-30">
-      <el-form-item prop="user_name" label="用户名称：">
-        <el-input type="text" v-model.trim="account.user_name" placeholder="请输入用户名称"></el-input>
+      <el-form-item prop="user_name" label="账号：">
+        <el-input type="text" v-model.trim="account.user_name" placeholder="请输入账号"></el-input>
       </el-form-item>
-      <el-form-item prop="name" label="中文名称：">
-        <el-input v-model.number="account.name" placeholder="请输入中文名称"></el-input>
+      <el-form-item prop="name" label="姓名：">
+        <el-input v-model.number="account.name" placeholder="请输入姓名"></el-input>
       </el-form-item>
       <el-form-item prop="pwd" label="密码：">
         <el-input type="password" v-model.trim="account.pwd" placeholder="请输入密码"></el-input>
@@ -41,6 +41,9 @@
           <el-option v-if="propity !== 3 ? true : item.value !== 3" v-for="item in jobList" :key="item.value" :label="item.name" :value="item.value">
           </el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item prop="phone" label="电话：">
+        <el-input type="text" v-model.trim="account.phone" placeholder="请输入电话"></el-input>
       </el-form-item>
       <el-form-item label="允许登录：">
         <el-radio-group v-model="account.can_be_login">
@@ -128,7 +131,7 @@
           obj = this.companyList.find(function(item){
               return item.company_id === companyId 
           });
-          this.departmentList = obj.departments;
+          this.departmentList = obj && obj.departments;
         }
       },
       changeDepart(data) {
@@ -171,7 +174,7 @@
                   obj = this.companyList.find(function(item){
                       return item.company_id === res.data.company_id 
                   });
-                  this.departmentList = obj.departments;
+                  this.departmentList = obj && obj.departments;
                   // 部门所选
                   this.account.department_id = res.data.department_id;
 
@@ -193,7 +196,8 @@
               name,
               pwd,
               job_level,
-              can_be_login
+              can_be_login,
+              phone
             } = this.account;
 
             let params = {
@@ -203,6 +207,7 @@
                 pwd: md5(pwd),
                 name: name,
                 job_level: job_level,
+                phone: phone,
                 can_be_login: can_be_login
             }
 

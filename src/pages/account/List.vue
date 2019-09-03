@@ -11,6 +11,7 @@
       <el-table-column prop="name" label="姓名"></el-table-column>
       <el-table-column prop="user_name" label="用户名"></el-table-column>
       <el-table-column prop="job" label="岗位等级"></el-table-column>
+      <el-table-column prop="phone" label="电话"></el-table-column>
       <el-table-column label="是否允许登录">
         <template slot-scope="scope">
          {{scope.row.can_be_login === 1 ? '允许' : '不允许'}}

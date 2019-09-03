@@ -20,9 +20,9 @@
     </el-table>
 
     <el-table v-if="tableType === 2" v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
-      <el-table-column prop="position_name" label="大分类"></el-table-column>
-      <el-table-column prop="position_detail_name" label="长标题"></el-table-column>
-      <el-table-column prop="position_detail_sname" label="短标题"></el-table-column>
+      <el-table-column prop="position_name" label="一级编码"></el-table-column>
+      <el-table-column prop="position_detail_name" label="二级编码"></el-table-column>
+      <el-table-column prop="position_detail_sname" label="三级编码"></el-table-column>
       <el-table-column label="操作" width="180px">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row, 'small')"

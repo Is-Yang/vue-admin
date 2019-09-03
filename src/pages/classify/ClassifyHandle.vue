@@ -5,27 +5,27 @@
       :rules="rules"
       ref="classForm"
       @keyup.enter.native="onSubmit('classForm')"
-      label-width="100px" class="padding-right-30">
+      label-width="120px" class="padding-right-30">
       <el-form-item label="标题" prop="position_name" v-if="position == 'big'">
         <el-input v-model="classForm.position_name"></el-input>
-      </el-form-item>
-      <el-form-item label="所属大分类" prop="position_id" v-if="position == 'small'">
-        <el-select v-model="classForm.position_id" placeholder="请选择" size="medium">
-            <el-option v-for="item in bigPositionList" :key="item.position_id" :label="item.position_name" :value="item.position_id">
-            </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="长标题" prop="position_detail_name" v-if="position == 'small'">
-        <el-input v-model="classForm.position_detail_name"></el-input>
-      </el-form-item>
-      <el-form-item label="短标题" prop="position_detail_sname" v-if="position == 'small'">
-        <el-input v-model="classForm.position_detail_sname"></el-input>
       </el-form-item>
       <el-form-item prop="company_id" label="所选公司：" v-if="position == 'big'">
           <el-select v-model="classForm.company_id" placeholder="请选择公司" size="medium">
             <el-option v-for="item in companyList" :key="item.company_id" :label="item.company_name" :value="item.company_id">
             </el-option>
           </el-select>
+      </el-form-item>
+      <el-form-item label="所属一级编码" prop="position_id" v-if="position == 'small'">
+        <el-select v-model="classForm.position_id" placeholder="请选择" size="medium">
+            <el-option v-for="item in bigPositionList" :key="item.position_id" :label="item.position_name" :value="item.position_id">
+            </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="二级编码" prop="position_detail_name" v-if="position == 'small'">
+        <el-input v-model="classForm.position_detail_name"></el-input>
+      </el-form-item>
+      <el-form-item label="三级编码" prop="position_detail_sname" v-if="position == 'small'">
+        <el-input v-model="classForm.position_detail_sname"></el-input>
       </el-form-item>
       <el-form-item class="margin-top-30">
         <el-button type="primary" @click="submitForm('classForm')">确定</el-button>
@@ -53,16 +53,16 @@ export default {
         companyList: [],
         rules: {
           position_id: [
-            { required: true, message: '请选择所属大分类', trigger: 'change' }
+            { required: true, message: '请选择一级编码', trigger: 'change' }
           ],
           position_name: [
             { required: true, message: '请输入标题', trigger: 'blur' }
           ],
           position_detail_name: [
-            { required: true, message: '请输入长标题', trigger: 'blur' }
+            { required: true, message: '请输入二级编码', trigger: 'blur' }
           ],
           position_detail_sname: [
-            { required: true, message: '请输入短标题', trigger: 'blur' }
+            { required: true, message: '请输入三级编码', trigger: 'blur' }
           ]
         }
       };
