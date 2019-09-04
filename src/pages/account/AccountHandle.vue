@@ -177,7 +177,8 @@
                   this.departmentList = obj && obj.departments;
                   // 部门所选
                   this.account.department_id = res.data.department_id;
-
+                  // pwd
+                  this.account.pwdCopy = this.account.pwd;
                 }
               })
             })
@@ -204,7 +205,7 @@
                 company_id: company_id,
                 department_id: department_id,
                 user_name: user_name,
-                pwd: md5(pwd),
+                pwd: this.account.pwdCopy != this.account.pwd ? md5(pwd) : pwd,
                 name: name,
                 job_level: job_level,
                 phone: phone,

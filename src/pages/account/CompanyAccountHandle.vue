@@ -11,8 +11,8 @@
       <el-form-item label="所属区域：">
         {{areaInfo.area_name}}
       </el-form-item>
-      <el-form-item prop="user_name" label="企业名称：">
-        <el-input type="text" v-model.trim="account.user_name" placeholder="请输入企业名称"></el-input>
+      <el-form-item prop="user_name" :label="pageType == 1 ? '政府名称：' : '企业名称：'">
+        <el-input type="text" v-model.trim="account.user_name" :placeholder="pageType == 1 ? '请输入政府名称：' : '请输入企业名称'"></el-input>
       </el-form-item>
       <el-form-item prop="pwd" label="密码：">
         <el-input type="password" v-model.trim="account.pwd" placeholder="请输入密码"></el-input>
@@ -65,6 +65,7 @@
         loading: false,
         companyList: [],
         areaInfo: {},
+        pageType: 3,
         rules: {
           user_name: [{required: true, message: '用户名称不能为空', trigger: 'blur'}],
           pwd: [{required: true, message: '密码不能为空', trigger: 'blur'}],
@@ -75,6 +76,12 @@
     },
     created() {
       this.paramsId = this.$route.query && this.$route.query.userId;
+
+      if (this.$route.path == '/account/addGovernment') {
+        this.pageType = 1;
+      } else if (this.$route.path == '/account/addCompany'){
+        this.pageType = 3;
+      }
       this.init();
     },
     methods: {
@@ -100,7 +107,8 @@
                   this.departmentList = obj.departments;
                   // 部门所选
                   this.account.department_id = res.data.department_id;
-
+                  // pwd
+                  this.account.pwdCopy = this.account.pwd;
                 }
               })
             })
@@ -130,8 +138,8 @@
 
             let params = {
                 user_name: user_name,
-                pwd: md5(pwd),
-                propity: 3,  // 公司级
+                pwd: this.account.pwdCopy != this.account.pwd ? md5(pwd) : pwd,
+                propity: this.pageType,  // 公司级
                 manager_index: this.areaInfo.manager_index,
                 company_id: company_id,
                 can_be_login: can_be_login

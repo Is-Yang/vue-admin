@@ -3,7 +3,7 @@
     <el-row type="flex" class="margin-bottom-20" justify="space-between">
       <!-- <el-col style="font-size: 16px; color: #67C23A;">管理地区: {{areaInfo.area_name}}</el-col> -->
       <el-col class="text-right">
-        <router-link to="addCompany">
+        <router-link :to="pageType == 1 ? 'addGovernment' : 'addCompany'">
           <el-button type="primary" size="small">{{pageType == 1 ? '创建政府账号':'创建企业账号'}}</el-button>
         </router-link></el-col>
     </el-row>
@@ -97,7 +97,7 @@ export default {
     editFn(user_id) {
       // 编辑
       this.$router.push({
-        path: "/account/editCompany",
+        path: this.pageType == 1 ? "/account/editGovernment" : "/account/editCompany",
         query: {
           userId: user_id
         }
