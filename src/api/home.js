@@ -395,3 +395,46 @@ export function updateFriendLink(params) {
 export function getCompanyById(params) {
     return http.getAjax('/manager_get_company_by_id?token=' + getToken(), params);
 }
+
+// 企业端-获得应急人员列表
+export function getCompanyContainer(params) {
+    return http.getAjax('/get_company_container?token=' + getToken(), params);
+}
+
+// 企业端-添加应急人员
+export function addCompanyContainer(params) {
+    let header = { 'Content-Type': 'application/json' };
+    return http.postAjax('/add_company_container?token=' + getToken(), params, header, true)
+}
+
+// 企业端-修改应急人员
+export function updateCompanyContainer(params) {
+    let header = { 'Content-Type': 'application/json' };
+    return http.postAjax('/update_company_container?token=' + getToken(), params, header, true)
+}
+
+// 企业端-删除应急人员
+export function deleteCompanyContainer(params) {
+    let header = { 'Content-Type': 'application/json' };
+    return http.postAjax('/delete_company_container?token=' + getToken() + '&user_id=' + params.user_id, header, true)
+}
+
+// 企业端-首页
+export function getCompanyShowInfo() {
+    return http.getAjax('/get_company_show_info?token=' + getToken());
+}
+
+// 企业端-风险功能
+ export function getRiskCheckTask(params) {
+    return http.getAjax('/get_risk_check_task?token=' + getToken(), params);
+ }
+
+//  企业端-监控任务 
+export function getTypeCheckTask(params) {
+    return http.getAjax('/get_type_check_task?token=' + getToken(), params);
+}
+
+// 企业端-隐患功能 
+export function getProblemCheckTask(params) {
+    return http.getAjax('/get_problem_check_task?token=' + getToken(), params);
+}

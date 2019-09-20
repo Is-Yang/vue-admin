@@ -4,10 +4,6 @@ textarea {
   font: 400 13.3333px Arial;
 }
 
-.el-menu.el-menu--horizontal {
-  border-bottom: none;
-}
-
 .el-menu-theme {
   background-color: $themeColor;
   .el-menu-item,
@@ -17,18 +13,19 @@ textarea {
     &:hover,
     &:focus,
     &.is-active {
-      background-color: #48576a;
-      color: #fff;
-      &::before {
-        content: '';
-        width: 5px;
-        height: 100%;
-        background: #1494eb;
-        display: inline-block;
-        position: absolute;
-        left: 0;
-        top: 0px;
-      }
+      border-bottom: 4px solid #409EFF !important;
+      color: #fff !important;
+      background: #1b1e23 !important;
+      // &::before {
+      //   content: '';
+      //   width: 5px;
+      //   height: 100%;
+      //   background: #1494eb;
+      //   display: inline-block;
+      //   position: absolute;
+      //   left: 0;
+      //   top: 0px;
+      // }
     }
   }
 
@@ -40,10 +37,16 @@ textarea {
   }
 }
 
-.el-menu--vertical {
-  .el-menu-item {
-    padding-left: 20px !important;
-  }
+.el-menu--horizontal>.el-submenu.is-active .el-submenu__title {
+  border-bottom: 4px solid #409EFF !important;
+  color: #fff !important;
+  background: #1b1e23 !important;
+}
+
+.el-menu--horizontal .el-menu .el-menu-item.is-active, 
+.el-menu--horizontal .el-menu .el-submenu.is-active>.el-submenu__title {
+  color: #fff !important;
+  background: #1b1e23 !important;
 }
 
 // 按钮 plain 属性重置

@@ -66,11 +66,11 @@
       getData() {
         setTimeout(()=> {
           if (this.mapXY && this.mapXY.xData && this.mapXY.yData) {
-            this.location.lng = parseFloat(this.mapXY.xData).toFixed(3) || '';
-            this.location.lat = parseFloat(this.mapXY.yData).toFixed(3) || '';
+            this.location.lng = parseFloat(this.mapXY.xData).toFixed(3) || 0;
+            this.location.lat = parseFloat(this.mapXY.yData).toFixed(3) || 0;
           } else {
-            this.location.lng = '';
-            this.location.lat = '';
+            this.location.lng = 0;
+            this.location.lat = 0;
           }
           this.setMap();
         }, 500);

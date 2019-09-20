@@ -1,21 +1,15 @@
 <template>
-  <div class="app-wrapper" :class="{hideSidebar:!sidebar.opened}">
-    <!-- 左侧边栏菜单 -->
-    <div class="sidebar-wrapper">
-      <Sidebar />
-    </div>
-
-    <!-- 右容器内容 -->
+  <!-- :class="{hideSidebar:!sidebar.opened}" -->
+  <div class="app-wrapper">
+    <Header />
     <div class="main-container" v-loading.fullscreen.lock="loadingLocal"
       element-loading-text="请稍后，正在获取数据"
       element-loading-spinner="icon-loading">
-      <!-- 导航栏 -->
-      <Navbar/>
       <!-- 主内容 -->
       <App-main/>
 
-      <Footer></Footer>
     </div>
+    <Footer />
   </div>
 </template>
 
@@ -93,9 +87,10 @@
     }
 
     .main-container {
-      min-height: 100%;
+      margin-top: 75px;
+      // min-height: 100%;
       transition: all .28s ease-out;
-      margin-left: 200px;
+      // margin-left: 200px;
     }
 
     .hideDiv{

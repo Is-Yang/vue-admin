@@ -1,5 +1,5 @@
 import Layout from '../pages/layout/Layout'
-import { Index } from '../pages/index/Index'
+import { Index, CompanyIndex, IframShowPage } from '../pages/index/Index'
 import {
     MonitoringList,
     MonitoringDetails
@@ -38,11 +38,11 @@ import {
 import {
     LinkList
 } from '../pages/FriendLink'
+import {
+    PersonList,
+    PersonHandle
+} from '../pages/emerg'
 
-/**
- * name: 标题
- * redirect : noredirect 为不重定向
- **/
 export default [{
     path: '/',
     component: Layout,
@@ -50,6 +50,19 @@ export default [{
         path: 'index',
         component: Index,
         name: "首页",
+    },{
+        path: 'companyIndex',
+        component: CompanyIndex,
+        name: "首页",
+        meta: { 
+            specialModule: true,
+        }
+    }, {
+        path: 'showPage',
+        component: IframShowPage,
+        meta: { 
+            specialModule: true,
+        }
     }, {
         path: 'account',
         component: AccountList,
@@ -134,6 +147,10 @@ export default [{
         path: '/link',
         component: LinkList,
         name: '友情链接'
+    }, {
+        path: 'emerg/person',
+        component: PersonList,
+        name: '应急人员列表'
     }]
 }, {
     path: '/monitoring',

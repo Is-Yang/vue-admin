@@ -94,7 +94,7 @@
         this.loading = true;
         let params = {
           page: this.page.current,
-          type: 0
+          from: 1
         };
         Http.getFileList(params)
           .then(res => {

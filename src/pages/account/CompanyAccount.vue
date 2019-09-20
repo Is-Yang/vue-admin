@@ -8,6 +8,7 @@
         </router-link></el-col>
     </el-row>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
+      <el-table-column prop="government_name" v-if="pageType == 1" label="政府名称"></el-table-column>
       <el-table-column prop="company.company_name" label="公司"></el-table-column>
       <el-table-column prop="user_name" label="用户名"></el-table-column>
       <el-table-column prop="area_name" label="区域"></el-table-column>

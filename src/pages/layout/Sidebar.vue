@@ -1,15 +1,74 @@
 <template>
   <div class="sidebar-container">
-    <el-menu class="el-menu-theme" router 
+    <el-menu class="el-menu-theme"
+      mode="horizontal" 
+      background-color="#324157"
+      text-color="#fff"
+      router 
       :default-active="path" 
       @select="handleSelect" 
       @open="handleOpen"
-      @close="handleClose" 
-      :collapse="!sidebar.opened">
-      <el-menu-item index="/index" v-if="level == 1">
+      @close="handleClose" >
+      <el-menu-item v-if="level == 1 || level == 3" :index="level == 1 ? '/index' : '/companyIndex'">
         <i class="fa fa-home"></i> 
         <span slot="title">首页</span>
       </el-menu-item>
+
+      <!-- 企业端 -->
+      <el-submenu index="/" v-if="level == 3">
+        <template slot="title">
+          <i class="fa fa-code-branch"></i> 
+          <span slot="title">企业管理</span>
+        </template>
+        <el-menu-item index="/showPage?page=1">
+          <span slot="title">隐患上报</span>
+        </el-menu-item>
+
+        <el-menu-item index="/company/info">
+          <span slot="title">企业资料</span>
+        </el-menu-item>
+      </el-submenu>
+
+      <el-submenu index="/emerg" v-if="level == 3">
+        <template slot="title">
+          <i class="fa fa-thumbtack"></i> 
+          <span slot="title">应急管理</span>
+        </template>
+        <el-menu-item index="/emerg/person">
+          <span slot="title">应急人员</span>
+        </el-menu-item>
+      </el-submenu>
+
+      <el-submenu index="/works" v-if="level == 3">
+        <template slot="title">
+          <i class="fa el-icon-info"></i> 
+          <span slot="title">文件资料</span>
+        </template>
+        <el-menu-item>
+          <span slot="title">政府资料</span>
+        </el-menu-item>
+        <el-menu-item>
+          <span slot="title">其他资料</span>
+        </el-menu-item>
+      </el-submenu>
+
+      <el-submenu index="/account" v-if="level == 3">
+        <template slot="title">
+          <i class="fa fa-users"></i> 
+          <span slot="title">综合管理</span>
+        </template>
+        <el-menu-item index="/account">
+          <span slot="title">人员管理</span>
+        </el-menu-item>
+        <el-menu-item @click="logout">
+          <span slot="title">退出登录</span>
+        </el-menu-item>
+      </el-submenu>
+
+      <!-- <el-menu-item index="/tasks" v-if="level == 3">
+        <i class="fa fa-tasks"></i> 
+        <span slot="title">任务信息</span>
+      </el-menu-item> -->
 
       <el-menu-item index="/account/government" v-if="level == 2">
         <i class="fa fa-code-branch"></i> 
@@ -25,18 +84,8 @@
         <i class="fa fa-building"></i> 
         <span slot="title">企业列表</span>
       </el-menu-item>
-
-      <el-submenu index="/account" v-if="level == 3">
-        <template slot="title">
-          <i class="fa fa-users"></i> 
-          <span slot="title">账号列表</span>
-        </template>
-        <el-menu-item index="/account">
-          <span slot="title">员工账号</span>
-        </el-menu-item>
-      </el-submenu>
-
-      <el-submenu index="/classify" v-if="level != 1">
+      
+      <el-submenu index="/classify" v-if="level == 2">
         <template slot="title">
           <i class="fa fa-tasks"></i> 
           <span slot="title">分类列表</span>
@@ -49,7 +98,7 @@
         </el-menu-item>
       </el-submenu>
 
-      <el-submenu index="/monitoring" v-if="level == 1 || level == 2 || level == 3">
+      <el-submenu index="/monitoring" v-if="level == 1 || level == 2">
         <template slot="title">
           <i class="fa fa-cogs"></i> 
           <span slot="title">监控列表</span>
@@ -65,11 +114,6 @@
       <el-menu-item :index="level === 1 ? '/message/government' : '/message'" v-if="level == 1 || level == 2">
         <i class="fa fa-thumbtack"></i> 
         <span slot="title">应急消息列表</span>
-      </el-menu-item>
-
-      <el-menu-item index="/tasks" v-if="level == 3">
-        <i class="fa fa-tasks"></i> 
-        <span slot="title">任务信息</span>
       </el-menu-item>
 
       <el-menu-item index="/tasks/company" v-if="level == 2">
@@ -91,14 +135,22 @@
         <i class="fa el-icon-share"></i> 
         <span slot="title">友情链接</span>
       </el-menu-item>
-
-      <el-menu-item index="/company/info" v-if="level == 3">
-        <i class="fa el-icon-info"></i> 
-        <span slot="title">企业资料</span>
-      </el-menu-item>
       
     </el-menu>
     
+    <!-- <el-dropdown trigger="hover">
+      <div class="avatar-wrapper">
+        <span class="user-name">{{userInfo.userName}}</span>
+        <i class="el-icon-caret-bottom"></i>
+      </div>
+      <el-dropdown-menu slot="dropdown">
+        <div @click="logout">
+          <el-dropdown-item>
+            退出登录
+          </el-dropdown-item>
+        </div>
+      </el-dropdown-menu>
+    </el-dropdown> -->
   </div>
 </template>
 
@@ -118,6 +170,7 @@
       return {
         path: '',
         level: 0,
+        userInfo: {},
       };
     },
     mounted() {
@@ -130,9 +183,24 @@
       let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
       if (user_info && user_info.propity) {
         this.level = user_info.propity;
+        this.userInfo.userName = user_info.userName;
       }
     },
     methods: {
+      logout() { // 退出登录
+          this.$confirm('请确认是否退出登录?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+          }).then(() => {
+              localStorage.removeItem('userInfo'); // 清除用户信息
+              this.$store.dispatch('saveUser', '');
+              this.$router.push('/login');
+              window.location.reload();
+          }).catch(() => {
+
+          });
+      },
       handleOpen(key, keyPath) {
         // console.log(key, keyPath);
       },
@@ -142,9 +210,6 @@
       handleSelect(key, keyPath) {
         this.path = key; // 当前高亮
       },
-    },
-    destroyed() {
-      this.$eventHub.$off('getNav');
     }
   }
 
@@ -154,21 +219,10 @@
   @import "src/assets/css/mixin.scss";
 
   .sidebar-container {
-    transition: all .28s ease-out;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: -17px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    z-index: 999;
+    display: flex;
+    justify-content: space-between;
 
     .el-menu {
-      min-height: 100%;
-      border-radius: 0px;
-      border-right: none;
-
       /deep/ .fa {
         color: #bfcbd9;
       }
@@ -201,6 +255,26 @@
       flex-direction: row;
       align-items: center;
     }
+
+    .avatar-wrapper {
+        height: 60px;
+        line-height: 60px;
+        cursor: pointer;
+        position: relative;
+        color: #bfcbd9;
+        .user-avatar {
+          width: 40px;
+          height: 40px;
+          display: inline-block;
+          vertical-align: middle;
+          @include borderRadius(50%);
+          background-color: #fff;
+        }
+        .user-name {
+          margin-left: 25px;
+          padding: 0 15px;
+        }
+      }
   }
 
 </style>

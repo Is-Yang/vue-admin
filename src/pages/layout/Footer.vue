@@ -1,6 +1,6 @@
 <template>
     <div class="footer-container" v-if="propity === 3">
-        <el-row type="flex" align="middle" style="height: 65px;">
+        <el-row type="flex" align="middle" justify="center" style="height: 65px;">
             <span>友情链接：</span>
             <a :href="data.link1">{{data.link1_name}}</a>
             <a :href="data.link2">{{data.link2_name}}</a>
@@ -43,7 +43,6 @@ export default {
     .footer-container {
         background-color: #324157; 
         color: #fff;
-
         a {
             margin: 0 12px 0 4px;
         }

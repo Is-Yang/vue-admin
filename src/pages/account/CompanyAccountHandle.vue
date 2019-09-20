@@ -172,7 +172,7 @@
       },
       handleClose() {
         this.$router.push({
-          path: '../account/company'
+          path: this.pageType == 3 ? '../account/company' : '../account/government'
         });
       },
       resetForm(formName) {

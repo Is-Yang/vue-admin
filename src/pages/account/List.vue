@@ -1,10 +1,32 @@
 <template>
   <div>
-    <div class="margin-bottom-20 text-right">
-      <router-link to="account/add">
-        <el-button type="primary" size="small">创建员工账号</el-button>
-      </router-link>
-    </div>
+    <el-row>
+      <el-col :span="20">
+        <el-form :inline="true" :model="searchInfo" size="small" v-if="propity == 3">
+          <el-form-item label="人员姓名：">
+            <el-input v-model="searchInfo.keyword" placeholder="请输入人员姓名"></el-input>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button
+              type="primary"
+              size="small"
+              round
+              icon="el-icon-search"
+              @click="onSearch"
+            >查询</el-button>
+            <el-button plain size="small" round icon="el-icon-delete" @click="onReset">清空查询条件</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+
+      <el-col :span="4" class="text-right">
+        <router-link to="account/add">
+          <el-button type="primary" size="small">创建员工账号</el-button>
+        </router-link>
+      </el-col>
+    </el-row>
+
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column prop="company" label="公司"></el-table-column>
       <el-table-column prop="department" label="部门"></el-table-column>
@@ -44,6 +66,9 @@ export default {
     return {
       loading: false,
       listData: [],
+      searchInfo: {
+
+      },
       page: {
         current: 1,
         size: 10,
@@ -69,7 +94,8 @@ export default {
     getListData() {
       this.loading = true;
       let params = {
-        page: this.page.current
+        page: this.page.current,
+        key: this.searchInfo.keyword
       };
 
       let queryName = this.propity === 3 ? 'getManagerAccountList' : this.propity === 2 ? 'getAccountList' : 'getManagerUserList';
@@ -92,7 +118,7 @@ export default {
     },
     onReset() {
       // 清空
-      this.menuCon.keyword = "";
+      this.searchInfo.keyword = "";
       this.getListData();
     },
     editFn(user_id) {

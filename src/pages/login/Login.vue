@@ -76,13 +76,18 @@
           this.loading = false;
           this.$handleResponse(res, res=>{
             let { token, propity } = res;
-            let setData = {token: token, userName: user_name, propity: propity}
+            let setData = {
+              token: token, 
+              userName: user_name, 
+              propity: propity,
+              companyName: res.company && res.company.company_name
+            }
             localStorage.setItem('userInfo', JSON.stringify(setData));
             this.$store.dispatch('saveUser', setData);
             if (propity == 1) {
               this.$router.push({path: '/index'});
             } else if (propity == 3) {
-              this.$router.push({path: '/account'});
+              this.$router.push({path: '/companyIndex'});
             } else {
               this.$router.push({path: '/company'});
             }

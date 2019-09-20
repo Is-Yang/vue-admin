@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     resetHeight() {
-      this.minHeight = `${document.documentElement.clientHeight}` - 100;
+      this.minHeight = `${document.documentElement.clientHeight}` - 65;
       if (this.minHeight < 550) this.minHeight = 550;
     }
   }

@@ -66,7 +66,7 @@ export default {
     },
     methods: {
       init() {
-         if(this.type == 'edit') {
+        if(this.type == 'edit') {
             this.title = "编辑宣传图";
             this.loading = true;    
             setTimeout(() => {
