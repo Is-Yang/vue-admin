@@ -50,17 +50,17 @@ export default [{
         path: 'index',
         component: Index,
         name: "首页",
-    },{
+    }, {
         path: 'companyIndex',
         component: CompanyIndex,
         name: "首页",
-        meta: { 
+        meta: {
             specialModule: true,
         }
     }, {
         path: 'showPage',
         component: IframShowPage,
-        meta: { 
+        meta: {
             specialModule: true,
         }
     }, {

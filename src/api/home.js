@@ -425,9 +425,9 @@ export function getCompanyShowInfo() {
 }
 
 // 企业端-风险功能
- export function getRiskCheckTask(params) {
+export function getRiskCheckTask(params) {
     return http.getAjax('/get_risk_check_task?token=' + getToken(), params);
- }
+}
 
 //  企业端-监控任务 
 export function getTypeCheckTask(params) {
@@ -437,4 +437,19 @@ export function getTypeCheckTask(params) {
 // 企业端-隐患功能 
 export function getProblemCheckTask(params) {
     return http.getAjax('/get_problem_check_task?token=' + getToken(), params);
+}
+
+// 平台端-按照公司进行分类
+export function getMCompanyPostionList(params) {
+    return http.getAjax('/manager_company_position_list?token=' + getToken(), params);
+}
+
+// 平台端-按照大分类获取小分类
+export function getMPosPostionDetailList(params) {
+    return http.getAjax('/manager_pos_position_detail_list?token=' + getToken(), params);
+}
+
+// 平台端-企业地区分类搜索下拉选择
+export function geAreaSelect() {
+    return http.getAjax('/get_area_select?token=' + getToken());
 }

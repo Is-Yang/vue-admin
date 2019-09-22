@@ -4,7 +4,7 @@
       <div class="header-menu flex"
         v-loading.fullscreen="loading"
         element-loading-spinner="icon-loading">
-        <div>
+        <div v-if="userInfo.propity == 3">
           <span>{{userInfo.companyName}}</span>
           <p>安全风险分级管控和隐患排查治理平台</p>
         </div>
@@ -31,7 +31,6 @@
         loading: false,
         userInfo: {},
         dialogFormVisible: false,
-        path: '',
         defaultImg: '',
       }
     },
@@ -40,12 +39,7 @@
     },
     methods: {
       getUserInfo() { //用户信息
-        let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
-        if (user_info) {
-          this.userInfo = {
-            companyName: user_info.companyName
-          }
-        }
+        this.userInfo = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
       },
       logout() { // 退出登录
         this.$confirm('请确认是否退出登录?', '提示', {

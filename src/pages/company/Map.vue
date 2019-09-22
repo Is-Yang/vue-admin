@@ -158,7 +158,7 @@
         this.ac.addEventListener("onconfirm", function (e) {
           let _value = e.item.value
           myValue = _value.province + _value.city + _value.district + _value.street + _value.business
-          _this.setPlace(myValue)
+          _this.setPlace(myValue);
         });
       },
       setPlace(myValue) {
@@ -170,6 +170,7 @@
           onSearchComplete: _this.onSearchComplete
         });
         this.local.search(myValue);
+        this.showAddress = myValue;
       },
       onSearchComplete() {
         //获取第一个智能搜索的结果

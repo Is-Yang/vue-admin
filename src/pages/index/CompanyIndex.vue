@@ -22,7 +22,7 @@
                 <div class="card-item" style="height: 420px;">
                     <h3>安全风险管控情况</h3>
                     <p class="text-right margin-bottom-20">完成率：
-                        <span style="color: #fd6b6b; font-weight: 600;">{{monitoringInfo.complete_rate}}</span>
+                        <span style="color: #fd6b6b; font-weight: 600;">{{complete_rate*100}}%</span>
                     </p>
                     <div class="monitoring-table">
                         <ul class="table-head">
@@ -32,38 +32,38 @@
                             <li>一般风险</li>
                             <li>低风险</li>
                         </ul>
-                    <div class="table-body">
-                        <ul>
-                            <li>已监控</li>
-                            <li>
-                                <a href="javascript:;" @click="getTypeTask(3, 0)">{{monitoringInfo.risk_history_serious}}</a>
-                            </li>
-                            <li>
-                                <a href="javascript:;" @click="getTypeTask(2, 0)">{{monitoringInfo.risk_history_high}}</a>
-                            </li>
-                            <li>
-                                <a href="javascript:;" @click="getTypeTask(1, 0)">{{monitoringInfo.risk_history_normal}}</a>
-                            </li>
-                            <li>
-                                <a href="javascript:;" @click="getTypeTask(0, 0)">{{monitoringInfo.risk_history_low}}</a>
-                            </li>
-                        </ul>
-                        <ul>
-                            <li>未监控</li>
-                            <li>
-                                <a href="javascript:;" @click="getTypeTask(3, 1)">{{monitoringInfo.risk_undo_serious}}</a>
-                            </li>
-                            <li>
-                                <a href="javascript:;" @click="getTypeTask(2, 1)">{{monitoringInfo.risk_undo_high}}</a>
-                            </li>
-                            <li>
-                                <a href="javascript:;" @click="getTypeTask(1, 1)">{{monitoringInfo.risk_undo_normal}}</a>
-                            </li>
-                            <li>
-                                <a href="javascript:;" @click="getTypeTask(0, 1)">{{monitoringInfo.risk_undo_low}}</a>
-                            </li>
-                        </ul>
-                    </div>
+                        <div class="table-body">
+                            <ul>
+                                <li>已监控</li>
+                                <li>
+                                    <a href="javascript:;" @click="getTypeTask(3, 0)">{{monitoringInfo.risk_history_serious}}</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" @click="getTypeTask(2, 0)">{{monitoringInfo.risk_history_high}}</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" @click="getTypeTask(1, 0)">{{monitoringInfo.risk_history_normal}}</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" @click="getTypeTask(0, 0)">{{monitoringInfo.risk_history_low}}</a>
+                                </li>
+                            </ul>
+                            <ul>
+                                <li>未监控</li>
+                                <li>
+                                    <a href="javascript:;" @click="getTypeTask(3, 1)">{{monitoringInfo.risk_undo_serious}}</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" @click="getTypeTask(2, 1)">{{monitoringInfo.risk_undo_high}}</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" @click="getTypeTask(1, 1)">{{monitoringInfo.risk_undo_normal}}</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" @click="getTypeTask(0, 1)">{{monitoringInfo.risk_undo_low}}</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </el-col>
@@ -161,6 +161,7 @@ export default {
             typeTask: {},
             problemTask: ''
         },
+        complete_rate: 0,
         chartTitle: ['安全风险实时统计', '安全隐患实时统计'],
         dataId: ['risk', 'danger'],
         chartOptions: [
@@ -217,6 +218,7 @@ export default {
                 this.$handleResponse(res, res => {
                     this.monitoringInfo = res.risk_info;
                     this.imageData = res.company.company_img_1;
+                    this.complete_rate = res.complete_rate;
                     this.mapXY = {
                         xData: res.company.company_x,
                         yData: res.company.company_y,
@@ -377,7 +379,6 @@ export default {
                 width: 20%;
                 height: 45px;
                 line-height: 45px;
-                padding: 0 10px;
                 border-right: 1px solid #ebeef5;
                 border-bottom: 1px solid #ebeef5;
                 text-align: center;

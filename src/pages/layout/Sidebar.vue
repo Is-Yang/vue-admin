@@ -44,10 +44,10 @@
           <i class="fa el-icon-info"></i> 
           <span slot="title">文件资料</span>
         </template>
-        <el-menu-item>
+        <el-menu-item index="/works/zf">
           <span slot="title">政府资料</span>
         </el-menu-item>
-        <el-menu-item>
+        <el-menu-item index="/works/other">
           <span slot="title">其他资料</span>
         </el-menu-item>
       </el-submenu>
@@ -60,9 +60,9 @@
         <el-menu-item index="/account">
           <span slot="title">人员管理</span>
         </el-menu-item>
-        <el-menu-item @click="logout">
+        <!-- <li class="el-menu-item" @click="logout">
           <span slot="title">退出登录</span>
-        </el-menu-item>
+        </li> -->
       </el-submenu>
 
       <!-- <el-menu-item index="/tasks" v-if="level == 3">
@@ -77,24 +77,19 @@
 
       <el-menu-item index="/company" v-if="level == 2">
         <i class="fa fa-building"></i> 
-        <span slot="title">公司列表</span>
-      </el-menu-item>
-
-      <el-menu-item index="/company" v-if="level == 1">
-        <i class="fa fa-building"></i> 
-        <span slot="title">企业列表</span>
+        <span slot="title">公司管理</span>
       </el-menu-item>
       
       <el-submenu index="/classify" v-if="level == 2">
         <template slot="title">
           <i class="fa fa-tasks"></i> 
-          <span slot="title">分类列表</span>
+          <span slot="title">任务管理</span>
         </template>
         <el-menu-item index="/classify/big">
-          <span slot="title">大分类</span>
+          <span slot="title">风险点创建</span>
         </el-menu-item>
         <el-menu-item index="/classify/small">
-          <span slot="title">小分类</span>
+          <span slot="title">风险点任务创建</span>
         </el-menu-item>
       </el-submenu>
 
@@ -113,7 +108,7 @@
 
       <el-menu-item :index="level === 1 ? '/message/government' : '/message'" v-if="level == 1 || level == 2">
         <i class="fa fa-thumbtack"></i> 
-        <span slot="title">应急消息列表</span>
+        <span slot="title">消息管理</span>
       </el-menu-item>
 
       <el-menu-item index="/tasks/company" v-if="level == 2">
@@ -128,17 +123,22 @@
 
       <el-menu-item index="/other" v-if="level == 2">
         <i class="fa el-icon-info"></i> 
-        <span slot="title">其他资料列表</span>
+        <span slot="title">资料管理</span>
       </el-menu-item>
 
       <el-menu-item index="/link" v-if="level == 2">
         <i class="fa el-icon-share"></i> 
-        <span slot="title">友情链接</span>
+        <span slot="title">相关连接</span>
+      </el-menu-item>
+
+      <el-menu-item index="/company" v-if="level == 1">
+        <i class="fa fa-building"></i> 
+        <span slot="title">企业列表</span>
       </el-menu-item>
       
     </el-menu>
     
-    <!-- <el-dropdown trigger="hover">
+    <el-dropdown trigger="hover">
       <div class="avatar-wrapper">
         <span class="user-name">{{userInfo.userName}}</span>
         <i class="el-icon-caret-bottom"></i>
@@ -150,7 +150,7 @@
           </el-dropdown-item>
         </div>
       </el-dropdown-menu>
-    </el-dropdown> -->
+    </el-dropdown>
   </div>
 </template>
 

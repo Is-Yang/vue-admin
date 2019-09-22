@@ -1,6 +1,6 @@
 <template>
   <el-form :model="company" :label-position="'right'" ref="companyInfo" :rules="rules"
-    @keyup.enter.native="onSubmit('companyInfo')" label-width="100px" size="medium">
+    @keyup.enter.native="onSubmit('companyInfo')" label-width="150px" size="medium">
     <el-form-item prop="company_name" label="公司名称：">
       <el-input type="text" style="width: 280px;" v-model.trim="company.company_name" placeholder="请输入公司名称"></el-input>
     </el-form-item>
@@ -13,7 +13,13 @@
     <el-form-item label="公司信息：">
       <el-input type="textarea" :rows="2" style="width: 280px;" v-model="company.company_info"></el-input>
     </el-form-item>
-    <el-form-item label="四色图1：">
+    <el-form-item label="区域：">
+      <el-select v-model="company.manager_index" placeholder="请选择区域" size="medium">
+        <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index">
+        </el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="四色分布图：">
       <el-row type="flex" :gutter="10">
         <el-col :span="4">
           <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess1">
@@ -21,7 +27,7 @@
             <i v-else class="el-icon-plus"></i>
           </el-upload>
         </el-col>
-        <el-col :span="6">
+        <!-- <el-col :span="6">
           <div class="flex">
             <span style="width: 75px;">四色图2：</span>
             <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess2">
@@ -47,13 +53,31 @@
               <i v-else class="el-icon-plus"></i>
             </el-upload>
           </div>
-        </el-col>
+        </el-col> -->
       </el-row>
     </el-form-item>
-    <el-form-item label="地图点">
-      <v-map @selectLocation="selectLocation" :mapXY="mapXY"></v-map>
+    <el-form-item label="地图点：" style="margin-bottom: 50px;">
+      <v-map @selectLocation="selectLocation" :mapXY="mapXY" style="width: 860px; height: 420px;"></v-map>
     </el-form-item>
-    <el-form-item class="margin-top-30">
+    <el-form-item label="企业法人：">
+      <el-input type="text" style="width: 280px;" v-model.trim="company.corporate" placeholder="请输入企业法人"></el-input>
+    </el-form-item>
+    <el-form-item  label="法人手机号：">
+      <el-input type="text" style="width: 280px;" v-model.trim="company.corporate_phone" placeholder="请输入法人手机号"></el-input>
+    </el-form-item>
+    <el-form-item label="企业负责人：">
+      <el-input type="text" style="width: 280px;" v-model.trim="company.ceo" placeholder="请输入企业负责人"></el-input>
+    </el-form-item>
+    <el-form-item label="负责人手机号：">
+      <el-input type="text" style="width: 280px;" v-model.trim="company.ceo_phone" placeholder="请输入负责人手机号"></el-input>
+    </el-form-item>
+    <el-form-item label="企业状态：">
+      <el-input type="text" style="width: 280px;" v-model.trim="company.status" placeholder="请输入企业状态"></el-input>
+    </el-form-item>
+    <el-form-item label="经营范围：">
+      <el-input type="textarea" :rows="2" style="width: 280px;" v-model="company.scope"></el-input>
+    </el-form-item>
+    <el-form-item class="margin-top-20">
       <el-button @click="handleClose">取 消</el-button>
       <el-button type="primary" @click="onSubmit('companyInfo')">提交</el-button>
     </el-form-item>
@@ -78,6 +102,7 @@
           company_name: '',
           company_type: '',
         },
+        areaList: [],
         imageUrl1: '',
         imageUrl2: '',
         imageUrl3: '',
@@ -106,7 +131,11 @@
             value: 4,
           }
         ],
-        mapXY: {},
+        mapXY: {
+          xData: 0,
+          yData: 0,
+          edit: true
+        },
         rules: {
           company_name: [{
             required: true,
@@ -121,7 +150,7 @@
           companyLocation: {
             lng: '',
             lat: ''
-          },
+          }
         },
       }
     },
@@ -152,6 +181,15 @@
               this.loading = false;
           });
         }
+
+        this.getAreaSelect();
+      },
+      getAreaSelect() {
+         Http.geAreaSelect().then(res => {
+              this.$handleResponse(res, res => {
+               this.areaList = res.data;
+              })
+          })
       },
       selectLocation (location) {
         if (location && location.lng && location.lat) {
@@ -202,22 +240,36 @@
               company_name,
               company_type,
               company_info,
+              manager_index,
               company_img_1,
-              company_img_2,
-              company_img_3,
-              company_img_4,
+              // company_img_2,
+              // company_img_3,
+              // company_img_4,
+              corporate,
+              corporate_phone,
+              ceo,
+              ceo_phone,
+              status,
+              scope
             } = this.company;
 
             let params = {
               company_name: company_name,
               company_type: company_type,
               company_info: company_info,
+              manager_index: manager_index,
               company_img_1: company_img_1,
-              company_img_2: company_img_2,
-              company_img_3: company_img_3,
-              company_img_4: company_img_4,
+              // company_img_2: company_img_2,
+              // company_img_3: company_img_3,
+              // company_img_4: company_img_4,
               company_x: this.companyLocation && this.companyLocation.lng && parseFloat(this.companyLocation.lng),
-              company_y: this.companyLocation && this.companyLocation.lat && parseFloat(this.companyLocation.lat)
+              company_y: this.companyLocation && this.companyLocation.lat && parseFloat(this.companyLocation.lat),
+              corporate: corporate,
+              corporate_phone: corporate_phone,
+              ceo: ceo,
+              ceo_phone: ceo_phone,
+              status: status,
+              scope: scope
             }
 
 

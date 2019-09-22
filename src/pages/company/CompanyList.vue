@@ -6,10 +6,11 @@
       </router-link>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-      <el-table-column prop="company_name" label="公司名字" min-width="300"></el-table-column>
+      <el-table-column prop="company_name" label="公司名称" min-width="300"></el-table-column>
       <el-table-column prop="company_type_text" label="公司类型" width="130px"></el-table-column>
       <el-table-column prop="company_info" label="公司信息" min-width="280"></el-table-column>
-      <el-table-column label="四色图1" width="100px">
+      <el-table-column prop="area_name" label="区域" min-width="100"></el-table-column>
+      <!-- <el-table-column label="四色图1" width="100px">
         <template slot-scope="scope">
           <a :href="scope.row.company_img_1" target="_blank">
             <img :src="scope.row.company_img_1" style="width: 100%;" />
@@ -36,12 +37,12 @@
             <img :src="scope.row.company_img_4" style="width: 100%;" />
           </a>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="操作" min-width="500px">
         <template slot-scope="scope">
           <el-button size="mini" type="success" plain icon="el-icon-download" @click="downloadFn(scope.row)" title="导出">
           </el-button>
-          <el-button size="mini" type="success" plain icon="el-icon-view" @click="viewFn(scope.row)" title="查看地图">
+          <el-button size="mini" type="success" plain icon="el-icon-view" @click="viewFn(scope.row)" title="查看">
           </el-button>
           <el-button size="mini" v-if="propity === 2" type="primary" plain icon="el-icon-edit"  @click="editFn(scope.row)"
             title="编辑"></el-button>
@@ -65,9 +66,8 @@
       :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
       layout="total, sizes, prev, pager, next, jumper"></el-pagination>
   
-    <el-dialog title="地图点" :visible.sync="dialog.show" width="1000px" :before-close="handleClose">
-        <v-map :mapXY="dialog.mapXY"></v-map>
-    </el-dialog>
+      <!-- <v-map :mapXY="dialog.mapXY"></v-map> -->
+
     <el-dialog title="请选择分类来进行企业信息导出" :visible.sync="dialog.typeShow" width="400px" :before-close="handleTypeClose">
       <el-select v-model="filter.positionId" clearable filterable placeholder="请选择" style="width: 300px">
         <el-option
@@ -83,17 +83,23 @@
       </span>
     </el-dialog>
 
-    <table-slider-bar></table-slider-bar>
+    <!-- <table-slider-bar></table-slider-bar> -->
 
+    <EnterpriseInfo v-if="dialog.show"
+      :infoData="dialog.infoData"   
+      @cancel="dialog.show = false"
+      @success="dialog.show = false"></EnterpriseInfo>
   </div>
 </template>
 
 <script>
 import * as Http from "@/api/home";
 import * as userInfo from "@/utils/commonService/getUserInfo";
+import EnterpriseInfo from './EnterpriseInfo';
 import VMap from './Map'
 export default {
   components: {
+    EnterpriseInfo,
     VMap
   },
   inject: ["reload"],
@@ -109,7 +115,8 @@ export default {
       dialog: {
         show: false,
         typeShow: false,
-        mapXY: {}
+        mapXY: {},
+        infoData: {}
       },
       propity: 2,
       options: [],
@@ -199,6 +206,7 @@ export default {
         yData: data.company_y,
         edit: false
       }
+      this.dialog.infoData = data;
       this.dialog.show = true;
     },
     handleTypeOk() {

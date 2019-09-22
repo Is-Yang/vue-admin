@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="margin-bottom-20 text-right">
-      <el-button v-if="tableType === 1" type="primary" size="small" @click="dialogShow('add', {}, 'big')">创建大分类</el-button>
-      <el-button v-if="tableType === 2" type="primary" size="small" @click="dialogShow('add', {}, 'small')">创建小分类</el-button>
+      <el-button v-if="tableType === 1" type="primary" size="small" @click="dialogShow('add', {}, 'big')">创建风险点</el-button>
+      <el-button v-if="tableType === 2" type="primary" size="small" @click="dialogShow('add', {}, 'small')">创建二级子项</el-button>
     </div>
     <el-table v-if="tableType === 1" v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
       <el-table-column prop="position_name" label="标题"></el-table-column>
