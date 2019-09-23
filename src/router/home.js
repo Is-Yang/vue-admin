@@ -112,9 +112,13 @@ export default [{
         component: CompanyHandle,
         name: '编辑公司'
     }, {
-        path: 'company/info',
+        path: 'company/zfinfo',
         component: CompanyInfo,
-        name: '企业资料'
+        name: '政府资料'
+    }, {
+        path: 'company/qtinfo',
+        component: CompanyInfo,
+        name: '其他资料'
     }, {
         path: 'department',
         component: DepartmentList,

@@ -4,10 +4,10 @@
         <el-button size="small" type="primary" @click="dialogShow('add', {})">上传资料</el-button>
     </div>
 
-    <el-tabs v-model="active" type="card" @tab-click="getListData">
+    <!-- <el-tabs v-model="active" type="card" @tab-click="getListData">
       <el-tab-pane label="安全生产培训" name="1"></el-tab-pane>
       <el-tab-pane label="应急救援" name="2"></el-tab-pane>
-      <el-tab-pane label="安全生产标准化" name="3"></el-tab-pane>
+      <el-tab-pane label="安全生产标准化" name="3"></el-tab-pane> -->
 
       <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
         <el-table-column prop="name" label="资料标题"></el-table-column>
@@ -29,7 +29,7 @@
       <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.current"
         :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
         layout="total, sizes, prev, pager, next, jumper"></el-pagination>
-    </el-tabs>
+    <!-- </el-tabs> -->
 
      <!-- 文件新增或修改 -->
     <file-handle
@@ -95,12 +95,20 @@
         }
       },
       getListData() {
+        let route = this.$route;
+        let form = '';
+        if (route.path == '/company/zfinfo') {
+          form = 1;
+        } else if (route.path == '/company/qtinfo') {
+          form = 0;
+        }
+        console.log(route)
         // 菜单列表数据
         this.loading = true;
         let params = {
           page: this.page.current,
-          type: this.active,
-          form: 0
+          // type: this.active,
+          form: form
         };
         Http.getFileList(params)
           .then(res => {

@@ -24,7 +24,7 @@
           <span slot="title">隐患上报</span>
         </el-menu-item>
 
-        <el-menu-item index="/company/info">
+        <el-menu-item @click="showInfoDialog()">
           <span slot="title">企业资料</span>
         </el-menu-item>
       </el-submenu>
@@ -39,15 +39,15 @@
         </el-menu-item>
       </el-submenu>
 
-      <el-submenu index="/works" v-if="level == 3">
+      <el-submenu index="/company" v-if="level == 3">
         <template slot="title">
           <i class="fa el-icon-info"></i> 
           <span slot="title">文件资料</span>
         </template>
-        <el-menu-item index="/works/zf">
+        <el-menu-item index="/company/zfinfo">
           <span slot="title">政府资料</span>
         </el-menu-item>
-        <el-menu-item index="/works/other">
+        <el-menu-item index="/company/qtinfo">
           <span slot="title">其他资料</span>
         </el-menu-item>
       </el-submenu>
@@ -151,6 +151,7 @@
         </div>
       </el-dropdown-menu>
     </el-dropdown>
+
   </div>
 </template>
 
@@ -159,8 +160,11 @@
     mapGetters
   } from 'vuex';
   import * as userInfo from "@/utils/commonService/getUserInfo";
-
+  // import EnterpriseInfo from '../company/EnterpriseInfo.vue';
   export default {
+    components: {
+      // EnterpriseInfo
+    },
     computed: {
       ...mapGetters([
         'sidebar',
@@ -200,6 +204,9 @@
           }).catch(() => {
 
           });
+      },
+      showInfoDialog() {
+         this.$eventHub.$emit('ShowEnterpriseInfo'); 
       },
       handleOpen(key, keyPath) {
         // console.log(key, keyPath);

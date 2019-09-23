@@ -159,7 +159,9 @@ export default {
             problemShow: false,
             rickTask: '',
             typeTask: {},
-            problemTask: ''
+            problemTask: '',
+            infoShow: false,
+            infoData: {}
         },
         complete_rate: 0,
         chartTitle: ['安全风险实时统计', '安全隐患实时统计'],
@@ -224,7 +226,8 @@ export default {
                         yData: res.company.company_y,
                     }
                     this.showRiskStat(res.risk_info);
-                })
+                    this.$store.dispatch('GetEnterpriseInfo', res.company);
+                });
             }).catch(err => {
                 console.log(err)
             });

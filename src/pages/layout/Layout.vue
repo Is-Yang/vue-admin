@@ -10,10 +10,16 @@
 
     </div>
     <Footer />
+
+    <EnterpriseInfo v-if="dialog.infoShow"
+            :infoData="dialog.infoData"   
+            @cancel="dialog.infoShow = false"
+            @success="dialog.infoShow = false"></EnterpriseInfo>
   </div>
 </template>
 
 <script>
+  import * as Http from "@/api/home";
   import {
     Header,
     Navbar,
@@ -22,6 +28,7 @@
     Footer
   } from './index'
   import { mapGetters } from 'vuex';
+  import EnterpriseInfo from '../company/EnterpriseInfo.vue';
 
   export default {
     name: 'layout',
@@ -30,20 +37,43 @@
       Navbar,
       Sidebar,
       AppMain,
-      Footer
+      Footer,
+      EnterpriseInfo
     },
     computed: {
-      ...mapGetters(['loadingLocal']),
+      ...mapGetters(['loadingLocal', 'enterpriseInfo']),
       sidebar() {
         return this.$store.state.app.sidebar;
       }
     },
     data() {
       return {
-        isHide: false
+        isHide: false,
+        dialog: {
+          infoShow: false,
+          infoData: {}
+        }
+      }
+    },
+    watch: {
+      enterpriseInfo(data) {
+        this.dialog.infoData = data;
       }
     },
     created () {
+       this.$eventHub.$on('ShowEnterpriseInfo', (data) => {
+        if (this.dialog.infoData && !this.dialog.infoData.ceo) {
+          Http.getCompanyShowInfo().then(res => {
+              this.$handleResponse(res, res => {
+                  this.dialog.infoData = res.company;
+                  this.$store.dispatch('GetEnterpriseInfo', res.company);
+              });
+          }).catch(err => {
+              console.log(err)
+          });
+        }
+        this.dialog.infoShow = true;
+      })
     },
     methods: {
       

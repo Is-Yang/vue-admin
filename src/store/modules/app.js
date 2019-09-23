@@ -9,7 +9,8 @@ const app = {
     showLoading: {
       full: {},  // 全局的loading
       local: false, // 局部 main组件的loading
-    }
+    },
+    enterpriseInfo: {}  // 企业信息
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
@@ -49,6 +50,10 @@ const app = {
         }
         state.showLoading.local = false;
       }
+    },
+    GET_ENTERPRISE_INFO: (state, data) => {
+      let info = Object.assign({}, state.enterpriseInfo, data); 
+      state.enterpriseInfo = info;
     }
   },
   actions: {
@@ -67,6 +72,9 @@ const app = {
     },
     closeLoading: ({ commit}, data) => {
       commit('CLOS_LOADING', data);
+    },
+    GetEnterpriseInfo: ({ commit}, data) => {
+      commit('GET_ENTERPRISE_INFO', data);
     }
   }
 };
