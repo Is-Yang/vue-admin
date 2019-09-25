@@ -6,20 +6,32 @@
       ref="messageForm"
       @keyup.enter.native="onSubmit('messageForm')"
       label-width="100px" class="messageForm">
-       <el-form-item label="消息发送者" prop="message_from">
+      <el-form-item label="消息发送者" prop="message_from">
         <el-input v-model="messageForm.message_from"></el-input>
       </el-form-item>
-      <el-form-item v-if="pageType === 1" prop="company_id" label="发送对象：">
+      <el-form-item prop="company_id" label="发送对象：">
           <el-select v-model="messageForm.company_id" placeholder="请选择发送企业" size="medium">
           <el-option v-for="(item, index) in companyList" :key="index" :label="item.company_name" :value="item.company_id">
           </el-option>
           </el-select>
+      </el-form-item>
+      <el-form-item v-if="pageType == 2" prop="company_type" label="公司类型：">
+        <el-select v-model="messageForm.company_type" placeholder="请选择公司类型" size="medium">
+          <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="消息标题" prop="message_title">
         <el-input v-model="messageForm.message_title"></el-input>
       </el-form-item>
       <el-form-item label="消息内容" prop="message_content">
         <el-input type="textarea" v-model="messageForm.message_content"></el-input>
+      </el-form-item>
+      <el-form-item label="上传附件">
+          <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess">
+            <div v-if="imageUrl" :style="{backgroundImage: 'url('+imageUrl +')'}" class="picture"></div>
+            <i v-else class="el-icon-plus"></i>
+          </el-upload>
       </el-form-item>
       <el-form-item class="margin-top-30">
         <el-button type="primary" @click="submitForm('messageForm')">确定</el-button>
@@ -32,6 +44,8 @@
 <script>
 import * as Http from '@/api/home'
 import moment from 'moment';
+import * as userInfo from "@/utils/commonService/getUserInfo";
+let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
 export default {
     props: ['pageType'],
     inject: ['reload'],
@@ -42,6 +56,30 @@ export default {
         loading: false,
         messageForm: {},
         companyList: [],
+        // 公司类型列表
+        typeList: [{
+            label: '危险化学品',
+            value: 0,
+          },
+          {
+            label: '煤矿',
+            value: 1,
+          },
+          {
+            label: '非煤矿山',
+            value: 2,
+          },
+          {
+            label: '工贸行业',
+            value: 3,
+          },
+          {
+            label: '其他',
+            value: 4,
+          }
+        ],
+        imageUrl: '',
+        uploadUrl: window.scrmApi + '/manager_upload_company_img?token=' + user_info.token,
         rules: {
           message_title: [
             { required: true, message: '请输入消息标题', trigger: 'blur' }
@@ -59,10 +97,7 @@ export default {
       };
     },
     created() {
-      // 如果是政府端需指定发送对象
-      if (this.pageType == 1) {
-          this.getCompanySelect()
-      }
+        this.getCompanySelect()
     },
     methods: {
       // 获取所有公司列表
@@ -77,6 +112,15 @@ export default {
           })
           .catch(err => {});
       },
+      handleImageSuccess(res, file) {
+        if (res.ok) {
+          this.imageUrl = URL.createObjectURL(file.raw);
+          this.messageForm.file_url = res.url; 
+          this.$message.success("上传成功");
+        } else {
+          this.$message.error("上传失败");
+        }
+      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -84,7 +128,10 @@ export default {
             let {
               message_title,
               message_content,
-              message_from
+              message_from,
+              company_id,
+              company_type,
+              file_url
             } = this.messageForm;
 
             let create_time = Math.round(new Date().getTime()/1000);
@@ -94,11 +141,14 @@ export default {
                 message_title: message_title,
                 message_content: message_content,
                 message_from: message_from,
+                company_id: company_id,
+                company_type: company_type,
+                file_url: file_url
             }
             // 政府端
             let goverParams = {
                 message_from: message_from,
-                company_id: this.messageForm.company_id,
+                company_id: company_id,
                 title: message_title,
                 content: message_content,
                 create_time: create_time
@@ -129,5 +179,42 @@ export default {
     }
   }
 </script>
+
+<style lang="scss">
+  .uploader {
+    width: 160px;
+    height: 160px;
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+
+    .el-upload {
+      display: block;
+    }
+
+    .picture {
+      width: 100%;
+      height: 0;
+      padding-top: 100%;
+      overflow: hidden;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      -webkit-background-size: cover;
+    }
+
+    .el-icon-plus {
+      width: 160px;
+      height: 160px;
+      line-height: 160px;
+      font-size: 40px;
+      font-weight: 600;
+      color: #409eff;
+    }
+  }
+
+</style>
 
 

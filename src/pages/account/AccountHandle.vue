@@ -19,7 +19,7 @@
       </el-form-item>
       <el-form-item prop="company_id" label="所属公司：">
         <span v-if="companyInfo.company_name">{{companyInfo.company_name}}</span>
-        <el-select v-else v-model="account.company_id" placeholder="请选择公司" @change="getDepartment">
+        <el-select v-else v-model="account.company_id" placeholder="请选择公司" :disabled="propity == 2 ? true : false" @change="getDepartment">
           <el-option v-for="item in companyList" 
             :key="item.company_id" 
             :label="item.company_name" 
@@ -95,7 +95,7 @@
           user_name: [{required: true, message: '用户名称不能为空', trigger: 'blur'}],
           name: [{required: true, message: '中文名称不能为空', trigger: 'blur'}],
           pwd: [{required: true, message: '密码不能为空', trigger: 'blur'}],
-          company_id: [{ required: true, message: '请选择所属公司', trigger: 'change' }],
+          company_id: [{ required: true, message: '请选择所属公司', trigger: 'blur' }],
           // department_id: [{ required: true, message: '请选择所属部门', trigger: 'change' }],
           job_level: [{ required: true, message: '请选择岗位等级', trigger: 'change' }]
         },
@@ -118,6 +118,12 @@
             this.$handleResponse(res, res => {
               if (res.data) {
                 this.companyList = res.data;
+
+                let companyId = this.$route.query && this.$route.query.companyId;
+                this.account.company_id = companyId;
+                if (this.account.company_id) {
+                  this.getDepartment(this.account.company_id);
+                }
               }
             });
           })
@@ -129,7 +135,7 @@
         if (companyId) {
           let obj = {};
           obj = this.companyList.find(function(item){
-              return item.company_id === companyId 
+              return item.company_id == companyId 
           });
           this.departmentList = obj && obj.departments;
         }
@@ -239,7 +245,10 @@
       },
       handleClose() {
         this.$router.push({
-          path: '../account'
+          path: '../account',
+          query: {
+            companyId: this.account.company_id
+          }
         });
       },
       resetForm(formName) {

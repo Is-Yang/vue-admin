@@ -1,18 +1,62 @@
 <template>
   <div>
-    <el-row type="flex" class="margin-bottom-20" justify="space-between">
-      <!-- <el-col style="font-size: 16px; color: #67C23A;">管理地区: {{areaInfo.area_name}}</el-col> -->
-      <el-col class="text-right">
-        <router-link :to="pageType == 1 ? 'addGovernment' : 'addCompany'">
-          <el-button type="primary" size="small">{{pageType == 1 ? '创建政府账号':'创建企业账号'}}</el-button>
-        </router-link></el-col>
+    <el-row type="flex">
+      <el-col :span="20">
+        <el-form :inline="true" :model="searchInfo" size="small">
+           <el-form-item label="公司名称：">
+            <el-input v-model="searchInfo.keyword" placeholder="请输入公司名称"></el-input>
+          </el-form-item>
+
+          <el-form-item label="区域：">
+              <el-select v-model="searchInfo.manager_index" placeholder="请选择区域" size="medium">
+                <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index">
+                </el-option>
+              </el-select>
+          </el-form-item>
+
+          <el-form-item label="类型：">
+            <el-select v-model="searchInfo.company_type" placeholder="请选择类型" size="medium">
+              <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button
+              type="primary"
+              size="small"
+              round
+              icon="el-icon-search"
+              @click="onSearch"
+            >查询</el-button>
+            <el-button plain size="small" round icon="el-icon-delete" @click="onReset">清空查询条件</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+
+      <el-col :span="4" class="text-right margin-bottom-20">
+        <router-link v-if="pageType == 1" to="addGovernment">
+          <el-button type="primary" size="small">{{'创建政府账号'}}</el-button>
+        </router-link>
+        <router-link v-else to="addCompany">
+          <el-button type="primary" size="small">{{'创建企业账号'}}</el-button>
+        </router-link>
+      </el-col>
     </el-row>
+
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-      <el-table-column prop="government_name" v-if="pageType == 1" label="政府名称"></el-table-column>
-      <el-table-column prop="company.company_name" label="公司"></el-table-column>
-      <el-table-column prop="user_name" label="用户名"></el-table-column>
-      <el-table-column prop="area_name" label="区域"></el-table-column>
-      <el-table-column prop="propity" label="用户等级"></el-table-column>
+      <el-table-column label="区域" v-if="pageType == 1">
+        <template slot-scope="scope">
+          <router-link to="/account/company" class="a-link">
+            {{scope.row.area_name}}
+          </router-link>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column prop="government_name" v-if="pageType == 1" label="账号/政府名称"></el-table-column> -->
+      <el-table-column prop="user_name" v-if="pageType == 1" label="账号/政府名称"></el-table-column>
+      <el-table-column prop="company.company_name" label="公司" v-if="pageType != 1"></el-table-column>
+      <el-table-column prop="area_name" label="区域" v-if="pageType != 1"></el-table-column>
+      <el-table-column prop="company.company_type_text" label="公司类型" v-if="pageType != 1"></el-table-column>
       <el-table-column label="是否允许登录">
         <template slot-scope="scope">
          {{scope.row.can_be_login === 1 ? '允许' : '不允许'}}
@@ -52,10 +96,34 @@ export default {
         total: 0
       },
       userInfo: {},
+      searchInfo: {},
       dialog: {
         show: false,
         type: ""
       },
+       // 公司类型列表
+      typeList: [{
+          label: '危险化学品',
+          value: 0,
+        },
+        {
+          label: '煤矿',
+          value: 1,
+        },
+        {
+          label: '非煤矿山',
+          value: 2,
+        },
+        {
+          label: '工贸行业',
+          value: 3,
+        },
+        {
+          label: '其他',
+          value: 4,
+        }
+      ],
+      areaList: [],
       pageType: 3
     };
   },
@@ -68,6 +136,7 @@ export default {
     } else if (route.path === '/account/government') {
         this.pageType = 1;
     } 
+    this.getAreaSelect();
     this.getListData();
   },
   methods: {
@@ -77,10 +146,20 @@ export default {
       if (this.userInfo && this.userInfo.propity) {
         propity = this.userInfo.propity;
       }
+
+      let {
+        company_type,
+        manager_index,
+        keyword
+      } = this.searchInfo
+
       let params = {
         page: this.page.current,
         type: propity == 2 ? 1 : 0,  // type未1表示平台端，默认为0表示政府端
-        propity: this.pageType   // 企业账户3， 政府账户2，平台账户列表1
+        propity: this.pageType,   // 企业账户3， 政府账户2，平台账户列表1
+        company_type: company_type,  // 公司类型
+        manager_index: manager_index,  // 区域
+        key: keyword  // 公司名称查询
       };
       Http.getCompanyAccount(params)
         .then(res => {
@@ -94,6 +173,13 @@ export default {
         .catch(err => {
           this.loading = false;
         });
+    },
+    getAreaSelect() {
+        Http.geAreaSelect().then(res => {
+            this.$handleResponse(res, res => {
+              this.areaList = res.data;
+            })
+        })
     },
     editFn(user_id) {
       // 编辑
@@ -139,6 +225,16 @@ export default {
     },
     currentChange(val) {
       this.page.current = val;
+      this.getListData();
+    },
+    onSearch() {
+      // 搜索
+      this.page.current = 1;
+      this.getListData();
+    },
+    onReset() {
+      // 清空
+      this.searchInfo = {};
       this.getListData();
     },
     dialogSuccess() {

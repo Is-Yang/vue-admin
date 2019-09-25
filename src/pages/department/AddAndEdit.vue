@@ -3,10 +3,10 @@
         <div class="form__content" v-loading="loading" style="width:520px">
             <el-form :model="department" :label-position="'right'" ref="departmentInfo" :rules="rules" @keyup.enter.native="onSubmit('departmentInfo')"
               label-width="100px" size="medium" style="width: 400px;">
-              <el-form-item prop="company_id" label="所选公司：">
-                  <el-select v-model="department.company_id" placeholder="请选择公司" size="medium">
-                  <el-option v-for="item in companyList" :key="item.company_id" :label="item.company_name" :value="item.company_id">
-                  </el-option>
+              <el-form-item label="所选公司：">
+                  <el-select v-model="department.company_id" placeholder="请选择公司" size="medium" disabled>
+                    <el-option v-for="item in companyList" :key="item.company_id" :label="item.company_name" :value="item.company_id">
+                    </el-option>
                   </el-select>
               </el-form-item>
               <el-form-item prop="department_name" label="部门名称：">
@@ -44,7 +44,7 @@
             message: '部门名称不能为空',
             trigger: 'blur'
           }],
-          company_id: [{required: true, message: '请选择公司', trigger: 'change'}]
+          // company_id: [{required: true, message: '请选择公司', trigger: 'change'}]
         },
       }
     },
@@ -72,6 +72,9 @@
             this.$handleResponse(res, res => {
               if (res) {
                 this.companyList = res.data;
+
+                let companyId = this.$route.query && this.$route.query.companyId;
+                this.department.company_id = companyId;
               }
             });
           })

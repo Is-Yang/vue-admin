@@ -30,7 +30,8 @@ import {
     GovernmentMessage
 } from '../pages/message'
 import {
-    ClassifyList
+    ClassifyList,
+    CompanyPoint
 } from '../pages/classify'
 import {
     DepartmentList
@@ -195,6 +196,14 @@ export default [{
             path: 'small',
             component: ClassifyList,
             name: '小分类列表'
+        }, {
+            path: 'point',
+            component: CompanyPoint,
+            name: '创建风险点'
+        }, {
+            path: 'taskPoint',
+            component: CompanyPoint,
+            name: '风险点任务创建'
         }
     ]
 }]

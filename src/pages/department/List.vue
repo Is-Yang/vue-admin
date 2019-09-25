@@ -64,8 +64,10 @@ export default {
     getListData() {
       // 菜单列表数据
       this.loading = true;
+      let companyId = this.$route.query && this.$route.query.companyId;
       let params = {
-        page: this.page.current
+        page: this.page.current,
+        company_id: companyId
       };
       Http.getDepartmentList(params)
         .then(res => {

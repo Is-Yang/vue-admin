@@ -91,9 +91,18 @@ export default {
               file
             } = this.picturesForm;
 
+            let route = this.$route;
+            let form = '';
+            if (route.path == '/company/zfinfo') {
+              form = 1;
+            } else if (route.path == '/company/qtinfo') {
+              form = 0;
+            }
+
             let formData = new FormData();
             formData.append('title', title);
             formData.append('type', this.currentActive);
+            formData.append('form', form);
             formData.append('file', file);
 
             if (this.type == 'add') { // 新增

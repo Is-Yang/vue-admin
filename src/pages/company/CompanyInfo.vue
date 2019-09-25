@@ -102,7 +102,6 @@
         } else if (route.path == '/company/qtinfo') {
           form = 0;
         }
-        console.log(route)
         // 菜单列表数据
         this.loading = true;
         let params = {

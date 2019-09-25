@@ -2,7 +2,7 @@
     <el-dialog :title="title" :visible.sync="dialogShow" width="1250px" :before-close="handleClose">
         <el-table :data="gridData" v-loading="loading" border tooltip-effect="dark">
             <el-table-column property="task_name" label="任务名称"></el-table-column>
-            <el-table-column property="position_name" label="大分类" width="100px"></el-table-column>
+            <el-table-column property="position_name" label="隐患名称" width="100px"></el-table-column>
             <el-table-column property="report_name" label="提交人" width="120px"></el-table-column>
             <el-table-column property="task_input_forsure" label="提交内容"></el-table-column>
             <el-table-column property="create_forsure_time" label="提交时间" width="105px"></el-table-column>

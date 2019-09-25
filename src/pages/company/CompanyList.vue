@@ -1,12 +1,53 @@
 <template>
   <div>
-    <div class="margin-bottom-20 text-right">
-      <router-link to="company/add" v-if="propity === 2">
-        <el-button type="primary" size="small">创建公司</el-button>
-      </router-link>
-    </div>
+    <el-row>
+      <el-col :span="20">
+        <el-form :inline="true" :model="searchInfo" size="small">
+           <el-form-item label="企业名称：">
+            <el-input v-model="searchInfo.keyword" placeholder="请输入企业名称"></el-input>
+          </el-form-item>
+
+          <el-form-item label="企业区域：">
+              <el-select v-model="searchInfo.manager_index" placeholder="请选择区域" size="medium">
+                <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index">
+                </el-option>
+              </el-select>
+          </el-form-item>
+
+          <el-form-item label="企业类型：">
+            <el-select v-model="searchInfo.company_type" placeholder="请选择公司类型" size="medium">
+              <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button
+              type="primary"
+              size="small"
+              round
+              icon="el-icon-search"
+              @click="onSearch"
+            >查询</el-button>
+            <el-button plain size="small" round icon="el-icon-delete" @click="onReset">清空查询条件</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+
+      <el-col :span="4" class="text-right">
+        <router-link to="company/add" v-if="propity === 2">
+          <el-button type="primary" size="small">创建公司</el-button>
+        </router-link>
+      </el-col>
+    </el-row>
+
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-      <el-table-column prop="company_name" label="公司名称" min-width="300"></el-table-column>
+      <el-table-column label="公司名称" min-width="300" v-if="propity == 2">
+        <template slot-scope="scope">
+          <a class="a-link" href="javascript:;" @click="companyOperate(scope.row.company_id)">{{scope.row.company_name}}</a>
+        </template>
+      </el-table-column>
+      <el-table-column v-else prop="company_name" label="公司名称"></el-table-column>
       <el-table-column prop="company_type_text" label="公司类型" width="130px"></el-table-column>
       <el-table-column prop="company_info" label="公司信息" min-width="280"></el-table-column>
       <el-table-column prop="area_name" label="区域" min-width="100"></el-table-column>
@@ -38,7 +79,7 @@
           </a>
         </template>
       </el-table-column> -->
-      <el-table-column label="操作" min-width="500px">
+      <el-table-column label="操作" min-width="180px">
         <template slot-scope="scope">
           <el-button size="mini" type="success" plain icon="el-icon-download" @click="downloadFn(scope.row)" title="导出">
           </el-button>
@@ -48,7 +89,7 @@
             title="编辑"></el-button>
           <el-button size="mini" v-if="propity === 2" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
             title="删除"></el-button>
-          <router-link to="/account/company" class="margin-left-10" v-if="propity == 2">
+          <!-- <router-link to="/account/company" class="margin-left-10" v-if="propity == 2">
             <el-button type="primary" plain size="mini">企业账号</el-button>
           </router-link>
           <router-link to="/department" v-if="propity == 2">
@@ -56,7 +97,7 @@
           </router-link> 
           <router-link to="/account" v-if="propity == 2">
             <el-button type="primary" plain size="mini">员工账号</el-button>
-          </router-link>
+          </router-link> -->
         </template>
       </el-table-column>
     </el-table>
@@ -80,6 +121,21 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleTypeClose">取 消</el-button>
         <el-button type="primary" @click="handleTypeOk">确 定</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog title="请选择操作" :visible.sync="dialog.selectShow" width="400px" :before-close="handleClose">
+      <el-select v-model="selectVal" placeholder="请选择" style="width: 300px">
+        <el-option
+          v-for="item in selectOptions"
+          :key="item.to"
+          :label="item.label"
+          :value="item.to">
+        </el-option>
+      </el-select>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleClose">取 消</el-button>
+        <el-button type="primary" @click="handleSelectOk">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -107,6 +163,7 @@ export default {
     return {
       loading: false,
       listData: [],
+      searchInfo: {},
       page: {
         current: 1,
         size: 10,
@@ -115,6 +172,8 @@ export default {
       dialog: {
         show: false,
         typeShow: false,
+        selectShow: false,
+        companyId: '',
         mapXY: {},
         infoData: {}
       },
@@ -123,22 +182,67 @@ export default {
       filter: {
         positionId: '',
         companyId: ''
-      }
+      },
+      // 公司类型列表
+      typeList: [{
+          label: '危险化学品',
+          value: 0,
+        },
+        {
+          label: '煤矿',
+          value: 1,
+        },
+        {
+          label: '非煤矿山',
+          value: 2,
+        },
+        {
+          label: '工贸行业',
+          value: 3,
+        },
+        {
+          label: '其他',
+          value: 4,
+        }
+      ],
+      areaList: [],
+      selectVal: '',
+      selectOptions: [
+        {
+          to: '/account/addCompany',
+          label: '创建企业'
+        }, {
+          to: '/department',
+          label: '部门列表'
+        }, {
+          to: '/account',
+          label: '员工账号'
+        }
+      ]
     };
   },
   created() {
+    this.getAreaSelect();
     this.getListData();
   },
   methods: {
     getListData() {
-      // 菜单列表数据
       this.loading = true;
       let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
       this.propity = user_info && user_info.propity;
+
+      let {
+        company_type,
+        manager_index,
+        keyword
+      } = this.searchInfo
       
       let params = {
         propity: this.propity,
-        page: this.page.current
+        page: this.page.current,
+        company_type: company_type,
+        manager_index: manager_index,
+        key: keyword
       };
       Http.getCompanyList(params)
         .then(res => {
@@ -151,6 +255,17 @@ export default {
         .catch(err => {
           this.loading = false;
         });
+    },
+    getAreaSelect() {
+        Http.geAreaSelect().then(res => {
+            this.$handleResponse(res, res => {
+              this.areaList = res.data;
+            })
+        })
+    },
+    companyOperate(company_id) {
+      this.dialog.companyId = company_id;
+      this.dialog.selectShow = true;
     },
     editFn(data){ 
        // 编辑
@@ -209,6 +324,14 @@ export default {
       this.dialog.infoData = data;
       this.dialog.show = true;
     },
+    handleSelectOk() {
+      this.$router.push({
+          path: this.selectVal,
+          query: {
+            companyId: this.dialog.companyId
+          }
+      })
+    },
     handleTypeOk() {
         this.loading = true;
         Http.exportWord(
@@ -235,14 +358,26 @@ export default {
         this.handleTypeClose();
     },
     handleClose() {
-      this.dialog.show = false;
-      this.dialog.mapXY = {};
+      // this.dialog.show = false;
+      // this.dialog.mapXY = {};
+      this.selectVal = '';
+      this.dialog.selectShow = false;
     },
     handleTypeClose() {
       this.dialog.typeShow = false;
     },  
     sizeChange(val) {
       this.page.size = val;
+      this.getListData();
+    },
+    onSearch() {
+      // 搜索
+      this.page.current = 1;
+      this.getListData();
+    },
+    onReset() {
+      // 清空
+      this.searchInfo = {};
       this.getListData();
     },
     currentChange(val) {

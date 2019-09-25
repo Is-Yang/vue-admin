@@ -6,27 +6,27 @@
       ref="classForm"
       @keyup.enter.native="onSubmit('classForm')"
       label-width="120px" class="padding-right-30">
-      <el-form-item label="标题" prop="position_name" v-if="position == 'big'">
+      <el-form-item label="风险点" prop="position_name" v-if="position == 'big'">
         <el-input v-model="classForm.position_name"></el-input>
       </el-form-item>
-      <el-form-item prop="company_id" label="所选公司：" v-if="position == 'big'">
+      <!-- <el-form-item prop="company_id" label="所选公司：" v-if="position == 'big'">
           <el-select v-model="classForm.company_id" placeholder="请选择公司" size="medium">
             <el-option v-for="item in companyList" :key="item.company_id" :label="item.company_name" :value="item.company_id">
             </el-option>
           </el-select>
-      </el-form-item>
-      <el-form-item label="所属一级编码" prop="position_id" v-if="position == 'small'">
+      </el-form-item> -->
+      <!-- <el-form-item label="所属一级编码" prop="position_id" v-if="position == 'small'">
         <el-select v-model="classForm.position_id" placeholder="请选择" size="medium">
             <el-option v-for="item in bigPositionList" :key="item.position_id" :label="item.position_name" :value="item.position_id">
             </el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="二级编码" prop="position_detail_name" v-if="position == 'small'">
         <el-input v-model="classForm.position_detail_name"></el-input>
       </el-form-item>
-      <el-form-item label="三级编码" prop="position_detail_sname" v-if="position == 'small'">
+      <!-- <el-form-item label="三级编码" prop="position_detail_sname" v-if="position == 'small'">
         <el-input v-model="classForm.position_detail_sname"></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item class="margin-top-30">
         <el-button type="primary" @click="submitForm('classForm')">确定</el-button>
         <el-button @click="resetForm('classForm')">重置</el-button>
@@ -46,7 +46,8 @@ export default {
         dialogShow: true,
         loading: false,
         classForm: {
-          company_id: ''
+          company_id: '',
+          position_id: ''
         },
         bigPositionList: [],
         // 公司类型列表
@@ -68,10 +69,16 @@ export default {
       };
     },
     created() {
-      if (this.position == 'big') {
-        this.getCompanyList();
-      }
-      this.getPositionList();
+      // if (this.position == 'big') {
+      //   this.getCompanyList();
+      // }
+     
+      // this.getPositionList();
+
+      const route = this.$route;
+      this.classForm.company_id = route.query && route.query.companyId;
+      this.classForm.position_id = route.query && route.query.positionId;
+
       this.init();
     },
     methods: {

@@ -173,8 +173,7 @@ export default {
                 marginBottom: 80, 
                 dataShowInLegend: true,
                 useHTML: true,
-                titleY: -30,
-                dataColors: ['#fd6b6b', '#FDB582', '#1494EB', '#4fc08d']
+                dataColors: ['#fd6b6b', '#FDB582', '#ffd555', '#1494EB']
             },
             { 
                 type: 'pie',
@@ -182,7 +181,6 @@ export default {
                 marginBottom: 80, 
                 dataShowInLegend: true,
                 useHTML: true,
-                titleY: -30,
                 dataColors: ['#fd6b6b', '#1494EB'] 
             },
         ],

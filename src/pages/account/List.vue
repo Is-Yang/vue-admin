@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <el-row>
       <el-col :span="20">
-        <el-form :inline="true" :model="searchInfo" size="small" v-if="propity == 3">
+        <el-form :inline="true" :model="searchInfo" size="small">
           <el-form-item label="人员姓名：">
             <el-input v-model="searchInfo.keyword" placeholder="请输入人员姓名"></el-input>
           </el-form-item>
@@ -21,7 +21,7 @@
       </el-col>
 
       <el-col :span="4" class="text-right">
-        <router-link to="account/add">
+        <router-link :to="{ path: 'account/add', query: {companyId: companyId}}">
           <el-button type="primary" size="small">创建员工账号</el-button>
         </router-link>
       </el-col>
@@ -31,7 +31,7 @@
       <el-table-column prop="company" label="公司"></el-table-column>
       <el-table-column prop="department" label="部门"></el-table-column>
       <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="user_name" label="用户名"></el-table-column>
+      <el-table-column prop="user_name" label="账号"></el-table-column>
       <el-table-column prop="job" label="岗位等级"></el-table-column>
       <el-table-column prop="phone" label="电话"></el-table-column>
       <el-table-column label="是否允许登录">
@@ -80,6 +80,7 @@ export default {
       },
       userInfo: {},
       propity: 0,
+      companyId: ''
     };
   },
   created() {
@@ -87,6 +88,7 @@ export default {
     if (this.userInfo && this.userInfo.propity) {
         this.propity = this.userInfo.propity;
     }
+    this.companyId = this.$route.query && this.$route.query.companyId;
 
     this.getListData();
   },
@@ -95,9 +97,9 @@ export default {
       this.loading = true;
       let params = {
         page: this.page.current,
-        key: this.searchInfo.keyword
+        key: this.searchInfo.keyword,
+        company_id: this.companyId
       };
-
       let queryName = this.propity === 3 ? 'getManagerAccountList' : this.propity === 2 ? 'getAccountList' : 'getManagerUserList';
       Http[queryName](params)
         .then(res => {
@@ -126,7 +128,8 @@ export default {
       this.$router.push({
         path: "account/edit",
         query: {
-          userId: user_id
+          userId: user_id,
+          companyId: this.companyId
         }
       });
     },

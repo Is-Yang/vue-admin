@@ -85,10 +85,10 @@
           <i class="fa fa-tasks"></i> 
           <span slot="title">任务管理</span>
         </template>
-        <el-menu-item index="/classify/big">
+        <el-menu-item index="/classify/point">
           <span slot="title">风险点创建</span>
         </el-menu-item>
-        <el-menu-item index="/classify/small">
+        <el-menu-item index="/classify/taskPoint">
           <span slot="title">风险点任务创建</span>
         </el-menu-item>
       </el-submenu>
@@ -111,10 +111,10 @@
         <span slot="title">消息管理</span>
       </el-menu-item>
 
-      <el-menu-item index="/tasks/company" v-if="level == 2">
+      <!-- <el-menu-item index="/tasks/company" v-if="level == 2">
         <i class="fa fa-tasks"></i> 
         <span slot="title">任务信息</span>
-      </el-menu-item>
+      </el-menu-item> -->
 
       <el-menu-item index="/pictures" v-if="level == 2">
         <i class="fa el-icon-picture"></i> 

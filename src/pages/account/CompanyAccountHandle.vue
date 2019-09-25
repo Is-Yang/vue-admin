@@ -5,14 +5,17 @@
       ref="accountInfo" 
       :rules="rules" 
       @keyup.enter.native="onSubmit('accountInfo')"
-      label-width="120px"
+      label-width="150px"
       size="medium"
-      style="width:380px">
-      <el-form-item label="所属区域：">
-        {{areaInfo.area_name}}
+      style="width: 420px">
+      <el-form-item label="所属区域：" v-if="pageType != 3">
+        <el-select v-model="account.manager_index" placeholder="请选择区域" size="medium">
+          <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index">
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item prop="user_name" :label="pageType == 1 ? '政府名称：' : '企业名称：'">
-        <el-input type="text" v-model.trim="account.user_name" :placeholder="pageType == 1 ? '请输入政府名称：' : '请输入企业名称'"></el-input>
+      <el-form-item prop="user_name" :label="pageType == 1 ? '政府名称：' : '账号/企业名称：'">
+        <el-input type="text" v-model.trim="account.user_name" :placeholder="pageType == 1 ? '请输入政府名称' : '请输入账号/企业名称'"></el-input>
       </el-form-item>
       <el-form-item prop="pwd" label="密码：">
         <el-input type="password" v-model.trim="account.pwd" placeholder="请输入密码"></el-input>
@@ -26,7 +29,7 @@
           </el-option>
         </el-select>
       </el-form-item> -->
-      <el-form-item prop="company_id" label="所属公司：">
+      <!-- <el-form-item prop="company_id" label="所属公司：" v-if="pageType != 3">
         <el-select v-model="account.company_id" placeholder="请选择公司">
           <el-option v-for="item in companyList" 
             :key="item.company_id" 
@@ -34,7 +37,7 @@
             :value="item.company_id">
           </el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="允许登录：">
         <el-radio-group v-model="account.can_be_login">
           <el-radio :label="1">允许</el-radio>
@@ -64,18 +67,23 @@
         },
         loading: false,
         companyList: [],
+        areaList: [],
         areaInfo: {},
         pageType: 3,
+        companyId: '',
+        paramsId: '',
         rules: {
           user_name: [{required: true, message: '用户名称不能为空', trigger: 'blur'}],
           pwd: [{required: true, message: '密码不能为空', trigger: 'blur'}],
-          company_id: [{ required: true, message: '请选择所属公司', trigger: 'change' }],
+          // company_id: [{ required: true, message: '请选择所属公司', trigger: 'change' }],
           // manager_index: [{ required: true, message: '请选择管理地区', trigger: 'change' }]
         },
       }
     },
     created() {
-      this.paramsId = this.$route.query && this.$route.query.userId;
+      let routeQuery = this.$route.query;
+      this.companyId = routeQuery && routeQuery.companyId;
+      this.paramsId = routeQuery && routeQuery.userId;
 
       if (this.$route.path == '/account/addGovernment') {
         this.pageType = 1;
@@ -83,11 +91,15 @@
         this.pageType = 3;
       }
       this.init();
+
+      this.getAreaSelect();
     },
     methods: {
       init() {
         // 获取下拉框信息
-        this.getSelectInfo();
+        if (this.pageType != 3) {
+          this.getSelectInfo();
+        }
 
         setTimeout(() =>{
           if (this.paramsId) { // 编辑
@@ -100,13 +112,13 @@
                   Object({}, this.account)
                   this.account = res.data;
                   // 部门列表
-                  let obj = {};
-                  obj = this.companyList.find(function(item){
-                      return item.company_id === res.data.company_id 
-                  });
-                  this.departmentList = obj.departments;
-                  // 部门所选
-                  this.account.department_id = res.data.department_id;
+                  // let obj = {};
+                  // obj = this.companyList.find(function(item){
+                  //     return item.company_id === res.data.company_id 
+                  // });
+                  // this.departmentList = obj.departments;
+                  // // 部门所选
+                  // this.account.department_id = res.data.department_id;
                   // pwd
                   this.account.pwdCopy = this.account.pwd;
                 }
@@ -114,6 +126,13 @@
             })
           }
         }, 500)
+      },
+      getAreaSelect() {
+         Http.geAreaSelect().then(res => {
+              this.$handleResponse(res, res => {
+               this.areaList = res.data;
+              })
+          })
       },
       getSelectInfo() {
           Http.getSelectInfo().then(res => {
@@ -136,12 +155,13 @@
               can_be_login
             } = this.account;
 
+
             let params = {
                 user_name: user_name,
                 pwd: this.account.pwdCopy != this.account.pwd ? md5(pwd) : pwd,
-                propity: this.pageType,  // 公司级
+                propity: this.pageType,
                 manager_index: this.areaInfo.manager_index,
-                company_id: company_id,
+                company_id:  this.companyId ? this.companyId : company_id,
                 can_be_login: can_be_login
             }
 
@@ -172,7 +192,10 @@
       },
       handleClose() {
         this.$router.push({
-          path: this.pageType == 3 ? '../account/company' : '../account/government'
+          path: this.pageType == 3 ? '../account/company' : '../account/government',
+          // query: {
+          //   companyId: this.companyId
+          // }
         });
       },
       resetForm(formName) {
