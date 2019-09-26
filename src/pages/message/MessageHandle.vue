@@ -9,13 +9,21 @@
       <el-form-item label="消息发送者" prop="message_from">
         <el-input v-model="messageForm.message_from"></el-input>
       </el-form-item>
-      <el-form-item prop="company_id" label="发送对象：">
-          <el-select v-model="messageForm.company_id" placeholder="请选择发送企业" size="medium">
+      <el-form-item v-if="pageType == 1" label="发送对象：">
+        <el-radio v-model="sendType" label="1">群发</el-radio>
+        <el-radio v-model="sendType" label="2">单独发</el-radio>
+        <el-select v-if="sendType == 2" v-model="messageForm.company_id" placeholder="请选择发送企业" size="medium">
           <el-option v-for="(item, index) in companyList" :key="index" :label="item.company_name" :value="item.company_id">
           </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="message_from" v-if="pageType == 2" label="发送对象：">
+          <el-select v-model="messageForm.company_id" placeholder="请选择发送企业" size="medium">
+            <el-option v-for="(item, index) in companyList" :key="index" :label="item.company_name" :value="item.company_id">
+            </el-option>
           </el-select>
       </el-form-item>
-      <el-form-item v-if="pageType == 2" prop="company_type" label="公司类型：">
+      <el-form-item prop="company_type" label="公司类型：">
         <el-select v-model="messageForm.company_type" placeholder="请选择公司类型" size="medium">
           <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
@@ -27,11 +35,15 @@
       <el-form-item label="消息内容" prop="message_content">
         <el-input type="textarea" v-model="messageForm.message_content"></el-input>
       </el-form-item>
-      <el-form-item label="上传附件">
-          <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess">
-            <div v-if="imageUrl" :style="{backgroundImage: 'url('+imageUrl +')'}" class="picture"></div>
-            <i v-else class="el-icon-plus"></i>
-          </el-upload>
+       <el-form-item label="上传附件">
+        <el-upload
+          :action="uploadUrl"
+          :before-remove="beforeRemove"
+          :on-success="handleImageSuccess"
+          :limit="1"
+          :file-list="fileList">
+          <el-button size="small">点击上传</el-button>
+        </el-upload>
       </el-form-item>
       <el-form-item class="margin-top-30">
         <el-button type="primary" @click="submitForm('messageForm')">确定</el-button>
@@ -53,9 +65,11 @@ export default {
       return {
         title: "创建消息",
         dialogShow: true,
+        sendType: '1',
         loading: false,
         messageForm: {},
         companyList: [],
+        fileList: [],
         // 公司类型列表
         typeList: [{
             label: '危险化学品',
@@ -84,14 +98,11 @@ export default {
           message_title: [
             { required: true, message: '请输入消息标题', trigger: 'blur' }
           ],
-          company_id: [
-            { required: true, message: '请选择发送对象', trigger: 'change' }
-          ],
           message_content: [
             { required: true, message: '请输入消息内容', trigger: 'blur' }
           ],
           message_from: [
-            { required: true, message: '请输入消息发送者', trigger: 'blur' }
+            { required: true, message: '请输入发送对象', trigger: 'blur' }
           ]
         }
       };
@@ -121,6 +132,9 @@ export default {
           this.$message.error("上传失败");
         }
       },
+      beforeRemove(file, fileList) {
+        return this.$confirm(`确定移除 ${ file.name }？`);
+      },
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -147,11 +161,12 @@ export default {
             }
             // 政府端
             let goverParams = {
+                message_title: message_title,
+                message_content: message_content,
                 message_from: message_from,
-                company_id: company_id,
-                title: message_title,
-                content: message_content,
-                create_time: create_time
+                company_type: company_type,
+                file_url: file_url,
+                company_id: this.sendType == '1' ? 0 : company_id
             }
             // pageType 1:政府端， 2:平台端
             let queryName = this.pageType == 1 ? 'sendMessage' : 'genMessage';

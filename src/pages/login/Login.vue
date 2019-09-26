@@ -43,7 +43,7 @@
     },
     methods: {
       initData(){
-         localStorage.removeItem('userInfo');
+        localStorage.removeItem('userInfo');
         this.$store.dispatch('saveUser', '');
         if (localStorage.getItem('RememberMe')) {
           this.rememberme = true;

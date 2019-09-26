@@ -214,7 +214,9 @@ export default {
   },
   methods: {
         init() {
+            this.$store.dispatch('openLoading', 'full');
             Http.getCompanyShowInfo().then(res => {
+                this.$store.dispatch('closeLoading', 'full');
                 this.$handleResponse(res, res => {
                     this.monitoringInfo = res.risk_info;
                     this.imageData = res.company.company_img_1;
@@ -227,6 +229,7 @@ export default {
                     this.$store.dispatch('GetEnterpriseInfo', res.company);
                 });
             }).catch(err => {
+                this.$store.dispatch('closeLoading', 'full');
                 console.log(err)
             });
         },

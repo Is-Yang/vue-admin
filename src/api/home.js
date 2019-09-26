@@ -9,7 +9,7 @@ export function getToken() {
 }
 
 export function getIndexPage(params) {
-    return http.getAjax('/manager_first_page?token=' + getToken(), params)
+    return http.getAjax('/manager_first_page', params)
 }
 
 // 获取已管控的任务列表
@@ -452,4 +452,9 @@ export function getMPosPostionDetailList(params) {
 // 平台端-企业地区分类搜索下拉选择
 export function geAreaSelect() {
     return http.getAjax('/get_area_select?token=' + getToken());
+}
+
+// 政府端-获取相应管理地区的子账户权限
+export function getTokenReload(params) {
+    return http.getAjax('/token_reload?token=' + getToken(), params);
 }

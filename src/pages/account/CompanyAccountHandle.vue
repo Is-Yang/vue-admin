@@ -85,13 +85,12 @@
       this.companyId = routeQuery && routeQuery.companyId;
       this.paramsId = routeQuery && routeQuery.userId;
 
-      if (this.$route.path == '/account/addGovernment') {
+      if (this.$route.path == '/account/addGovernment' || this.$route.path == '/account/editGovernment') {
         this.pageType = 1;
-      } else if (this.$route.path == '/account/addCompany'){
+      } else if (this.$route.path == '/account/addCompany' || this.$route.path == '/account/editCompany'){
         this.pageType = 3;
       }
       this.init();
-
       this.getAreaSelect();
     },
     methods: {

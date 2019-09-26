@@ -106,7 +106,7 @@
         this.loading = true;
         let params = {
           page: this.page.current,
-          // type: this.active,
+          type: this.active,
           form: form
         };
         Http.getFileList(params)

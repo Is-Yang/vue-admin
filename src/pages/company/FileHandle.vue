@@ -10,7 +10,7 @@
           <el-form-item label="标题" prop="title">
             <el-input v-model="picturesForm.title" style="width: 300px"></el-input>
           </el-form-item>
-          <el-form-item label="">
+          <el-form-item label="上传文件">
             <el-upload
               :action="uploadUrl"
               :auto-upload="false"
@@ -18,7 +18,7 @@
               :on-change="fileChange"
               :limit="1"
               :file-list="fileList">
-              <el-button size="small" type="primary">上传文件</el-button>
+              <el-button size="small">点击上传</el-button>
             </el-upload>
           </el-form-item>
           <el-form-item class="margin-top-40">

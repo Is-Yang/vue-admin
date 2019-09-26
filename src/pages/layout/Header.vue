@@ -8,6 +8,9 @@
           <span>{{userInfo.companyName}}</span>
           <p>安全风险分级管控和隐患排查治理平台</p>
         </div>
+        <div v-if="userInfo.propity == 1">
+          <span>安全风险分级管控和隐患排查治理平台</span>
+        </div>
       </div>
 
       <Sidebar />
