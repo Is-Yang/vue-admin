@@ -33,6 +33,7 @@
 <script>
 import * as Http from '@/api/home'
 import * as userInfo from "@/utils/commonService/getUserInfo";
+import store from '../../store';
 let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
 export default {
     props: ['type', 'fileParent', 'currentActive'],
@@ -50,7 +51,7 @@ export default {
         params: {
           title: '',
         },
-        uploadUrl: window.scrmApi + '/manager_file_upload?token=' + user_info.token,
+        uploadUrl: window.scrmApi + '/manager_file_upload?token=' + (user_info.token ? user_info.token : store.getters.userInfo.token),
         rules: {
           title: [
             { required: true, message: '请输入标题', trigger: 'blur' }
@@ -92,17 +93,17 @@ export default {
             } = this.picturesForm;
 
             let route = this.$route;
-            let form = '';
+            let from = '';
             if (route.path == '/company/zfinfo') {
-              form = 1;
+              from = 1;
             } else if (route.path == '/company/qtinfo') {
-              form = 0;
+              from = 0;
             }
 
             let formData = new FormData();
             formData.append('title', title);
             formData.append('type', this.currentActive);
-            formData.append('form', form);
+            formData.append('from', from);
             formData.append('file', file);
 
             if (this.type == 'add') { // 新增

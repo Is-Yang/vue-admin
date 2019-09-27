@@ -34,6 +34,7 @@
 <script>
 import * as Http from '@/api/home'
 import * as userInfo from "@/utils/commonService/getUserInfo";
+import store from '../../store';
 let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
 export default {
     props: ['type', 'fileParent'],
@@ -50,7 +51,7 @@ export default {
         params: {
           title: '',
         },
-        uploadUrl: window.scrmApi + '/manager_upload_img?token=' + user_info.token,
+        uploadUrl: window.scrmApi + '/manager_upload_img?token=' + (user_info.token ? user_info.token : store.getters.userInfo.token),
         rules: {
           title: [
             { required: true, message: '请输入宣传标题', trigger: 'blur' }

@@ -2,7 +2,7 @@
   <div class="home-index">
     <BZManage v-if="isShow" @manageIndex="manageIndex"></BZManage>  
 
-    <RiskItem v-if="!isShow" :token="token"></RiskItem>
+    <RiskItem v-if="!isShow"></RiskItem>
   </div>
 </template>
 
@@ -18,20 +18,29 @@ export default {
     },
     data () {
         return {
-            token: '',
             isShow: false  // 是否显示巴中的所有区域
         }
     },
     created () {
-        let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
-        this.token = user_info.token;
+        let route = this.$route;
+        if (route.path == '/araeIndex') {
+            this.isShow = true;
+        } else {
+            this.isShow = false;
+        }
     },
     methods: {
         manageIndex(data) {
             Http.getTokenReload({manager_index: data}).then(res => {
                 this.$handleResponse(res, res => {
-                    this.token = res.token;
-                    this.isShow = true;
+                    if (res.token) {
+                        this.$router.push({
+                            path: '/index',
+                            query: {
+                                token: res.token
+                            }
+                        })
+                    }
                 })
             })
         }

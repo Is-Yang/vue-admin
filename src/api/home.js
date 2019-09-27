@@ -4,7 +4,7 @@ import store from '../store';
 
 export function getToken() {
     var user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
-    var token = store.getters.userInfo.token ? user_info.token : user_info.token;
+    var token = store.getters.userInfo.token ? store.getters.userInfo.token : user_info.token;
     return token;
 }
 
@@ -457,4 +457,14 @@ export function geAreaSelect() {
 // 政府端-获取相应管理地区的子账户权限
 export function getTokenReload(params) {
     return http.getAjax('/token_reload?token=' + getToken(), params);
+}
+
+// 政府端-获取企业账号
+export function getMGovAccountList(params) {
+    return http.getAjax('/manager_gov_account_list?token=' + getToken(), params);
+}
+
+// 政府端-所有区域列表
+export function mAreaListTotal () {
+    return http.getAjax('/manager_area_list_total?token=' + getToken());
 }

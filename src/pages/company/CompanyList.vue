@@ -42,13 +42,14 @@
     </el-row>
 
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-      <el-table-column label="公司名称" min-width="300" v-if="propity == 2">
+      <el-table-column v-if="propity == 2" label="公司名称" min-width="300">
         <template slot-scope="scope">
           <a class="a-link" href="javascript:;" @click="companyOperate(scope.row.company_id)">{{scope.row.company_name}}</a>
         </template>
       </el-table-column>
-      <el-table-column v-else prop="company_name" label="公司名称"></el-table-column>
-      <el-table-column prop="company_type_text" label="公司类型" width="130px"></el-table-column>
+      <el-table-column v-else prop="company.company_name" label="公司名称"></el-table-column>
+      <el-table-column v-if="propity == 2" prop="company_type_text" label="公司类型" width="130px"></el-table-column>
+      <el-table-column v-else prop="company.company_type_text" label="公司类型" width="130px"></el-table-column>
       <!-- <el-table-column prop="company_info" label="公司信息" min-width="280"></el-table-column> -->
       <el-table-column prop="area_name" label="区域" min-width="100"></el-table-column>
       <!-- <el-table-column label="四色图1" width="100px">
@@ -244,7 +245,8 @@ export default {
         manager_index: manager_index,
         key: keyword
       };
-      Http.getCompanyList(params)
+      let queryName = this.propity == 1 ? 'getMGovAccountList' : 'getCompanyList';
+      Http[queryName](params)
         .then(res => {
           this.loading = false;
           this.$handleResponse(res, res => {
@@ -257,7 +259,7 @@ export default {
         });
     },
     getAreaSelect() {
-        Http.geAreaSelect().then(res => {
+        Http.mAreaListTotal().then(res => {
             this.$handleResponse(res, res => {
               this.areaList = res.data;
             })

@@ -10,13 +10,47 @@
         </h3>
       </el-alert>
     </div>
+    <el-row type="flex">
+      <el-col :span="20">
+        <el-form :inline="true" :model="searchInfo" size="small">
+          <el-form-item label="风险点名称">
+            <el-input v-model="searchInfo.keyword" placeholder="请输入关键字"></el-input>
+          </el-form-item>
+          <el-form-item label="二级子项">
+            <el-select v-model="searchInfo.position_id" placeholder="请选择">
+              <el-option v-for="item in positionList" :key="item.position_id" :label="item.position_name"
+                :value="item.position_id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="三级子项">
+            <el-select v-model="searchInfo.position_detail_id" placeholder="请选择">
+              <el-option v-for="item in positionDetailList" :key="item.position_detail_id"
+                :label="item.position_detail_sname" :value="item.position_detail_id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              type="primary"
+              size="small"
+              round
+              icon="el-icon-search"
+              @click="onSearch"
+            >查询</el-button>
+            <el-button plain size="small" round icon="el-icon-delete" @click="onReset">清空查询条件</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
-      <el-table-column prop="position_name" label="大分类"></el-table-column>
-      <el-table-column prop="position_detail_name" label="小分类"></el-table-column>
-      <el-table-column prop="company_name" label="企业名称"></el-table-column>
-      <el-table-column prop="task_name" label="分类名称"></el-table-column>
+      <el-table-column prop="position_name" label="风险点名称"></el-table-column>
+      <el-table-column prop="position_detail_name" label="二级子项"></el-table-column>
+      <el-table-column prop="position_detail_sname" label="三级子项"></el-table-column>
+      <el-table-column prop="task_name" label="任务名称"></el-table-column>
       <el-table-column prop="task_status_text" label="任务状态"></el-table-column>
       <el-table-column prop="task_risk_level_text" label="隐患等级"></el-table-column>
+      <el-table-column prop="task_check_cycle" label="管控周期"></el-table-column>
       <el-table-column prop="create_time_text" label="创建时间"></el-table-column>
       <el-table-column label="操作" width="80px">
         <template slot-scope="scope">
@@ -59,7 +93,10 @@ export default {
         taskId: 0
       },
       companyId: '',
-      companyInfo: {}
+      companyInfo: {},
+      searchInfo: {},
+      positionList: [],
+      positionDetailList: []
     };
   },
   created() {
@@ -80,15 +117,46 @@ export default {
           this.companyId = route.query.company_id;
         }
     }
-
+    this.getPositionList();
+    this.getPositionDetailList();
     this.getListData();
   },
   methods: {
+    getPositionDetailList() {
+      Http.getPositionDetailList()
+        .then(res => {
+          this.$handleResponse(res, res => {
+            if (res) {
+              this.positionDetailList = res;
+            }
+          });
+        })
+        .catch(err => {});
+    },
+    getPositionList() {
+      Http.getPositionList()
+        .then(res => {
+          this.$handleResponse(res, res => {
+            if (res) {
+              this.positionList = res;
+            }
+          });
+        })
+        .catch(err => {});
+    },
     getListData() {
       // 菜单列表数据
       this.loading = true;
+      let {
+        keyword,
+        position_id,
+        position_detail_id
+      } = this.searchInfo;
       let params = {
-        page: this.page.current
+        page: this.page.current,
+        key: keyword,  // 风险点名称
+        position_id: position_id,  // 二级子项
+        position_detail_id: position_detail_id  // 三级子项
       };
       let queryDataName = this.tableType === 1 ? 'getCheckList': 
                           this.tableType === 2 && !this.companyId ? 'getUCheckList' : 
@@ -173,6 +241,16 @@ export default {
     dialogSuccess() {
       // 新增或修改成功后关闭窗口
       this.dialog.show = false;
+      this.getListData();
+    },
+    onSearch() {
+      // 搜索
+      this.page.current = 1;
+      this.getListData();
+    },
+    onReset() {
+      // 清空
+      this.searchInfo = {};
       this.getListData();
     }
   }

@@ -74,8 +74,14 @@ export default {
         }
     },
     created () {
-        let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
-        this.token = user_info.token;
+        let route = this.$route;
+        if (route.query.token) {
+            this.token = route.query.token;
+        } else {
+            let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
+            this.token = user_info.token;
+        }
+       
         this.init();
     },
     methods: {

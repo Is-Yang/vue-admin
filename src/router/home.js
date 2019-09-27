@@ -52,6 +52,10 @@ export default [{
         component: Index,
         name: "首页",
     }, {
+        path: 'araeIndex',
+        component: Index,
+        name: "首页",
+    }, {
         path: 'companyIndex',
         component: CompanyIndex,
         name: "首页",

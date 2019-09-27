@@ -57,6 +57,7 @@
 import * as Http from '@/api/home'
 import moment from 'moment';
 import * as userInfo from "@/utils/commonService/getUserInfo";
+import store from '../../store';
 let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
 export default {
     props: ['pageType'],
@@ -93,7 +94,7 @@ export default {
           }
         ],
         imageUrl: '',
-        uploadUrl: window.scrmApi + '/manager_upload_company_img?token=' + user_info.token,
+        uploadUrl: window.scrmApi + '/manager_upload_company_img?token=' + (user_info.token ? user_info.token : store.getters.userInfo.token),
         rules: {
           message_title: [
             { required: true, message: '请输入消息标题', trigger: 'blur' }
@@ -166,7 +167,7 @@ export default {
                 message_from: message_from,
                 company_type: company_type,
                 file_url: file_url,
-                company_id: this.sendType == '1' ? 0 : company_id
+                message_to: this.sendType == '1' ? 0 : company_id
             }
             // pageType 1:政府端， 2:平台端
             let queryName = this.pageType == 1 ? 'sendMessage' : 'genMessage';

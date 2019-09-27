@@ -96,18 +96,18 @@
       },
       getListData() {
         let route = this.$route;
-        let form = '';
+        let from = '';
         if (route.path == '/company/zfinfo') {
-          form = 1;
+          from = 1;
         } else if (route.path == '/company/qtinfo') {
-          form = 0;
+          from = 0;
         }
         // 菜单列表数据
         this.loading = true;
         let params = {
           page: this.page.current,
           type: this.active,
-          form: form
+          from: from
         };
         Http.getFileList(params)
           .then(res => {

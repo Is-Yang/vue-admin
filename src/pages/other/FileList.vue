@@ -42,6 +42,7 @@
 <script>
   import * as Http from "@/api/home";
   import * as userInfo from "@/utils/commonService/getUserInfo";
+  import store from '../../store';
   import FileHandle from './FileHandle';
   let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
   export default {
@@ -63,7 +64,7 @@
           type: "",
           fileParent: {}
         },
-        uploadUrl: window.scrmApi + '/manager_file_upload?token=' + user_info.token,
+        uploadUrl: window.scrmApi + '/manager_file_upload?token=' + (user_info.token ? user_info.token : store.getters.userInfo.token),
       };
     },
     created() {

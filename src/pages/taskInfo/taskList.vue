@@ -137,16 +137,16 @@ export default {
   },
   methods: {
     getPositionDetailList() {
-        Http.getPositionDetailList()
-          .then(res => {
-            this.$handleResponse(res, res => {
-              if (res) {
-                this.positionDetailList = res;
-              }
-            });
-          })
-          .catch(err => {});
-      },
+      Http.getPositionDetailList()
+        .then(res => {
+          this.$handleResponse(res, res => {
+            if (res) {
+              this.positionDetailList = res;
+            }
+          });
+        })
+        .catch(err => {});
+    },
     getListData() {
       this.loading = true;
       let params = {

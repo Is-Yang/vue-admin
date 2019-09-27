@@ -85,7 +85,11 @@
             localStorage.setItem('userInfo', JSON.stringify(setData));
             this.$store.dispatch('saveUser', setData);
             if (propity == 1) {
-              this.$router.push({path: '/index'});
+              if (user_name == '巴中市test') {
+                this.$router.push({path: '/araeIndex'});
+              } else {
+                this.$router.push({path: '/index'});
+              }
             } else if (propity == 3) {
               this.$router.push({path: '/companyIndex'});
             } else {

@@ -88,6 +88,7 @@
   import * as Http from '@/api/home'
   import * as userInfo from "@/utils/commonService/getUserInfo";
   import VMap from './Map'
+  import store from '../../store';
   let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
   export default {
     inject: ['reload'],
@@ -96,7 +97,7 @@
     },
     data() {
       return {
-        uploadUrl: window.scrmApi + '/manager_upload_company_img?token=' + user_info.token,
+        uploadUrl: window.scrmApi + '/manager_upload_company_img?token=' + (user_info.token ? user_info.token : store.getters.userInfo.token),
         dialogShow: true,
         company: {
           company_name: '',

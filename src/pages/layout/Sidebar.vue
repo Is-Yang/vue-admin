@@ -93,7 +93,7 @@
         </el-menu-item>
       </el-submenu>
 
-      <el-submenu index="/monitoring" v-if="level == 1 || level == 2">
+      <!-- <el-submenu index="/monitoring" v-if="level == 1 || level == 2">
         <template slot="title">
           <i class="fa fa-cogs"></i> 
           <span slot="title">监控列表</span>
@@ -104,7 +104,7 @@
         <el-menu-item :index="level === 3 ? '/monitoring/notCompany' : '/monitoring/not'">
           <span slot="title">未监控</span>
         </el-menu-item>
-      </el-submenu>
+      </el-submenu> -->
 
       <el-menu-item :index="level === 1 ? '/message/government' : '/message'" v-if="level == 1 || level == 2">
         <i class="fa fa-thumbtack"></i> 

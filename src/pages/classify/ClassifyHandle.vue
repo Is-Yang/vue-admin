@@ -21,12 +21,12 @@
             </el-option>
         </el-select>
       </el-form-item> -->
-      <el-form-item label="二级编码" prop="position_detail_name" v-if="position == 'small'">
+      <el-form-item label="二级子项" prop="position_detail_name" v-if="position == 'small'">
         <el-input v-model="classForm.position_detail_name"></el-input>
       </el-form-item>
-      <!-- <el-form-item label="三级编码" prop="position_detail_sname" v-if="position == 'small'">
+      <el-form-item label="三级子项" prop="position_detail_sname" v-if="position == 'small'">
         <el-input v-model="classForm.position_detail_sname"></el-input>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item class="margin-top-30">
         <el-button type="primary" @click="submitForm('classForm')">确定</el-button>
         <el-button @click="resetForm('classForm')">重置</el-button>
