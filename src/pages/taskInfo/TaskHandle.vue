@@ -10,22 +10,8 @@
           </el-option>
         </el-select>
       </el-form-item> -->
-      <el-form-item label="所属部门">
-        <el-select v-model="taskForm.department_id" placeholder="请选择部门" @change="changeDepart">
-          <el-option v-for="item in departmentList" :key="item.department_id" :label="item.department_name"
-            :value="item.department_id">
-          </el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item label="风险点名称" prop="task_name">
         <el-input v-model="taskForm.task_name"></el-input>
-      </el-form-item>
-      <el-form-item label="员工列表">
-        <el-select v-model="taskForm.user_id" placeholder="请选择">
-          <el-option v-for="item in userList" :key="item.user_id" :label="item.name"
-            :value="item.user_id">
-          </el-option>
-        </el-select>
       </el-form-item>
       <!-- <el-form-item label="二级子项">
         <el-select v-model="taskForm.position_id" placeholder="请选择">
@@ -41,24 +27,48 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="员工列表">
+        <el-select v-model="taskForm.user_id" placeholder="请选择">
+          <el-option v-for="item in userList" :key="item.user_id" :label="item.name"
+            :value="item.user_id">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="风险描述">
         <el-input v-model="taskForm.risk_desc"></el-input>
-      </el-form-item>
-      <el-form-item label="风险评估" prop="risk_for">
-        <el-input v-model="taskForm.risk_for"></el-input>
       </el-form-item>
       <el-form-item label="导致后果" prop="risk_result">
         <el-input v-model="taskForm.risk_result"></el-input>
       </el-form-item>
+      
+      <el-form-item label="风险评估" prop="risk_for">
+        <el-input v-model="taskForm.risk_for"></el-input>
+      </el-form-item>
+      
       <!-- <el-form-item label="风险级别" prop="risk_level">
         <el-input v-model="taskForm.risk_level"></el-input>
       </el-form-item> -->
-      <el-form-item label="风险级别" prop="task_risk_init_level">
-        <el-select v-model="taskForm.task_risk_init_level" placeholder="请选择">
+      <el-form-item label="风险级别" prop="risk_level">
+        <el-select v-model="taskForm.risk_level" placeholder="请选择">
           <el-option v-for="item in riskLevel" :key="item.value" :label="item.label"
             :value="item.value">
           </el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label="工程技术" prop="risk_evaluate_technology">
+        <el-input v-model="taskForm.risk_evaluate_technology"></el-input>
+      </el-form-item>
+       <el-form-item label="管控措施" prop="risk_to_do">
+        <el-input v-model="taskForm.risk_to_do"></el-input>
+      </el-form-item>
+       <el-form-item label="培训教育" prop="risk_evaluate_train">
+        <el-input v-model="taskForm.risk_evaluate_train"></el-input>
+      </el-form-item>
+      <el-form-item label="个体防护" prop="risk_evaluate_protect">
+        <el-input v-model="taskForm.risk_evaluate_protect"></el-input>
+      </el-form-item>
+      <el-form-item label="应急处理" prop="risk_evaluate_emergency">
+        <el-input v-model="taskForm.risk_evaluate_emergency"></el-input>
       </el-form-item>
       <el-form-item label="法规依据" prop="row">
         <el-input v-model="taskForm.row"></el-input>
@@ -70,20 +80,12 @@
         <el-radio v-model="taskForm.task_check_cycle" label="1">1天1次</el-radio>
         <el-radio v-model="taskForm.task_check_cycle" label="3">1天3次</el-radio>
       </el-form-item>
-      <el-form-item label="工程技术" prop="risk_evaluate_technology">
-        <el-input v-model="taskForm.risk_evaluate_technology"></el-input>
-      </el-form-item>
-      <el-form-item label="管控措施" prop="risk_to_do">
-        <el-input v-model="taskForm.risk_to_do"></el-input>
-      </el-form-item>
-      <el-form-item label="培训教育" prop="risk_evaluate_train">
-        <el-input v-model="taskForm.risk_evaluate_train"></el-input>
-      </el-form-item>
-      <el-form-item label="个体防护" prop="risk_evaluate_protect">
-        <el-input v-model="taskForm.risk_evaluate_protect"></el-input>
-      </el-form-item>
-      <el-form-item label="应急处理" prop="risk_evaluate_emergency">
-        <el-input v-model="taskForm.risk_evaluate_emergency"></el-input>
+      <el-form-item label="所属部门">
+        <el-select v-model="taskForm.department_id" placeholder="请选择部门" @change="changeDepart">
+          <el-option v-for="item in departmentList" :key="item.department_id" :label="item.department_name"
+            :value="item.department_id">
+          </el-option>
+        </el-select>
       </el-form-item>
       
       <!-- <el-form-item label="任务截止时间">
@@ -186,11 +188,11 @@
             message: '请输入应急处理',
             trigger: 'blur'
           }],
-          // risk_level: [{
-          //   required: true,
-          //   message: '请输入风险等级',
-          //   trigger: 'blur'
-          // }],
+          risk_level: [{
+            required: true,
+            message: '请输入选择等级',
+            trigger: 'blur'
+          }],
           company_id: [{
             required: true,
             message: '请选择所属公司',
@@ -244,8 +246,12 @@
         this.$forceUpdate();
       },
       getUserList() {
-        Http.checkTask()
-          .then(res => {
+        Http.checkTask(
+          {
+            company_id: this.taskForm.company_id,
+            position_id: this.taskForm.position_id
+          }
+        ).then(res => {
             this.loading = false;
             this.$handleResponse(res, res => {
               if (res.users) {
@@ -297,8 +303,12 @@
           .catch(err => {});
       },
       getPositionDetailList() {
-        Http.getPositionDetailList()
-          .then(res => {
+        Http.getPositionDetailList(
+          {
+            company_id: this.taskForm.company_id,
+            position_id: this.taskForm.position_id
+          }
+        ).then(res => {
             this.$handleResponse(res, res => {
               if (res) {
                 this.positionDetailList = res;

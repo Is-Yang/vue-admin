@@ -23,7 +23,7 @@
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
       <el-table-column label="公司名称">
         <template slot-scope="scope">
-          <router-link :to="{ path: '/classify/big', query: {companyId: scope.row.company_id, pointType: pointType}}" class="a-link">{{scope.row.company_name}}</router-link>
+          <router-link :to="{ path: '/classify/big', query: {companyId: scope.row.company_id, brea_name: scope.row.company_name, pointType: pointType}}" class="a-link">{{scope.row.company_name}}</router-link>
         </template>
       </el-table-column>
     </el-table>

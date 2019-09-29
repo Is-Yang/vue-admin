@@ -40,18 +40,10 @@ export default {
   data(){
     return {
       breadList: {
-        'poster': [{"name": '海报模板','path': ''}],
-        'posterAdd': [{"name": '海报模板','path': '/marketTool/template/poster'},{"name": '新增模板','path': ''}],
-        'posterEdit': [{"name": '海报模板','path': '/marketTool/template/poster'},{"name": '编辑模板','path': ''}],
-        'imgText': [{"name": '图文模板','path': ''}],
-        'imgTextAdd': [{"name": '图文模板','path': '/marketTool/template/imageText'},{"name": '新增图文','path': ''},],
-        'imgTextEdit': [{"name": '图文模板','path': '/marketTool/template/imageText'},{"name": '编辑图文','path': ''},],
-        'marktingGroup': [{"name": '集团图文统计','path': ''}],
-        'marktingSingle': [{"name": '单店图文统计','path': ''}],
-        'xgSetting': [{"name": '统计标签设置','path': ''}],
-        'xgSettingList': [{"name": '统计标签设置','path': '/xg/setting'}, {"name": '子标签设置','path': ''}],
-        'xgSettingListAdd': [{"name": '统计标签设置','path': '/xg/setting'}, {"name": '子标签设置','path': '/xg/setting/list'}, {"name": '新增子标签','path': ''}],
-        'xgSettingListEdit': [{"name": '统计标签设置','path': '/xg/setting'}, {"name": '子标签设置','path': '/xg/setting/list'}, {"name": '编辑子标签','path': ''}],
+        '/account/addGovernment': [{"name": '创建政府账号','path': ''}],
+        '/account/editGovernment': [{"name": '编辑政府账号','path': ''}],
+        '/account/addCompany': [{"name": '创建企业账号','path': ''}],
+        '/account/editCompany': [{"name": '编辑企业账号','path': ''}],
         'none': []
       },
       bread: []
@@ -60,7 +52,6 @@ export default {
   mounted(){
     if(!this.dataIsArr){
       this.bread = this.breadList[this.breadName];
-      // debugger;
     }else{
       this.bread = this.initBread;
     }

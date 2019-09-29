@@ -261,8 +261,8 @@ export function uploadPositionDetail(params) {
 }
 
 // 用户列表
-export function checkTask() {
-    return http.getAjax('/manager_check_task_request?token=' + getToken());
+export function checkTask(params) {
+    return http.getAjax('/manager_check_task_request?token=' + getToken(), params);
 }
 
 /**

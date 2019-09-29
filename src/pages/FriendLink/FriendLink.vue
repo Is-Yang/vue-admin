@@ -1,6 +1,6 @@
 <template>
     <el-form label-width="120px">
-        <el-form-item label="友情链接1:">
+        <!-- <el-form-item label="友情链接1:">
             <el-col :span="4" v-if="!isEdit">
                 <a :href="data.link1" target="_bank">{{data.link1_name}}</a>
             </el-col>
@@ -47,11 +47,17 @@
             <el-col :span="4" v-if="isEdit">
                 <el-input v-model="data.link4" placeholder="请输入链接地址" />
             </el-col>
-        </el-form-item>
-        <el-form-item>
+        </el-form-item> -->
+        <!-- <el-form-item>
             <el-button v-if="!isEdit" type="primary" @click="isEdit = true">修改</el-button>
             <el-button v-if="isEdit" type="primary" @click="editHandle">确定</el-button>
             <el-button v-if="isEdit" @click="cancelForm">取消</el-button>
+        </el-form-item> -->
+
+        <el-form-item v-for="(item, index) in relatedLinks" :key="index" :label="'友情链接' + (index + 1) + '：'">
+           <router-link :to="'/showPage?page=' + item.flag">
+                {{item.title}}
+            </router-link>
         </el-form-item>
     </el-form>
 </template>
@@ -64,12 +70,31 @@ export default {
         return {
             loading: false,
             data: {},
+            relatedLinks: [
+                {
+                    title: '隐患排查治理信息系统',
+                    link: 'http://ent.hazard.scaqjg.com',
+                    flag: 1,
+                }, {
+                    title: '社会单位消防安全户籍化管理系统',
+                    link: 'http://202.61.89.197:85/FrameSet/Login.aspx',
+                    flag: 2,
+                }, {
+                    title: '四川省安全社区信息管理平台',
+                    link: 'http://aqsq.tccxfw.com',
+                    flag: 3,
+                }, {
+                    title: '四川省安全评价信息公开平台',
+                    link: 'http://www.czax.org/cyxx',
+                    flag: 4,
+                }
+            ],
             copyData: {},
             isEdit: false,
         };
     },
     created() {
-        this.getListData();
+        // this.getListData();
     },
     methods: {
         getListData() {

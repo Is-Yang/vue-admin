@@ -1,87 +1,93 @@
 <template>
-  <el-form :model="company" :label-position="'right'" ref="companyInfo" :rules="rules"
-    @keyup.enter.native="onSubmit('companyInfo')" label-width="150px" size="medium">
-    <el-form-item prop="company_name" label="公司名称：">
-      <el-input type="text" style="width: 280px;" v-model.trim="company.company_name" placeholder="请输入公司名称"></el-input>
-    </el-form-item>
-    <el-form-item prop="company_type" label="公司类型：">
-      <el-select v-model="company.company_type" placeholder="请选择公司类型" size="medium">
-        <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item label="公司信息：">
-      <el-input type="textarea" :rows="2" style="width: 280px;" v-model="company.company_info"></el-input>
-    </el-form-item>
-    <el-form-item label="区域：">
-      <el-select v-model="company.manager_index" placeholder="请选择区域" size="medium">
-        <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index">
-        </el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item label="四色分布图：">
-      <el-row type="flex" :gutter="10">
-        <el-col :span="4">
-          <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess1">
-            <div v-if="imageUrl1" :style="{backgroundImage: 'url('+ imageUrl1 +')'}" class="picture"></div>
-            <i v-else class="el-icon-plus"></i>
-          </el-upload>
-        </el-col>
-        <!-- <el-col :span="6">
-          <div class="flex">
-            <span style="width: 75px;">四色图2：</span>
-            <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess2">
-              <div v-if="imageUrl2" :style="{backgroundImage: 'url('+ imageUrl2 +')'}" class="picture"></div>
-              <i v-else class="el-icon-plus"></i>
-            </el-upload>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="flex">
-            <span style="width: 75px;">四色图3：</span>
-            <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess3">
-              <div v-if="imageUrl3" :style="{backgroundImage: 'url('+ imageUrl3 +')'}" class="picture"></div>
-              <i v-else class="el-icon-plus"></i>
-            </el-upload>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="flex">
-            <span style="width: 75px;">四色图4：</span>
-            <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess4">
-              <div v-if="imageUrl4" :style="{backgroundImage: 'url('+imageUrl4 +')'}" class="picture"></div>
-              <i v-else class="el-icon-plus"></i>
-            </el-upload>
-          </div>
-        </el-col> -->
-      </el-row>
-    </el-form-item>
-    <el-form-item label="地图点：" style="margin-bottom: 50px;">
-      <v-map @selectLocation="selectLocation" :mapXY="mapXY" style="width: 860px; height: 420px;"></v-map>
-    </el-form-item>
-    <el-form-item label="企业法人：">
-      <el-input type="text" style="width: 280px;" v-model.trim="company.corporate" placeholder="请输入企业法人"></el-input>
-    </el-form-item>
-    <el-form-item  label="法人手机号：">
-      <el-input type="text" style="width: 280px;" v-model.trim="company.corporate_phone" placeholder="请输入法人手机号"></el-input>
-    </el-form-item>
-    <el-form-item label="企业负责人：">
-      <el-input type="text" style="width: 280px;" v-model.trim="company.ceo" placeholder="请输入企业负责人"></el-input>
-    </el-form-item>
-    <el-form-item label="负责人手机号：">
-      <el-input type="text" style="width: 280px;" v-model.trim="company.ceo_phone" placeholder="请输入负责人手机号"></el-input>
-    </el-form-item>
-    <el-form-item label="企业状态：">
-      <el-input type="text" style="width: 280px;" v-model.trim="company.status" placeholder="请输入企业状态"></el-input>
-    </el-form-item>
-    <el-form-item label="经营范围：">
-      <el-input type="textarea" :rows="2" style="width: 280px;" v-model="company.scope"></el-input>
-    </el-form-item>
-    <el-form-item class="margin-top-20">
-      <el-button @click="handleClose">取 消</el-button>
-      <el-button type="primary" @click="onSubmit('companyInfo')">提交</el-button>
-    </el-form-item>
-  </el-form>
+  <div>
+    <bread-crumb v-if="this.$route.meta.specialModule" :dataIsArr="false" isBack></bread-crumb>
+
+    <div :class="[{ 'minh768 common-section': this.$route.meta.specialModule }]">
+      <el-form :model="company" :label-position="'right'" ref="companyInfo" :rules="rules"
+        @keyup.enter.native="onSubmit('companyInfo')" label-width="150px" size="medium">
+        <el-form-item prop="company_name" label="公司名称：">
+          <el-input type="text" style="width: 280px;" v-model.trim="company.company_name" placeholder="请输入公司名称"></el-input>
+        </el-form-item>
+        <el-form-item prop="company_type" label="公司类型：">
+          <el-select v-model="company.company_type" placeholder="请选择公司类型" size="medium">
+            <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="公司信息：">
+          <el-input type="textarea" :rows="2" style="width: 280px;" v-model="company.company_info"></el-input>
+        </el-form-item>
+        <el-form-item label="区域：">
+          <el-select v-model="company.manager_index" placeholder="请选择区域" size="medium">
+            <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="四色分布图：">
+          <el-row type="flex" :gutter="10">
+            <el-col :span="4">
+              <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess1">
+                <div v-if="imageUrl1" :style="{backgroundImage: 'url('+ imageUrl1 +')'}" class="picture"></div>
+                <i v-else class="el-icon-plus"></i>
+              </el-upload>
+            </el-col>
+            <!-- <el-col :span="6">
+              <div class="flex">
+                <span style="width: 75px;">四色图2：</span>
+                <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess2">
+                  <div v-if="imageUrl2" :style="{backgroundImage: 'url('+ imageUrl2 +')'}" class="picture"></div>
+                  <i v-else class="el-icon-plus"></i>
+                </el-upload>
+              </div>
+            </el-col>
+            <el-col :span="6">
+              <div class="flex">
+                <span style="width: 75px;">四色图3：</span>
+                <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess3">
+                  <div v-if="imageUrl3" :style="{backgroundImage: 'url('+ imageUrl3 +')'}" class="picture"></div>
+                  <i v-else class="el-icon-plus"></i>
+                </el-upload>
+              </div>
+            </el-col>
+            <el-col :span="6">
+              <div class="flex">
+                <span style="width: 75px;">四色图4：</span>
+                <el-upload class="uploader" :action="uploadUrl" :show-file-list="false" :on-success="handleImageSuccess4">
+                  <div v-if="imageUrl4" :style="{backgroundImage: 'url('+imageUrl4 +')'}" class="picture"></div>
+                  <i v-else class="el-icon-plus"></i>
+                </el-upload>
+              </div>
+            </el-col> -->
+          </el-row>
+        </el-form-item>
+        <el-form-item label="地图点：" style="margin-bottom: 50px;">
+          <v-map @selectLocation="selectLocation" :mapXY="mapXY" style="width: 860px; height: 420px;"></v-map>
+        </el-form-item>
+        <el-form-item label="企业法人：">
+          <el-input type="text" style="width: 280px;" v-model.trim="company.corporate" placeholder="请输入企业法人"></el-input>
+        </el-form-item>
+        <el-form-item  label="法人手机号：">
+          <el-input type="text" style="width: 280px;" v-model.trim="company.corporate_phone" placeholder="请输入法人手机号"></el-input>
+        </el-form-item>
+        <el-form-item label="企业负责人：">
+          <el-input type="text" style="width: 280px;" v-model.trim="company.ceo" placeholder="请输入企业负责人"></el-input>
+        </el-form-item>
+        <el-form-item label="负责人手机号：">
+          <el-input type="text" style="width: 280px;" v-model.trim="company.ceo_phone" placeholder="请输入负责人手机号"></el-input>
+        </el-form-item>
+        <el-form-item label="企业状态：">
+          <el-input type="text" style="width: 280px;" v-model.trim="company.status" placeholder="请输入企业状态"></el-input>
+        </el-form-item>
+        <el-form-item label="经营范围：">
+          <el-input type="textarea" :rows="2" style="width: 280px;" v-model="company.scope"></el-input>
+        </el-form-item>
+        <el-form-item class="margin-top-20">
+          <el-button @click="handleClose">取 消</el-button>
+          <el-button type="primary" @click="onSubmit('companyInfo')">提交</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+  </div>
 </template>
 
 <script>

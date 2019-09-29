@@ -60,7 +60,7 @@
       this.setSearch()
     },
     created() {
-      this.getData();
+      // this.getData();
     },
     methods: {
       getData() {
@@ -73,12 +73,12 @@
             this.location.lat = 0;
           }
           this.setMap();
-        }, 500);
+        }, 800);
       },
       // 初始化地图
       setMap() {
         this.map = new BMap.Map('map-core')
-        this.map.centerAndZoom(new BMap.Point(113.275, 23.117), 11);
+        this.map.centerAndZoom(new BMap.Point(106.903, 31.874), 11);
         // 创建地理编码实例      
         var myGeo = new BMap.Geocoder();      
         // 根据坐标得到地址描述    

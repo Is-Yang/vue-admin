@@ -12,17 +12,23 @@
       <el-form-item v-if="pageType == 1" label="发送对象：">
         <el-radio v-model="sendType" label="1">群发</el-radio>
         <el-radio v-model="sendType" label="2">单独发</el-radio>
-        <el-select v-if="sendType == 2" v-model="messageForm.company_id" placeholder="请选择发送企业" size="medium">
+        <el-select v-if="sendType == 2" v-model="messageForm.company_id" filterable placeholder="请选择发送企业" size="medium">
           <el-option v-for="(item, index) in companyList" :key="index" :label="item.company_name" :value="item.company_id">
           </el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="message_from" v-if="pageType == 2" label="发送对象：">
-          <el-select v-model="messageForm.company_id" placeholder="请选择发送企业" size="medium">
+          <el-select v-model="messageForm.company_id" filterable placeholder="请选择发送企业" size="medium">
             <el-option v-for="(item, index) in companyList" :key="index" :label="item.company_name" :value="item.company_id">
             </el-option>
           </el-select>
       </el-form-item>
+      <el-form-item label="区域：" v-if="pageType == 2">
+      <el-select v-model="messageForm.manager_index" placeholder="请选择区域" size="medium">
+        <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index">
+        </el-option>
+      </el-select>
+    </el-form-item>
       <el-form-item prop="company_type" label="公司类型：">
         <el-select v-model="messageForm.company_type" placeholder="请选择公司类型" size="medium">
           <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
@@ -71,6 +77,7 @@ export default {
         messageForm: {},
         companyList: [],
         fileList: [],
+        areaList: [],
         // 公司类型列表
         typeList: [{
             label: '危险化学品',
@@ -109,7 +116,8 @@ export default {
       };
     },
     created() {
-        this.getCompanySelect()
+        this.getCompanySelect();
+        this.getAreaSelect();
     },
     methods: {
       // 获取所有公司列表
@@ -123,6 +131,13 @@ export default {
             });
           })
           .catch(err => {});
+      },
+      getAreaSelect() {
+         Http.geAreaSelect().then(res => {
+              this.$handleResponse(res, res => {
+               this.areaList = res.data;
+              })
+          })
       },
       handleImageSuccess(res, file) {
         if (res.ok) {
@@ -146,7 +161,8 @@ export default {
               message_from,
               company_id,
               company_type,
-              file_url
+              file_url,
+              manager_index
             } = this.messageForm;
 
             let create_time = Math.round(new Date().getTime()/1000);
@@ -158,7 +174,8 @@ export default {
                 message_from: message_from,
                 company_id: company_id,
                 company_type: company_type,
-                file_url: file_url
+                file_url: file_url,
+                manager_index: manager_index
             }
             // 政府端
             let goverParams = {
@@ -167,10 +184,10 @@ export default {
                 message_from: message_from,
                 company_type: company_type,
                 file_url: file_url,
-                message_to: this.sendType == '1' ? 0 : company_id
+                message_to: this.sendType == '1' ? -1 : company_id
             }
             // pageType 1:政府端， 2:平台端
-            let queryName = this.pageType == 1 ? 'sendMessage' : 'genMessage';
+            let queryName = 'sendMessage';
             let params = this.pageType == 1 ? goverParams : pinParams;
             Http[queryName](params).then(res => {
                 this.loading = false;

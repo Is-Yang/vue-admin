@@ -1,55 +1,61 @@
 <template>
-    <el-form :model="account" 
-      :label-position="'right'" 
-      v-loading="loading"
-      ref="accountInfo" 
-      :rules="rules" 
-      @keyup.enter.native="onSubmit('accountInfo')"
-      label-width="150px"
-      size="medium"
-      style="width: 420px">
-      <el-form-item label="所属区域：" v-if="pageType != 3">
-        <el-select v-model="account.manager_index" placeholder="请选择区域" size="medium">
-          <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="user_name" :label="pageType == 1 ? '政府名称：' : '账号/企业名称：'">
-        <el-input type="text" v-model.trim="account.user_name" :placeholder="pageType == 1 ? '请输入政府名称' : '请输入账号/企业名称'"></el-input>
-      </el-form-item>
-      <el-form-item prop="pwd" label="密码：">
-        <el-input type="password" v-model.trim="account.pwd" placeholder="请输入密码"></el-input>
-      </el-form-item>
-      <!-- <el-form-item prop="manager_index" label="管理地区：">
-        <el-select v-model="account.manager_index" placeholder="请选择地区" @change="getSelectInfo">
-          <el-option v-for="item in areaList" 
-            :key="item.manager_index" 
-            :label="item.area_name" 
-            :value="item.manager_index">
-          </el-option>
-        </el-select>
-      </el-form-item> -->
-      <!-- <el-form-item prop="company_id" label="所属公司：" v-if="pageType != 3">
-        <el-select v-model="account.company_id" placeholder="请选择公司">
-          <el-option v-for="item in companyList" 
-            :key="item.company_id" 
-            :label="item.company_name" 
-            :value="item.company_id">
-          </el-option>
-        </el-select>
-      </el-form-item> -->
-      <el-form-item label="允许登录：">
-        <el-radio-group v-model="account.can_be_login">
-          <el-radio :label="1">允许</el-radio>
-          <el-radio :label="0">不允许</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item class="margin-top-30">
-        <el-button @click="handleClose">取 消</el-button>
-        <el-button @click="resetForm('accountInfo')">重置</el-button>
-        <el-button type="primary" @click="onSubmit('accountInfo')">确定</el-button>
-      </el-form-item>
-    </el-form>
+    <div>
+      <bread-crumb :dataIsArr="false" isBack :breadName="$route.path"></bread-crumb>
+      
+      <div class="common-section minh768">
+        <el-form :model="account" 
+          :label-position="'right'" 
+          v-loading="loading"
+          ref="accountInfo" 
+          :rules="rules" 
+          @keyup.enter.native="onSubmit('accountInfo')"
+          label-width="150px"
+          size="medium"
+          style="width: 420px">
+          <el-form-item label="所属区域：" v-if="pageType != 3">
+            <el-select v-model="account.manager_index" placeholder="请选择区域" size="medium">
+              <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="user_name" :label="pageType == 1 ? '政府名称：' : '账号/企业名称：'">
+            <el-input type="text" v-model.trim="account.user_name" :placeholder="pageType == 1 ? '请输入政府名称' : '请输入账号/企业名称'"></el-input>
+          </el-form-item>
+          <el-form-item prop="pwd" label="密码：">
+            <el-input type="password" v-model.trim="account.pwd" placeholder="请输入密码"></el-input>
+          </el-form-item>
+          <!-- <el-form-item prop="manager_index" label="管理地区：">
+            <el-select v-model="account.manager_index" placeholder="请选择地区" @change="getSelectInfo">
+              <el-option v-for="item in areaList" 
+                :key="item.manager_index" 
+                :label="item.area_name" 
+                :value="item.manager_index">
+              </el-option>
+            </el-select>
+          </el-form-item> -->
+          <!-- <el-form-item prop="company_id" label="所属公司：" v-if="pageType != 3">
+            <el-select v-model="account.company_id" placeholder="请选择公司">
+              <el-option v-for="item in companyList" 
+                :key="item.company_id" 
+                :label="item.company_name" 
+                :value="item.company_id">
+              </el-option>
+            </el-select>
+          </el-form-item> -->
+          <el-form-item label="允许登录：">
+            <el-radio-group v-model="account.can_be_login">
+              <el-radio :label="1">允许</el-radio>
+              <el-radio :label="0">不允许</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item class="margin-top-30">
+            <el-button @click="handleClose">取 消</el-button>
+            <el-button @click="resetForm('accountInfo')">重置</el-button>
+            <el-button type="primary" @click="onSubmit('accountInfo')">确定</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
 </template>
 
 <script>

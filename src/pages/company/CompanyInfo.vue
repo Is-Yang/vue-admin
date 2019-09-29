@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="margin-bottom-20 text-right">
-        <el-button size="small" type="primary" @click="dialogShow('add', {})">上传资料</el-button>
+        <!-- <el-button size="small" type="primary" @click="dialogShow('add', {})">上传资料</el-button> -->
     </div>
 
     <!-- <el-tabs v-model="active" type="card" @tab-click="getListData">
@@ -100,7 +100,7 @@
         if (route.path == '/company/zfinfo') {
           from = 1;
         } else if (route.path == '/company/qtinfo') {
-          from = 0;
+          from = 2;
         }
         // 菜单列表数据
         this.loading = true;

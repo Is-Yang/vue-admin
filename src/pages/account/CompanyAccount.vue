@@ -1,81 +1,86 @@
 <template>
   <div>
-    <el-row type="flex">
-      <el-col :span="20">
-        <el-form :inline="true" :model="searchInfo" size="small">
-           <el-form-item label="公司名称：">
-            <el-input v-model="searchInfo.keyword" placeholder="请输入公司名称"></el-input>
-          </el-form-item>
+    <bread-crumb v-if="this.$route.meta.specialModule" :dataIsArr="true" isBack :initBread="customBread"></bread-crumb>
 
-          <el-form-item label="区域：">
-              <el-select v-model="searchInfo.manager_index" placeholder="请选择区域" size="medium">
-                <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index">
+    <div :class="[{ 'minh768 common-section': this.$route.meta.specialModule }]">
+      <el-row type="flex">
+        <el-col :span="20">
+          <el-form :inline="true" :model="searchInfo" size="small">
+              <el-form-item label="公司名称：">
+              <el-input v-model="searchInfo.keyword" placeholder="请输入公司名称"></el-input>
+            </el-form-item>
+
+            <el-form-item label="区域：" v-if="pageType == 1">
+                <el-select v-model="searchInfo.manager_index" placeholder="请选择区域" size="medium">
+                  <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index">
+                  </el-option>
+                </el-select>
+            </el-form-item>
+
+            <el-form-item label="类型：">
+              <el-select v-model="searchInfo.company_type" placeholder="请选择类型" size="medium">
+                <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
-          </el-form-item>
+            </el-form-item>
 
-          <el-form-item label="类型：">
-            <el-select v-model="searchInfo.company_type" placeholder="请选择类型" size="medium">
-              <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
+            <el-form-item>
+              <el-button
+                type="primary"
+                size="small"
+                round
+                icon="el-icon-search"
+                @click="onSearch"
+              >查询</el-button>
+              <el-button plain size="small" round icon="el-icon-delete" @click="onReset">清空查询条件</el-button>
+            </el-form-item>
+          </el-form>
+        </el-col>
 
-          <el-form-item>
-            <el-button
-              type="primary"
-              size="small"
-              round
-              icon="el-icon-search"
-              @click="onSearch"
-            >查询</el-button>
-            <el-button plain size="small" round icon="el-icon-delete" @click="onReset">清空查询条件</el-button>
-          </el-form-item>
-        </el-form>
-      </el-col>
-
-      <el-col :span="4" class="text-right margin-bottom-20">
-        <router-link v-if="pageType == 1" to="addGovernment">
-          <el-button type="primary" size="small">{{'创建政府账号'}}</el-button>
-        </router-link>
-        <router-link v-else to="addCompany">
-          <el-button type="primary" size="small">{{'创建企业账号'}}</el-button>
-        </router-link>
-      </el-col>
-    </el-row>
-
-    <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-      <el-table-column label="区域" v-if="pageType == 1">
-        <template slot-scope="scope">
-          <router-link to="/account/company" class="a-link">
-            {{scope.row.area_name}}
+        <el-col :span="4" class="text-right margin-bottom-20">
+          <router-link v-if="pageType == 1" to="addGovernment">
+            <el-button type="primary" size="small">{{'创建政府账号'}}</el-button>
           </router-link>
-        </template>
-      </el-table-column>
-      <!-- <el-table-column prop="government_name" v-if="pageType == 1" label="账号/政府名称"></el-table-column> -->
-      <el-table-column prop="user_name" v-if="pageType == 1" label="账号/政府名称"></el-table-column>
-      <el-table-column prop="company.company_name" label="公司" v-if="pageType != 1"></el-table-column>
-      <el-table-column prop="area_name" label="区域" v-if="pageType != 1"></el-table-column>
-      <el-table-column prop="company.company_type_text" label="公司类型" v-if="pageType != 1"></el-table-column>
-      <el-table-column label="是否允许登录">
-        <template slot-scope="scope">
-         {{scope.row.can_be_login === 1 ? '允许' : '不允许'}}
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="200px">
-        <template slot-scope="scope">
-          <el-button size="mini" :disabled="scope.row.user_name == '巴中市test' ? true :false" type="primary" plain icon="el-icon-edit" @click="editFn(scope.row.user_id)"
-            title="编辑"></el-button>
-          <el-button size="mini" :disabled="scope.row.user_name == '巴中市test' ? true :false" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
-            title="删除"></el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+          <router-link v-else to="addCompany">
+            <el-button type="primary" size="small">{{'创建企业账号'}}</el-button>
+          </router-link>
+        </el-col>
+      </el-row>
 
-    <!-- 分页 -->
-    <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.current"
-      :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
-      layout="total, sizes, prev, pager, next, jumper"></el-pagination>
+      <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
+        <el-table-column label="区域" v-if="pageType == 1">
+          <template slot-scope="scope">
+            <router-link :to="{ path: '/account/company', query: {'manager_index': scope.row.manager_index, 'brea_name' : scope.row.area_name}}" class="a-link">
+              {{scope.row.area_name}}
+            </router-link>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column prop="government_name" v-if="pageType == 1" label="账号/政府名称"></el-table-column> -->
+        <el-table-column prop="user_name" v-if="pageType == 1" label="账号/政府名称"></el-table-column>
+        <el-table-column prop="company.company_name" label="公司名称" v-if="pageType != 1"></el-table-column>
+        <el-table-column prop="user_name" label="企业账号" v-if="pageType != 1"></el-table-column>
+        <!-- <el-table-column prop="area_name" label="区域" v-if="pageType != 1"></el-table-column>
+        <el-table-column prop="company.company_type_text" label="公司类型" v-if="pageType != 1"></el-table-column> -->
+        <el-table-column label="是否允许登录">
+          <template slot-scope="scope">
+            {{scope.row.can_be_login === 1 ? '允许' : '不允许'}}
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="200px">
+          <template slot-scope="scope">
+            <el-button size="mini" :disabled="scope.row.user_name == '巴中市test' ? true :false" type="primary" plain icon="el-icon-edit" @click="editFn(scope.row.user_id)"
+              title="编辑"></el-button>
+            <el-button size="mini" :disabled="scope.row.user_name == '巴中市test' ? true :false" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
+              title="删除"></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!-- 分页 -->
+      <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.current"
+        :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
+        layout="total, sizes, prev, pager, next, jumper"></el-pagination>
+    </div>
   
   </div>
 </template>
@@ -124,7 +129,8 @@ export default {
         }
       ],
       areaList: [],
-      pageType: 3
+      pageType: 3,
+      customBread: []
     };
   },
   created() {
@@ -136,6 +142,13 @@ export default {
     } else if (route.path === '/account/government') {
         this.pageType = 1;
     } 
+    if (route.query && route.query.manager_index) {
+      this.searchInfo.manager_index = route.query.manager_index;
+    }
+    this.customBread.push({
+      'name': route.query && route.query.brea_name
+    });
+    
     this.getAreaSelect();
     this.getListData();
   },
@@ -161,7 +174,8 @@ export default {
         manager_index: manager_index,  // 区域
         key: keyword  // 公司名称查询
       };
-      Http.getCompanyAccount(params)
+      let queryName = this.pageType == 1 ? 'getMGovAccountList' : 'getCompanyAccount';
+      Http[queryName](params)
         .then(res => {
           this.loading = false;
           this.$handleResponse(res, res => {

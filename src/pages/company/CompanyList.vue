@@ -14,7 +14,7 @@
               </el-select>
           </el-form-item>
 
-          <el-form-item label="企业类型：">
+          <el-form-item label="企业类型：" v-if="propity == 2">
             <el-select v-model="searchInfo.company_type" placeholder="请选择公司类型" size="medium">
               <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
@@ -44,7 +44,7 @@
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column v-if="propity == 2" label="公司名称" min-width="300">
         <template slot-scope="scope">
-          <a class="a-link" href="javascript:;" @click="companyOperate(scope.row.company_id)">{{scope.row.company_name}}</a>
+          <a class="a-link" href="javascript:;" @click="companyOperate(scope.row.company_id, scope.row.company_name)">{{scope.row.company_name}}</a>
         </template>
       </el-table-column>
       <el-table-column v-else prop="company.company_name" label="公司名称"></el-table-column>
@@ -210,8 +210,8 @@ export default {
       selectVal: '',
       selectOptions: [
         {
-          to: '/account/addCompany',
-          label: '创建企业'
+          to: '/account/company',
+          label: '企业列表'
         }, {
           to: '/department',
           label: '部门列表'
@@ -265,8 +265,9 @@ export default {
             })
         })
     },
-    companyOperate(company_id) {
+    companyOperate(company_id, company_name) {
       this.dialog.companyId = company_id;
+      this.dialog.companyName = company_name;
       this.dialog.selectShow = true;
     },
     editFn(data){ 
@@ -330,7 +331,8 @@ export default {
       this.$router.push({
           path: this.selectVal,
           query: {
-            companyId: this.dialog.companyId
+            companyId: this.dialog.companyId,
+            brea_name: this.dialog.companyName
           }
       })
     },

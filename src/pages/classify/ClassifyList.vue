@@ -1,76 +1,80 @@
 <template>
   <div>
-    <el-row type="flex">
-      <el-col :span="20">
-        <el-form :inline="true" :model="searchInfo" size="small">
-          <el-form-item v-if="tableType === 1" label="风险点名称：">
-            <el-input v-model="searchInfo.keyword" placeholder="请输入风险点名称"></el-input>
-          </el-form-item>
-          <el-form-item v-if="tableType === 2" label="内容关键字：">
-            <el-input v-model="searchInfo.keyword" placeholder="请输入搜索内容"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button
-              type="primary"
-              size="small"
-              round
-              icon="el-icon-search"
-              @click="onSearch"
-            >查询</el-button>
-            <el-button plain size="small" round icon="el-icon-delete" @click="onReset">清空查询条件</el-button>
-          </el-form-item>
-        </el-form>
-      </el-col>
+    <bread-crumb v-if="this.$route.meta.specialModule" :dataIsArr="true" isBack :initBread="customBread"></bread-crumb>
 
-      <el-col :span="4" class="text-right">
-        <el-button v-if="tableType === 1" type="primary" size="small" @click="dialogShow('add', {}, 'big')">创建风险点</el-button>
-        <el-button v-if="tableType === 2" type="primary" size="small" @click="dialogShow('add', {}, 'small')">创建二级子项</el-button>
-      </el-col>
-    </el-row>
+    <div :class="[{ 'minh768 common-section': this.$route.meta.specialModule }]">
+      <el-row type="flex">
+        <el-col :span="20">
+          <el-form :inline="true" :model="searchInfo" size="small">
+            <el-form-item v-if="tableType === 1" label="风险点名称：">
+              <el-input v-model="searchInfo.keyword" placeholder="请输入风险点名称"></el-input>
+            </el-form-item>
+            <el-form-item v-if="tableType === 2" label="内容关键字：">
+              <el-input v-model="searchInfo.keyword" placeholder="请输入搜索内容"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                type="primary"
+                size="small"
+                round
+                icon="el-icon-search"
+                @click="onSearch"
+              >查询</el-button>
+              <el-button plain size="small" round icon="el-icon-delete" @click="onReset">清空查询条件</el-button>
+            </el-form-item>
+          </el-form>
+        </el-col>
 
-    <el-table v-if="tableType === 1" v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
-      <el-table-column prop="company_name" label="公司名称"></el-table-column>
-      <el-table-column label="风险点" v-if="pointType == 1">
-        <template slot-scope="scope">
-          <router-link :to="{ path: '/classify/small', query: {positionId: scope.row.position_id}}" class="a-link">{{scope.row.position_name}}</router-link>
-        </template>
-      </el-table-column>
-      <el-table-column label="风险点" v-if="pointType == 2">
-        <template slot-scope="scope">
-          <router-link :to="{ path: '/tasks/company', query: {companyId: scope.row.company_id, positionId: scope.row.position_id}}" class="a-link">{{scope.row.position_name}}</router-link>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="250px" v-if="pointType == 1">
-        <template slot-scope="scope">
-          <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row, 'big')"
-            title="编辑"></el-button>
-          <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row.position_id, 'position_id')"
-            title="删除"></el-button>
-          <el-button size="mini" type="primary" @click="dialogQCode(scope.row)">二维码</el-button>
-          <el-button v-if="userInfo.propity === 3" size="mini" type="success" plain icon="el-icon-download" @click="exportFn(scope.row)"
-            title="导出"></el-button>  
-        </template>
-      </el-table-column>
-    </el-table>
+        <el-col :span="4" class="text-right">
+          <el-button v-if="tableType === 1" type="primary" size="small" @click="dialogShow('add', {}, 'big')">创建风险点</el-button>
+          <el-button v-if="tableType === 2" type="primary" size="small" @click="dialogShow('add', {}, 'small')">创建二级子项</el-button>
+        </el-col>
+      </el-row>
 
-    <el-table v-if="tableType === 2" v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
-      <!-- <el-table-column prop="position_name" label="一级编码"></el-table-column> -->
-      <el-table-column prop="position_detail_name" label="二级子项"></el-table-column>
-      <el-table-column prop="position_detail_sname" label="三级子项"></el-table-column>
-      <el-table-column label="操作" width="180px">
-        <template slot-scope="scope">
-          <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row, 'small')"
-            title="编辑"></el-button>
-          <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row.position_detail_id, 'position_detail_id')"
-            title="删除"></el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+      <el-table v-if="tableType === 1" v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
+        <el-table-column prop="company_name" label="公司名称"></el-table-column>
+        <el-table-column label="风险点" v-if="pointType == 1">
+          <template slot-scope="scope">
+            <router-link :to="{ path: '/classify/small', query: {positionId: scope.row.position_id, brea_name: scope.row.position_name}}" class="a-link">{{scope.row.position_name}}</router-link>
+          </template>
+        </el-table-column>
+        <el-table-column label="风险点" v-if="pointType == 2">
+          <template slot-scope="scope">
+            <router-link :to="{ path: '/tasks/company', query: {companyId: scope.row.company_id, positionId: scope.row.position_id, brea_name: scope.row.position_name}}" class="a-link">{{scope.row.position_name}}</router-link>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="250px" v-if="pointType == 1">
+          <template slot-scope="scope">
+            <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row, 'big')"
+              title="编辑"></el-button>
+            <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row.position_id, 'position_id')"
+              title="删除"></el-button>
+            <el-button size="mini" type="primary" @click="dialogQCode(scope.row)">二维码</el-button>
+            <el-button v-if="userInfo.propity === 3" size="mini" type="success" plain icon="el-icon-download" @click="exportFn(scope.row)"
+              title="导出"></el-button>  
+          </template>
+        </el-table-column>
+      </el-table>
 
-    <!-- 分页 -->
-    <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.current"
-      :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
-      layout="total, sizes, prev, pager, next, jumper"></el-pagination>
+      <el-table v-if="tableType === 2" v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
+        <!-- <el-table-column prop="position_name" label="一级编码"></el-table-column> -->
+        <el-table-column prop="position_detail_name" label="二级子项"></el-table-column>
+        <el-table-column prop="position_detail_sname" label="三级子项"></el-table-column>
+        <el-table-column label="操作" width="180px">
+          <template slot-scope="scope">
+            <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row, 'small')"
+              title="编辑"></el-button>
+            <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row.position_detail_id, 'position_detail_id')"
+              title="删除"></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!-- 分页 -->
+      <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.current"
+        :page-size="page.size" :total="page.total" :page-sizes="[10, 20, 50, 100, 200]"
+        layout="total, sizes, prev, pager, next, jumper"></el-pagination>
+    </div>
 
     <!-- 新增与编辑 -->
     <classify-handle
@@ -125,7 +129,8 @@ export default {
         position: ''
       },
       dialogVisible: false,
-      qrVal: ''
+      qrVal: '',
+      customBread: []
     };
   },
   created() {
@@ -142,6 +147,10 @@ export default {
     } else if (route.path === '/classify/small') {
         this.tableType = 2;
     } 
+
+    this.customBread.push({
+      'name': route.query && route.query.brea_name
+    });
 
     this.getListData();
   },

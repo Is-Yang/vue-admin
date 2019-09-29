@@ -48,7 +48,7 @@
                                     <a href="javascript:;" @click="getTypeTask(0, 0)">{{monitoringInfo.risk_history_low}}</a>
                                 </li>
                             </ul>
-                            <ul>
+                            <ul class="txt-danger">
                                 <li>未监控</li>
                                 <li>
                                     <a href="javascript:;" @click="getTypeTask(3, 1)">{{monitoringInfo.risk_undo_serious}}</a>
@@ -337,15 +337,20 @@ export default {
             padding-bottom: 15px;
             font-weight: normal;
             font-size: 18px;
+            font-weight: 600;
         }
 
         .link {
-            padding-left: 20px;
             font-size: 15px;
-            margin-bottom: 12px;
-            color: #666;
-            &:hover {
-                color: #1494EB;
+            color: #1494EB;
+            padding: 15px 0 15px 20px;
+            border-bottom: 1px solid #eee;
+
+            a {
+                transition: all .2s linear;
+                &:hover {
+                    padding-left: 10px;
+                }
             }
         }
 
@@ -377,6 +382,31 @@ export default {
 
              &.table-head {
                  background-color: #f5f7fa;
+
+                 li {
+                     &::after {
+                        content: "";
+                        height: 2px;
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        z-index: 1;
+                    }
+
+                    &:nth-child(2)::after {
+                        background-color: rgb(253, 107, 107);
+                    }
+                    &:nth-child(3)::after {
+                        background-color: rgb(253, 181, 130);
+                    }
+                    &:nth-child(4)::after {
+                        background-color: rgb(255, 213, 85);
+                    }
+                    &:nth-child(5)::after {
+                        background-color: rgb(20, 148, 235);
+                    }
+                 }
              }
              
              li {
@@ -386,7 +416,14 @@ export default {
                 border-right: 1px solid #ebeef5;
                 border-bottom: 1px solid #ebeef5;
                 text-align: center;
-             }
+                position: relative;
+            }
+
+            &.txt-danger {
+                li {
+                    color: #F56C6C;
+                }
+            }
          }
      }
 

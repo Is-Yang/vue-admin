@@ -1,7 +1,8 @@
 <template>
   <div>
     <section
-      :class="[{ 'app-main common-section': !this.$route.meta.specialModule }]"
+      class="app-main"
+      :class="[{ 'common-section': !this.$route.meta.specialModule }]"
       :style="{'min-height': minHeight+'px'}"
     >
       <router-view :key="key"></router-view>

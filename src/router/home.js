@@ -75,7 +75,10 @@ export default [{
     }, {
         path: 'account/company',
         component: CompanyAccount,
-        name: '企业账号'
+        name: '企业账号',
+        meta: {
+            specialModule: true
+        }
     }, {
         path: 'account/add',
         component: AccountHandle,
@@ -87,11 +90,17 @@ export default [{
     }, {
         path: 'account/addCompany',
         component: CompanyAccountHandle,
-        name: '创建企业账号'
+        name: '创建企业账号',
+        meta: {
+            specialModule: true
+        }
     }, {
         path: 'account/editCompany',
         component: CompanyAccountHandle,
-        name: '编辑企业账号'
+        name: '编辑企业账号',
+        meta: {
+            specialModule: true
+        }
     }, {
         path: 'account/government',
         component: CompanyAccount,
@@ -99,11 +108,17 @@ export default [{
     }, {
         path: 'account/addGovernment',
         component: CompanyAccountHandle,
-        name: '创建政府账号'
+        name: '创建政府账号',
+        meta: {
+            specialModule: true
+        }
     }, {
         path: 'account/editGovernment',
         component: CompanyAccountHandle,
-        name: '编辑政府账号'
+        name: '编辑政府账号',
+        meta: {
+            specialModule: true
+        }
     }, {
         path: 'company',
         component: CompanyList,
@@ -111,11 +126,17 @@ export default [{
     }, {
         path: 'company/add',
         component: CompanyHandle,
-        name: '创建公司'
+        name: '创建公司',
+        meta: {
+            specialModule: true
+        }
     }, {
         path: 'company/edit',
         component: CompanyHandle,
-        name: '编辑公司'
+        name: '编辑公司',
+        meta: {
+            specialModule: true
+        }
     }, {
         path: 'company/zfinfo',
         component: CompanyInfo,
@@ -135,7 +156,10 @@ export default [{
     }, {
         path: 'tasks/company',
         component: TaskList,
-        name: '任务信息'
+        name: '任务信息',
+        meta: {
+            specialModule: true
+        }
     }, {
         path: 'other',
         component: FileList,
@@ -195,11 +219,17 @@ export default [{
             path: 'big',
             component: ClassifyList,
             name: '大分类列表',
+            meta: {
+                specialModule: true
+            }
         },
         {
             path: 'small',
             component: ClassifyList,
-            name: '小分类列表'
+            name: '小分类列表',
+            meta: {
+                specialModule: true
+            }
         }, {
             path: 'point',
             component: CompanyPoint,
