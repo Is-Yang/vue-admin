@@ -1,6 +1,6 @@
 <template>
   <div>
-    <bread-crumb v-if="this.$route.meta.specialModule" :dataIsArr="false" isBack></bread-crumb>
+    <bread-crumb v-if="this.$route.meta.specialModule" :dataIsArr="false" isBack :breadName="$route.path"></bread-crumb>
 
     <div :class="[{ 'minh768 common-section': this.$route.meta.specialModule }]">
       <el-form :model="company" :label-position="'right'" ref="companyInfo" :rules="rules"

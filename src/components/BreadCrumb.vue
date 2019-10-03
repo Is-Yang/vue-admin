@@ -40,10 +40,14 @@ export default {
   data(){
     return {
       breadList: {
+        '/account/add': [{"name": '创建员工','path': ''}],
+        '/account/edit': [{"name": '编辑员工','path': ''}],
         '/account/addGovernment': [{"name": '创建政府账号','path': ''}],
         '/account/editGovernment': [{"name": '编辑政府账号','path': ''}],
         '/account/addCompany': [{"name": '创建企业账号','path': ''}],
         '/account/editCompany': [{"name": '编辑企业账号','path': ''}],
+        '/company/add': [{"name": '创建公司','path': ''}],
+        '/company/edit': [{"name": '编辑公司','path': ''}],
         'none': []
       },
       bread: []

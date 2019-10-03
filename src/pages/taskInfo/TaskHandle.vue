@@ -55,6 +55,7 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <br/>
       <el-form-item label="工程技术" prop="risk_evaluate_technology">
         <el-input v-model="taskForm.risk_evaluate_technology"></el-input>
       </el-form-item>
@@ -70,6 +71,7 @@
       <el-form-item label="应急处理" prop="risk_evaluate_emergency">
         <el-input v-model="taskForm.risk_evaluate_emergency"></el-input>
       </el-form-item>
+      <br />
       <el-form-item label="法规依据" prop="row">
         <el-input v-model="taskForm.row"></el-input>
       </el-form-item>

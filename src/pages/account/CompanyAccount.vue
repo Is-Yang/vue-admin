@@ -17,7 +17,7 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="类型：">
+            <el-form-item label="类型：" v-if="pageType == 1">
               <el-select v-model="searchInfo.company_type" placeholder="请选择类型" size="medium">
                 <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>

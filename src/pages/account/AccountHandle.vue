@@ -1,62 +1,68 @@
 <template>
-    <el-form :model="account" 
-      :label-position="'right'" 
-      v-loading="loading"
-      ref="accountInfo" 
-      :rules="rules" 
-      @keyup.enter.native="onSubmit('accountInfo')"
-      label-width="120px"
-      size="medium"
-      style="width:380px" class="padding-top-30">
-      <el-form-item prop="user_name" label="账号：">
-        <el-input type="text" v-model.trim="account.user_name" placeholder="请输入账号"></el-input>
-      </el-form-item>
-      <el-form-item prop="name" label="姓名：">
-        <el-input v-model.number="account.name" placeholder="请输入姓名"></el-input>
-      </el-form-item>
-      <el-form-item prop="pwd" label="密码：">
-        <el-input type="password" v-model.trim="account.pwd" placeholder="请输入密码"></el-input>
-      </el-form-item>
-      <el-form-item prop="company_id" label="所属公司：">
-        <span v-if="companyInfo.company_name">{{companyInfo.company_name}}</span>
-        <el-select v-else v-model="account.company_id" placeholder="请选择公司" :disabled="propity == 2 ? true : false" @change="getDepartment">
-          <el-option v-for="item in companyList" 
-            :key="item.company_id" 
-            :label="item.company_name" 
-            :value="item.company_id">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="所属部门：">
-        <el-select v-model="account.department_id" placeholder="请选择部门" @change="changeDepart">
-          <el-option v-for="item in propity !== 3 ? departmentList : companyInfo.departments" 
-            :key="item.department_id" 
-            :label="item.department_name" 
-            :value="item.department_id">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="job_level" label="岗位等级：">
-        <el-select v-model="account.job_level" placeholder="请选择岗位">
-          <el-option v-if="propity !== 3 ? true : item.value !== 3" v-for="item in jobList" :key="item.value" :label="item.name" :value="item.value">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item prop="phone" label="电话：">
-        <el-input type="text" v-model.trim="account.phone" placeholder="请输入电话"></el-input>
-      </el-form-item>
-      <el-form-item label="允许登录：">
-        <el-radio-group v-model="account.can_be_login">
-          <el-radio :label="1">允许</el-radio>
-          <el-radio :label="0">不允许</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item class="margin-top-30">
-        <el-button @click="handleClose">取 消</el-button>
-        <el-button @click="resetForm('accountInfo')">重置</el-button>
-        <el-button type="primary" @click="onSubmit('accountInfo')">确定</el-button>
-      </el-form-item>
-    </el-form>
+  <div>
+    <bread-crumb :dataIsArr="false" isBack :breadName="$route.path"></bread-crumb>
+
+    <div class="common-section minh768">
+      <el-form :model="account" 
+        :label-position="'right'" 
+        v-loading="loading"
+        ref="accountInfo" 
+        :rules="rules" 
+        @keyup.enter.native="onSubmit('accountInfo')"
+        label-width="120px"
+        size="medium"
+        style="width:380px" class="padding-top-30">
+        <el-form-item prop="user_name" label="账号：">
+          <el-input type="text" v-model.trim="account.user_name" placeholder="请输入账号"></el-input>
+        </el-form-item>
+        <el-form-item prop="name" label="姓名：">
+          <el-input v-model.number="account.name" placeholder="请输入姓名"></el-input>
+        </el-form-item>
+        <el-form-item prop="pwd" label="密码：">
+          <el-input type="password" v-model.trim="account.pwd" placeholder="请输入密码"></el-input>
+        </el-form-item>
+        <el-form-item prop="company_id" label="所属公司：">
+          <span v-if="companyInfo.company_name">{{companyInfo.company_name}}</span>
+          <el-select v-else v-model="account.company_id" placeholder="请选择公司" :disabled="propity == 2 ? true : false" @change="getDepartment">
+            <el-option v-for="item in companyList" 
+              :key="item.company_id" 
+              :label="item.company_name" 
+              :value="item.company_id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="所属部门：">
+          <el-select v-model="account.department_id" placeholder="请选择部门" @change="changeDepart">
+            <el-option v-for="item in propity !== 3 ? departmentList : companyInfo.departments" 
+              :key="item.department_id" 
+              :label="item.department_name" 
+              :value="item.department_id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="job_level" label="岗位等级：">
+          <el-select v-model="account.job_level" placeholder="请选择岗位">
+            <el-option v-if="propity !== 3 ? true : item.value !== 3" v-for="item in jobList" :key="item.value" :label="item.name" :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="phone" label="电话：">
+          <el-input type="text" v-model.trim="account.phone" placeholder="请输入电话"></el-input>
+        </el-form-item>
+        <el-form-item label="允许登录：">
+          <el-radio-group v-model="account.can_be_login">
+            <el-radio :label="1">允许</el-radio>
+            <el-radio :label="0">不允许</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item class="margin-top-30">
+          <el-button @click="handleClose">取 消</el-button>
+          <el-button @click="resetForm('accountInfo')">重置</el-button>
+          <el-button type="primary" @click="onSubmit('accountInfo')">确定</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+  </div>
 </template>
 
 <script>

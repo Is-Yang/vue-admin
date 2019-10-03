@@ -1,20 +1,24 @@
 <template>
   <div>
-    <div class="margin-bottom-20 text-right">
-      <el-button type="primary" size="small" @click="dialogShow('add', {})">创建部门</el-button>
+    <bread-crumb v-if="this.$route.meta.specialModule" :dataIsArr="true" isBack :initBread="customBread"></bread-crumb>
+
+    <div :class="[{ 'minh768 common-section': this.$route.meta.specialModule }]">
+      <div class="margin-bottom-20 text-right">
+        <el-button type="primary" size="small" @click="dialogShow('add', {})">创建部门</el-button>
+      </div>
+      <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
+        <el-table-column prop="company_name" label="公司名称"></el-table-column>
+        <el-table-column prop="department_name" label="部门名称"></el-table-column>
+        <el-table-column label="操作" width="160px">
+          <template slot-scope="scope">
+            <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row)"
+              title="编辑"></el-button>
+            <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
+              title="删除"></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
-    <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
-      <el-table-column prop="company_name" label="公司名称"></el-table-column>
-      <el-table-column prop="department_name" label="部门名称"></el-table-column>
-      <el-table-column label="操作" width="160px">
-        <template slot-scope="scope">
-          <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row)"
-            title="编辑"></el-button>
-          <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
-            title="删除"></el-button>
-        </template>
-      </el-table-column>
-    </el-table>
 
     <!-- 分页 -->
     <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="page.current"
@@ -54,10 +58,16 @@ export default {
         show: false,
         type: "",
         departmentParent: {}
-      }
+      },
+      customBread: []
     };
   },
   created() {
+    const route = this.$route;
+    this.customBread.push({
+      'name': route.query && route.query.brea_name
+    });
+
     this.getListData();
   },
   methods: {

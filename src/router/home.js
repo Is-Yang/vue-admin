@@ -71,7 +71,10 @@ export default [{
     }, {
         path: 'account',
         component: AccountList,
-        name: '账号列表'
+        name: '账号列表',
+        meta: {
+            specialModule: true
+        }
     }, {
         path: 'account/company',
         component: CompanyAccount,
@@ -82,11 +85,17 @@ export default [{
     }, {
         path: 'account/add',
         component: AccountHandle,
-        name: '创建账号'
+        name: '创建账号',
+        meta: {
+            specialModule: true
+        }
     }, {
         path: 'account/edit',
         component: AccountHandle,
-        name: '编辑账号'
+        name: '编辑账号',
+        meta: {
+            specialModule: true
+        }
     }, {
         path: 'account/addCompany',
         component: CompanyAccountHandle,
@@ -148,7 +157,10 @@ export default [{
     }, {
         path: 'department',
         component: DepartmentList,
-        name: '部门列表'
+        name: '部门列表',
+        meta: {
+            specialModule: true
+        }
     }, {
         path: 'tasks',
         component: TaskList,
