@@ -290,11 +290,6 @@ export function getAreaList(params) {
     return http.getAjax('/manager_area_list?token=' + getToken(), params);
 }
 
-// 企业未监控列表
-export function companyUncheckList(params) {
-    return http.getAjax('/manager_company_uncheck?token=' + getToken(), params);
-}
-
 // 企业监控列表
 export function companyCheckList(params) {
     return http.getAjax('/manager_company_check?token=' + getToken(), params);
@@ -360,7 +355,7 @@ export function getMAccountById(params) {
     return http.getAjax('/manager_get_account_m?token=' + getToken(), params);
 }
 
-// 政府端-列表消息接口
+// 政府端，平台端-列表消息接口
 export function getCompanyMessageList(params) {
     return http.getAjax('/manager_get_company_message_list?token=' + getToken(), params);
 }
@@ -465,6 +460,28 @@ export function getMGovAccountList(params) {
 }
 
 // 政府端-所有区域列表
-export function mAreaListTotal () {
+export function mAreaListTotal() {
     return http.getAjax('/manager_area_list_total?token=' + getToken());
+}
+
+// 平台端-获得三级子项列表
+export function mGetThree(params) {
+    return http.getAjax('/manager_get_three?token=' + getToken(), params);
+}
+
+// 平台端-添加三级子项
+export function addThree(params) {
+    let header = { 'Content-Type': 'application/json' };
+    return http.postAjax('/manager_insert_three?token=' + getToken(), params, header, true)
+}
+
+// 平台端-修改三级子项
+export function updateThree(params) {
+    let header = { 'Content-Type': 'application/json' };
+    return http.postAjax('/manager_update_three?token=' + getToken(), params, header, true)
+}
+
+// 平台端-删除三级子项
+export function deleteThree(params) {
+    return http.postAjax('/manager_delete_three?token=' + getToken(), params)
 }

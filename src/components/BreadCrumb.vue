@@ -48,6 +48,7 @@ export default {
         '/account/editCompany': [{"name": '编辑企业账号','path': ''}],
         '/company/add': [{"name": '创建公司','path': ''}],
         '/company/edit': [{"name": '编辑公司','path': ''}],
+        'monitorDetail': [{"name": '隐患整改详情','path': ''}],
         'none': []
       },
       bread: []

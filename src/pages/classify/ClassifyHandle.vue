@@ -24,8 +24,8 @@
       <el-form-item label="二级子项" prop="position_detail_name" v-if="position == 'small'">
         <el-input v-model="classForm.position_detail_name"></el-input>
       </el-form-item>
-      <el-form-item label="三级子项" prop="position_detail_sname" v-if="position == 'small'">
-        <el-input v-model="classForm.position_detail_sname"></el-input>
+      <el-form-item label="三级子项" prop="position_three_name" v-if="position == 'three'">
+        <el-input v-model="classForm.position_three_name"></el-input>
       </el-form-item>
       <el-form-item class="margin-top-30">
         <el-button type="primary" @click="submitForm('classForm')">确定</el-button>
@@ -60,10 +60,10 @@ export default {
             { required: true, message: '请输入标题', trigger: 'blur' }
           ],
           position_detail_name: [
-            { required: true, message: '请输入二级编码', trigger: 'blur' }
+            { required: true, message: '请输入二级子项', trigger: 'blur' }
           ],
-          position_detail_sname: [
-            { required: true, message: '请输入三级编码', trigger: 'blur' }
+          position_three_name: [
+            { required: true, message: '请输入三级子项', trigger: 'blur' }
           ]
         }
       };
@@ -78,6 +78,7 @@ export default {
       const route = this.$route;
       this.classForm.company_id = route.query && route.query.companyId;
       this.classForm.position_id = route.query && route.query.positionId;
+      this.classForm.detailId = route.query && route.query.detailId;
 
       this.init();
     },
@@ -153,11 +154,10 @@ export default {
                         this.loading = false;
                     });
                 }
-            } else {  // 小分类
+            } else if (this.position == 'small') {  // 二级子项
                 let params = {
                     position_id: this.classForm.position_id,
-                    position_detail_name: this.classForm.position_detail_name,
-                    position_detail_sname: this.classForm.position_detail_sname
+                    position_detail_name: this.classForm.position_detail_name
                 }
 
                 if (this.type == 'add') { // 新增
@@ -175,6 +175,37 @@ export default {
                     params.position_id = this.classForm.position_id;
                     params.position_detail_id = this.classForm.position_detail_id;
                     Http.uploadPositionDetail(params).then(res => {
+                        this.loading = false;
+                        this.$handleResponse(res, res => {
+                        this.$message.success('修改成功');
+                        this.handleClose();
+                        this.reload();
+                        })
+                    }).catch(err => {
+                        this.loading = false;
+                    });
+                }
+            } else {   // 三级子项
+                let params = {
+                    position_detail_id: this.classForm.detailId,
+                    position_three_name: this.classForm.position_three_name
+                }
+
+                if (this.type == 'add') { // 新增
+                    Http.addThree(params).then(res => {
+                        this.loading = false;
+                        this.$handleResponse(res, res => {
+                            this.$message.success('新增成功');
+                            this.handleClose();
+                            this.reload();
+                        })
+                    }).catch(err => {
+                        this.loading = false;
+                    });
+                } else { // 修改
+                    params.position_detail_id = this.classForm.position_detail_id;
+                    params.position_three_id = this.classForm.position_three_id;
+                    Http.updateThree(params).then(res => {
                         this.loading = false;
                         this.$handleResponse(res, res => {
                         this.$message.success('修改成功');

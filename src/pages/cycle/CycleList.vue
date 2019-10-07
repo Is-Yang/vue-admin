@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="margin-bottom-20 text-right">
-      <el-button type="primary" size="small" @click="dialog.show = true">发送消息</el-button>
+      <el-button type="primary" size="small" @click="dialog.show = true">创建周期</el-button>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column prop="message_from" label="消息发送者"></el-table-column>
@@ -22,21 +22,21 @@
       layout="total, sizes, prev, pager, next, jumper"></el-pagination>
     
     <!-- 发送应急消息 -->
-    <message-handle
+    <cycle-handle
       v-if="dialog.show"
       :pageType = '2'
       @cancel="dialog.show = !dialog.show"
       @success="dialogSuccess">
-    </message-handle>
+    </cycle-handle>
   </div>
 </template>
 
 <script>
 import * as Http from "@/api/home";
-import MessageHandle from './MessageHandle';
+import CycleHandle from './CycleHandle';
 export default {
   components: {
-    MessageHandle
+    CycleHandle
   },
   inject: ["reload"],
   data() {

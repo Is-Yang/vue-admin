@@ -43,6 +43,9 @@ import {
     PersonList,
     PersonHandle
 } from '../pages/emerg'
+import {
+    CycleList
+} from '../pages/cycle'
 
 export default [{
     path: '/',
@@ -221,7 +224,10 @@ export default [{
         }, {
             path: 'details',
             component: MonitoringDetails,
-            name: '隐患整改详情'
+            name: '隐患整改详情',
+            meta: {
+                specialModule: true
+            }
         }
     ]
 }, {
@@ -230,7 +236,7 @@ export default [{
     children: [{
             path: 'big',
             component: ClassifyList,
-            name: '大分类列表',
+            name: '风险点',
             meta: {
                 specialModule: true
             }
@@ -238,7 +244,15 @@ export default [{
         {
             path: 'small',
             component: ClassifyList,
-            name: '小分类列表',
+            name: '二级子项列表',
+            meta: {
+                specialModule: true
+            }
+        },
+        {
+            path: 'three',
+            component: ClassifyList,
+            name: '三级子项列表',
             meta: {
                 specialModule: true
             }
@@ -250,6 +264,10 @@ export default [{
             path: 'taskPoint',
             component: CompanyPoint,
             name: '风险点任务创建'
+        }, {
+            path: 'cycle',
+            component: CycleList,
+            name: '管控周期'
         }
     ]
 }]

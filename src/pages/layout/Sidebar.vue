@@ -24,7 +24,7 @@
           <span slot="title">隐患上报</span>
         </el-menu-item>
 
-        <el-menu-item @click="showInfoDialog()">
+        <el-menu-item index="" @click="showInfoDialog()">
           <span slot="title">企业资料</span>
         </el-menu-item>
       </el-submenu>
@@ -91,6 +91,10 @@
         <el-menu-item index="/classify/taskPoint">
           <span slot="title">风险点任务创建</span>
         </el-menu-item>
+        <!-- <el-menu-item index="/classify/cycle">
+          <span slot="title">管控周期</span>
+        </el-menu-item> -->
+
       </el-submenu>
 
       <!-- <el-submenu index="/monitoring" v-if="level == 1 || level == 2">

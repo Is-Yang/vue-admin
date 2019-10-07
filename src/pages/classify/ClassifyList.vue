@@ -9,9 +9,16 @@
             <el-form-item v-if="tableType === 1" label="风险点名称：">
               <el-input v-model="searchInfo.keyword" placeholder="请输入风险点名称"></el-input>
             </el-form-item>
-            <el-form-item v-if="tableType === 2" label="内容关键字：">
+            <el-form-item v-else label="内容关键字：">
               <el-input v-model="searchInfo.keyword" placeholder="请输入搜索内容"></el-input>
             </el-form-item>
+            <!-- <el-form-item v-if="tableType === 3" label="三级子项搜索">
+              <el-select v-model="searchInfo.position_three_id" placeholder="请选择" filterable>
+                <el-option v-for="item in positionThreeList" :key="item.position_three_id"
+                  :label="item.position_three_name" :value="item.position_three_id">
+                </el-option>
+              </el-select>
+            </el-form-item> -->
             <el-form-item>
               <el-button
                 type="primary"
@@ -28,6 +35,7 @@
         <el-col :span="4" class="text-right">
           <el-button v-if="tableType === 1" type="primary" size="small" @click="dialogShow('add', {}, 'big')">创建风险点</el-button>
           <el-button v-if="tableType === 2" type="primary" size="small" @click="dialogShow('add', {}, 'small')">创建二级子项</el-button>
+          <el-button v-if="tableType === 3" type="primary" size="small" @click="dialogShow('add', {}, 'three')">创建三级子项</el-button>
         </el-col>
       </el-row>
 
@@ -58,13 +66,29 @@
 
       <el-table v-if="tableType === 2" v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
         <!-- <el-table-column prop="position_name" label="一级编码"></el-table-column> -->
-        <el-table-column prop="position_detail_name" label="二级子项"></el-table-column>
-        <el-table-column prop="position_detail_sname" label="三级子项"></el-table-column>
+        <el-table-column label="二级子项" >
+          <template slot-scope="scope">
+            <router-link :to="{ path: '/classify/three', query: {detailId: scope.row.position_detail_id, brea_name: scope.row.position_detail_name}}" class="a-link">{{scope.row.position_detail_name}}</router-link>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column prop="position_three_name" label="三级子项"></el-table-column> -->
         <el-table-column label="操作" width="180px">
           <template slot-scope="scope">
             <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row, 'small')"
               title="编辑"></el-button>
             <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row.position_detail_id, 'position_detail_id')"
+              title="删除"></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <el-table v-if="tableType === 3" v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
+        <el-table-column prop="position_three_name" label="三级子项"></el-table-column>
+        <el-table-column label="操作" width="180px">
+          <template slot-scope="scope">
+            <el-button size="mini" type="primary" plain icon="el-icon-edit" @click="dialogShow('edit', scope.row, 'three')"
+              title="编辑"></el-button>
+            <el-button size="mini" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row.position_three_id, 'position_three_id')"
               title="删除"></el-button>
           </template>
         </el-table-column>
@@ -116,6 +140,7 @@ export default {
       searchInfo: {},
       companyId: '',
       positionId: '',
+      detailId: '',
       pointType: '',
       page: {
         current: 1,
@@ -130,7 +155,8 @@ export default {
       },
       dialogVisible: false,
       qrVal: '',
-      customBread: []
+      customBread: [],
+      positionThreeList: [],
     };
   },
   created() {
@@ -138,7 +164,8 @@ export default {
 
     const route = this.$route;
     this.companyId = route.query && route.query.companyId;
-    this.positionId = route.query && route.query.positionId;
+    this.positionId = route.query && route.query.positionId ;
+    this.detailId = route.query && route.query.detailId;
     this.pointType = route.query && route.query.pointType;  // pointType = 1 -- 风险点创建 pointType = 2 -- 风险点任务创建
 
     // 根据当前路由，对应不同分类数据
@@ -146,7 +173,10 @@ export default {
         this.tableType = 1;
     } else if (route.path === '/classify/small') {
         this.tableType = 2;
-    } 
+    } else if (route.path === '/classify/three') {
+        this.tableType = 3;
+        this.getPositionThreeList(this.detailId);
+    }
 
     this.customBread.push({
       'name': route.query && route.query.brea_name
@@ -155,6 +185,20 @@ export default {
     this.getListData();
   },
   methods: {
+    getPositionThreeList(position_detail_id) {
+      Http.mGetThree(
+        {
+          page: 0,
+          position_detail_id: position_detail_id
+        }
+      ).then(res => {
+        this.$handleResponse(res, res => {
+          if (res) {
+            this.positionThreeList = res.data;
+          }
+        });
+      }).catch(err => {});
+    },
     // 导出
     exportFn(data) {
         this.loading = true;
@@ -186,9 +230,10 @@ export default {
         page: this.page.current,
         key: this.searchInfo.keyword,
       }
-      let queryDataName = this.tableType === 1 ? 'getMCompanyPostionList': 
-                          this.tableType === 2 ? 'getMPosPostionDetailList' : '';
-      this.tableType === 1 ? params.company_id = this.companyId : params.position_id = this.positionId;
+      let queryDataName = this.tableType == 1 ? 'getMCompanyPostionList': 
+                          this.tableType == 2 ? 'getMPosPostionDetailList' : 'mGetThree';
+      this.tableType == 1 ? params.company_id = this.companyId : 
+      this.tableType == 2 ?  params.position_id = this.positionId : params.position_detail_id = this.detailId;
       
       if (queryDataName) {
         Http[queryDataName](params)
@@ -225,7 +270,7 @@ export default {
     doDelete(id, type) {
         this.loading = true;
         let queryDataName = this.tableType === 1 ? 'delPosition': 
-                          this.tableType === 2 ? 'delPositionDetail' : '';
+                          this.tableType === 2 ? 'delPositionDetail' : 'deleteThree';
         if (queryDataName) {
             let params = {};
             params[type] = id;

@@ -364,68 +364,6 @@ export default {
             }
         }
      }
-     .monitoring-table {
-         border-top: 1px solid #ebeef5;
-         border-left: 1px solid #ebeef5;
-
-        .table-body {
-            ul:hover {
-                background-color: #f5f7fa;
-            }
-            a:hover {
-                color: #1494EB;
-            }
-        }   
-
-         ul {
-             display: flex;
-
-             &.table-head {
-                 background-color: #f5f7fa;
-
-                 li {
-                     &::after {
-                        content: "";
-                        height: 2px;
-                        position: absolute;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
-                        z-index: 1;
-                    }
-
-                    &:nth-child(2)::after {
-                        background-color: rgb(253, 107, 107);
-                    }
-                    &:nth-child(3)::after {
-                        background-color: rgb(253, 181, 130);
-                    }
-                    &:nth-child(4)::after {
-                        background-color: rgb(255, 213, 85);
-                    }
-                    &:nth-child(5)::after {
-                        background-color: rgb(20, 148, 235);
-                    }
-                 }
-             }
-             
-             li {
-                width: 20%;
-                height: 45px;
-                line-height: 45px;
-                border-right: 1px solid #ebeef5;
-                border-bottom: 1px solid #ebeef5;
-                text-align: center;
-                position: relative;
-            }
-
-            &.txt-danger {
-                li {
-                    color: #F56C6C;
-                }
-            }
-         }
-     }
 
     .bottom-legend {
         position: absolute;

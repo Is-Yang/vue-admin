@@ -9,20 +9,21 @@
       <el-form-item label="消息发送者" prop="message_from">
         <el-input v-model="messageForm.message_from"></el-input>
       </el-form-item>
-      <el-form-item v-if="pageType == 1" label="发送对象：">
+      <el-form-item label="发送对象：">
         <el-radio v-model="sendType" label="1">群发</el-radio>
         <el-radio v-model="sendType" label="2">单独发</el-radio>
-        <el-select v-if="sendType == 2" v-model="messageForm.company_id" filterable placeholder="请选择发送企业" size="medium">
+        <br />
+        <el-select style="width: 100%;" v-if="sendType == 2" v-model="messageForm.company_id" filterable placeholder="请选择发送企业" size="medium">
           <el-option v-for="(item, index) in companyList" :key="index" :label="item.company_name" :value="item.company_id">
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item prop="message_from" v-if="pageType == 2" label="发送对象：">
+      <!-- <el-form-item prop="message_from" label="发送对象：">
           <el-select v-model="messageForm.company_id" filterable placeholder="请选择发送企业" size="medium">
             <el-option v-for="(item, index) in companyList" :key="index" :label="item.company_name" :value="item.company_id">
             </el-option>
           </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="区域：" v-if="pageType == 2">
       <el-select v-model="messageForm.manager_index" placeholder="请选择区域" size="medium">
         <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index">
@@ -110,7 +111,7 @@ export default {
             { required: true, message: '请输入消息内容', trigger: 'blur' }
           ],
           message_from: [
-            { required: true, message: '请输入发送对象', trigger: 'blur' }
+            { required: true, message: '请输入发送者', trigger: 'blur' }
           ]
         }
       };
@@ -182,9 +183,10 @@ export default {
                 message_title: message_title,
                 message_content: message_content,
                 message_from: message_from,
+                company_id: company_id,
                 company_type: company_type,
                 file_url: file_url,
-                message_to: this.sendType == '1' ? -1 : company_id
+                // message_to: this.sendType == '1' ? -1 : company_id
             }
             // pageType 1:政府端， 2:平台端
             let queryName = 'sendMessage';

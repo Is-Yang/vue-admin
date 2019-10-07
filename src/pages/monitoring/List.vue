@@ -11,25 +11,35 @@
       </el-alert>
     </div>
     <el-row type="flex">
-      <el-col :span="20">
+      <el-col :span="24">
         <el-form :inline="true" :model="searchInfo" size="small">
           <el-form-item label="风险点名称">
             <el-input v-model="searchInfo.keyword" placeholder="请输入关键字"></el-input>
           </el-form-item>
-          <el-form-item label="二级子项">
+          <el-form-item label="一级子项">
             <el-select v-model="searchInfo.position_id" placeholder="请选择">
               <el-option v-for="item in positionList" :key="item.position_id" :label="item.position_name"
                 :value="item.position_id">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="三级子项">
-            <el-select v-model="searchInfo.position_detail_id" placeholder="请选择">
+          <el-form-item label="二级子项">
+            <el-select v-model="searchInfo.position_detail_id" placeholder="请选择"
+              @change="changePostion">
               <el-option v-for="item in positionDetailList" :key="item.position_detail_id"
                 :label="item.position_detail_sname" :value="item.position_detail_id">
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="三级子项">
+            <el-select v-model="searchInfo.position_three_id" placeholder="请选择"
+              @change="changeThree">
+              <el-option v-for="item in positionThreeList" :key="item.position_three_id"
+                :label="item.position_three_name" :value="item.position_three_id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
           <el-form-item>
             <el-button
               type="primary"
@@ -96,7 +106,8 @@ export default {
       companyInfo: {},
       searchInfo: {},
       positionList: [],
-      positionDetailList: []
+      positionDetailList: [],
+      positionThreeList: []
     };
   },
   created() {
@@ -122,6 +133,28 @@ export default {
     this.getListData();
   },
   methods: {
+    changePostion() {
+      this.searchInfo.position_three_id = '';
+      this.getPositionThreeList(this.searchInfo.position_detail_id);
+    },
+    changeThree(data) {
+      this.$set(this.searchInfo, 'position_three_id', data);
+      this.$forceUpdate();
+    },
+    getPositionThreeList(position_detail_id) {
+      Http.mGetThree(
+        {
+          page: 0,
+          position_detail_id: position_detail_id
+        }
+      ).then(res => {
+        this.$handleResponse(res, res => {
+          if (res) {
+            this.positionThreeList = res.data;
+          }
+        });
+      }).catch(err => {});
+    },
     getPositionDetailList() {
       Http.getPositionDetailList()
         .then(res => {
@@ -150,19 +183,21 @@ export default {
       let {
         keyword,
         position_id,
-        position_detail_id
+        position_detail_id,
+        position_three_id
       } = this.searchInfo;
       let params = {
         page: this.page.current,
         key: keyword,  // 风险点名称
-        position_id: position_id,  // 二级子项
-        position_detail_id: position_detail_id  // 三级子项
+        position_id: position_id,  // 一级子项
+        position_detail_id: position_detail_id,  // 二级子项
+        position_three_id: position_three_id  // 三级子项
       };
       let queryDataName = this.tableType === 1 ? 'getCheckList': 
                           this.tableType === 2 && !this.companyId ? 'getUCheckList' : 
                           this.tableType === 2 && this.companyId ? 'companyUncheck' : 
                           this.tableType === 3 ? 'companyCheckList' : 
-                          this.tableType === 4 ? 'companyUncheckList' : '';
+                          this.tableType === 4 ? 'companyUncheck' : '';
       this.companyId ? params.company_id = this.companyId : params
       if (queryDataName) {
         Http[queryDataName](params)

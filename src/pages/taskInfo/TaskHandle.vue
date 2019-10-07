@@ -13,22 +13,24 @@
       <el-form-item label="风险点名称" prop="task_name">
         <el-input v-model="taskForm.task_name"></el-input>
       </el-form-item>
-      <!-- <el-form-item label="二级子项">
-        <el-select v-model="taskForm.position_id" placeholder="请选择">
-          <el-option v-for="item in positionList" :key="item.position_id" :label="item.position_name"
-            :value="item.position_id">
-          </el-option>
-        </el-select>
-      </el-form-item> -->
-      <el-form-item label="三级子项">
-        <el-select v-model="taskForm.position_detail_id" placeholder="请选择">
+      <el-form-item label="二级子项">
+        <el-select v-model="taskForm.position_detail_id" placeholder="请选择"
+          @change="changePostion" filterable>
           <el-option v-for="item in positionDetailList" :key="item.position_detail_id"
             :label="item.position_detail_sname" :value="item.position_detail_id">
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="三级子项">
+        <el-select v-model="taskForm.position_three_id" placeholder="请选择" 
+          @change="changeThree" filterable>
+          <el-option v-for="item in positionThreeList" :key="item.position_three_id"
+            :label="item.position_three_name" :value="item.position_three_id">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="员工列表">
-        <el-select v-model="taskForm.user_id" placeholder="请选择">
+        <el-select v-model="taskForm.user_id" placeholder="请选择" filterable>
           <el-option v-for="item in userList" :key="item.user_id" :label="item.name"
             :value="item.user_id">
           </el-option>
@@ -79,8 +81,10 @@
         <el-input v-model="taskForm.risk_evaluate_to_do"></el-input>
       </el-form-item>
       <el-form-item label="管控周期">
-        <el-radio v-model="taskForm.task_check_cycle" label="1">1天1次</el-radio>
-        <el-radio v-model="taskForm.task_check_cycle" label="3">1天3次</el-radio>
+        <!-- <el-radio v-model="taskForm.task_check_cycle" label="1">1天1次</el-radio>
+        <el-radio v-model="taskForm.task_check_cycle" label="3">1天3次</el-radio> -->
+        <el-input-number v-model="taskForm.task_check_cycle" :min="1" controls-position="right" />
+        <p class="tip-txt">*比如：1天一次就填24，3天一次就填72，1天3次就填8。(单位为小时)</p>
       </el-form-item>
       <el-form-item label="所属部门">
         <el-select v-model="taskForm.department_id" placeholder="请选择部门" @change="changeDepart">
@@ -208,6 +212,7 @@
         },
         positionList: [],
         positionDetailList: [],
+        positionThreeList: [],
         companyList: [],
         departmentList: [],
         userList: [],
@@ -231,6 +236,24 @@
       this.init();
     },
     methods: {
+      changePostion() {
+        this.taskForm.position_three_id = '';
+        this.getPositionThreeList(this.taskForm.position_detail_id);
+      },
+      getPositionThreeList(position_detail_id) {
+        Http.mGetThree(
+          {
+            page: 0,
+            position_detail_id: position_detail_id
+          }
+        ).then(res => {
+          this.$handleResponse(res, res => {
+            if (res) {
+              this.positionThreeList = res.data;
+            }
+          });
+        }).catch(err => {});
+      },
       requestCompanyCheckInfo() {
         Http.requestCompanyCheckInfo()
           .then(res => {
@@ -245,6 +268,10 @@
       },
       changeDepart(data) {
         this.$set(this.taskForm, 'department_id', data);
+        this.$forceUpdate();
+      },
+      changeThree(data) {
+        this.$set(this.taskForm, 'position_three_id', data);
         this.$forceUpdate();
       },
       getUserList() {
@@ -323,6 +350,7 @@
         if (this.type == 'edit') {
           this.title = "编辑任务";
           this.loading = true;
+          this.getPositionDetailList();
           setTimeout(() => {
             this.taskForm = Object.assign({}, this.taskParent);
             this.taskForm.risk_for = this.taskParent.task_desc.risk_for;
@@ -346,6 +374,7 @@
             if (obj && obj.departments) {
               this.departmentList = obj.departments;
             }
+            this.getPositionThreeList(this.taskForm.position_detail_id);
             this.loading = false;
           }, 500);
         }
@@ -358,6 +387,7 @@
               task_risk_init_level,
               position_id,
               position_detail_id,
+              position_three_id,
               task_name,
               user_id,
               department_id,
@@ -384,6 +414,7 @@
               task_risk_init_level: task_risk_init_level,
               position_id: position_id,
               position_detail_id: position_detail_id,
+              position_three_id: position_three_id,
               task_name: task_name,
               user_id: user_id,
               department_id: department_id,
@@ -447,6 +478,14 @@
     .el-form-item {
       width: 33%;
       display: inline-block;
+      .tip-txt {
+          line-height: 1.2;
+          position: absolute;
+          margin-top: 10px;
+          font-size: 13px;
+          color: #f56c6c;
+          z-index: 1;
+      }
     }
   }
 

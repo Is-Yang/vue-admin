@@ -6,7 +6,10 @@
       <el-row type="flex">
         <el-col :span="20">
           <el-form :inline="true" :model="searchInfo" size="small">
-              <el-form-item label="公司名称：">
+            <el-form-item label="政府名称：" v-if="pageType == 1">
+              <el-input v-model="searchInfo.keyword" placeholder="请输入政府名称"></el-input>
+            </el-form-item>
+            <el-form-item label="公司名称：" v-else>
               <el-input v-model="searchInfo.keyword" placeholder="请输入公司名称"></el-input>
             </el-form-item>
 
@@ -17,12 +20,12 @@
                 </el-select>
             </el-form-item>
 
-            <el-form-item label="类型：" v-if="pageType == 1">
+            <!-- <el-form-item label="类型：">
               <el-select v-model="searchInfo.company_type" placeholder="请选择类型" size="medium">
                 <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
 
             <el-form-item>
               <el-button

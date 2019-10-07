@@ -6,10 +6,19 @@
       <el-row type="flex">
         <el-col :span="20">
           <el-form :inline="true" :model="searchInfo" size="small">
-            <el-form-item label="三级子项">
-              <el-select v-model="searchInfo.position_detail_id" placeholder="请选择">
+            <el-form-item label="二级子项">
+              <el-select v-model="searchInfo.position_detail_id" placeholder="请选择"
+                @change="changePostion">
                 <el-option v-for="item in positionDetailList" :key="item.position_detail_id"
                   :label="item.position_detail_sname" :value="item.position_detail_id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="三级子项">
+              <el-select v-model="searchInfo.position_three_id" placeholder="请选择"
+                @change="changeThree">
+                <el-option v-for="item in positionThreeList" :key="item.position_three_id"
+                  :label="item.position_three_name" :value="item.position_three_id">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -128,7 +137,10 @@ export default {
       qrVal: '',
       searchInfo: {},
       positionDetailList: [],
-      customBread: []
+      positionThreeList: [],
+      customBread: [],
+      positionId: '',
+      companyId: ''
     };
   },
   created() {
@@ -139,22 +151,44 @@ export default {
     } else if (route.path === '/tasks/company') {
         this.tableType = 2;
     } 
-    let companyId = route.query && route.query.companyId;
-    let positionId = route.query && route.query.positionId;
+    this.companyId = route.query && route.query.companyId;
+    this.positionId = route.query && route.query.positionId;
 
     this.customBread.push({
       'name': route.query && route.query.brea_name
     });
 
-    this.getPositionDetailList(companyId, positionId);
-    this.getListData(companyId, positionId);
+    this.getPositionDetailList();
+    this.getListData();
   },
   methods: {
-    getPositionDetailList(companyId, positionId) {
+    changePostion() {
+      this.searchInfo.position_three_id = '';
+      this.getPositionThreeList(this.searchInfo.position_detail_id);
+    },
+    changeThree(data) {
+      this.$set(this.searchInfo, 'position_three_id', data);
+      this.$forceUpdate();
+    },
+    getPositionThreeList(position_detail_id) {
+      Http.mGetThree(
+        {
+          page: 0,
+          position_detail_id: position_detail_id
+        }
+      ).then(res => {
+        this.$handleResponse(res, res => {
+          if (res) {
+            this.positionThreeList = res.data;
+          }
+        });
+      }).catch(err => {});
+    },
+    getPositionDetailList() {
       Http.getPositionDetailList(
         {
-          company_id: companyId,
-          position_id: positionId
+          company_id: this.companyId,
+          position_id: this.positionId
         }
       ).then(res => {
           this.$handleResponse(res, res => {
@@ -165,7 +199,7 @@ export default {
         })
         .catch(err => {});
     },
-    getListData(companyId, positionId) {
+    getListData() {
       this.loading = true;
       let params = {
         page: this.page.current
@@ -177,9 +211,10 @@ export default {
      
 
       if (this.tableType === 2) {
-        params.company_id = companyId;
-        params.position_id = positionId;
+        params.company_id = this.companyId;
+        params.position_id = this.positionId;
         params.position_detail_id = this.searchInfo.position_detail_id;
+        params.position_three_id = this.searchInfo.position_three_id;
       }
 
       Http[queryDataName](params)
