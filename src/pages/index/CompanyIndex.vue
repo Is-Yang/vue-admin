@@ -316,7 +316,6 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss">
  .company-index {
-    padding: 10px 20px;
      ul {
         list-style: none;
      }

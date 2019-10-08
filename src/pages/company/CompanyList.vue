@@ -48,7 +48,11 @@
         </template>
       </el-table-column>
       <el-table-column v-else prop="company.company_name" label="公司名称"></el-table-column>
-      <el-table-column v-if="propity == 2" prop="company_type_text" label="公司类型" width="130px"></el-table-column>
+      <el-table-column v-if="propity == 2" label="公司类型" width="130px">
+        <template slot-scope="scope">
+          {{scope.row.company_type_text ? scope.row.company_type_text : '其他'}}
+        </template>
+      </el-table-column>
       <el-table-column v-else prop="company.company_type_text" label="公司类型" width="130px"></el-table-column>
       <!-- <el-table-column prop="company_info" label="公司信息" min-width="280"></el-table-column> -->
       <el-table-column prop="area_name" label="区域" min-width="100"></el-table-column>

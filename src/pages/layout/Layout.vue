@@ -9,7 +9,7 @@
       <App-main/>
 
     </div>
-    <Footer />
+    <!-- <Footer /> -->
 
     <EnterpriseInfo v-if="dialog.infoShow"
             :infoData="dialog.infoData"   

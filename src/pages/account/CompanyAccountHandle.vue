@@ -14,7 +14,7 @@
           style="width: 420px">
           <el-form-item label="所属区域：" v-if="pageType != 3">
             <el-select v-model="account.manager_index" placeholder="请选择区域" size="medium">
-              <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index">
+              <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index" :disabled="item.area_name == '巴中市' ? true :false">
               </el-option>
             </el-select>
           </el-form-item>

@@ -2,8 +2,8 @@
     <el-dialog :title="title" :visible.sync="dialogShow" width="1100px" :before-close="handleClose">
         <el-table :data="gridData" v-loading="loading" border tooltip-effect="dark">
             <el-table-column property="task_name" label="风险点名称"></el-table-column>
-            <el-table-column property="position_name" label="二级子项"></el-table-column>
-            <el-table-column property="position_detail_name" label="三级子项"></el-table-column>
+            <el-table-column property="position_detail_name" label="二级子项"></el-table-column>
+            <el-table-column property="position_detail_sname" label="三级子项"></el-table-column>
             <el-table-column property="task_desc.risk_desc" label="风险描述"></el-table-column>
             <el-table-column property="task_desc.risk_result" label="导致后果"></el-table-column>
             <el-table-column property="task_desc.risk_to_do" label="管控措施"></el-table-column>

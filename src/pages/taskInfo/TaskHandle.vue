@@ -43,10 +43,6 @@
         <el-input v-model="taskForm.risk_result"></el-input>
       </el-form-item>
       
-      <el-form-item label="风险评估" prop="risk_for">
-        <el-input v-model="taskForm.risk_for"></el-input>
-      </el-form-item>
-      
       <!-- <el-form-item label="风险级别" prop="risk_level">
         <el-input v-model="taskForm.risk_level"></el-input>
       </el-form-item> -->
@@ -86,6 +82,10 @@
         <el-input-number v-model="taskForm.task_check_cycle" :min="1" controls-position="right" />
         <p class="tip-txt">*比如：1天一次就填24，3天一次就填72，1天3次就填8。(单位为小时)</p>
       </el-form-item>
+      <el-form-item label="管控周期文字">
+        <el-input v-model="taskForm.risk_for"></el-input>
+        <p class="tip-txt">*比如：1天1次，1周1次</p>
+      </el-form-item>
       <el-form-item label="所属部门">
         <el-select v-model="taskForm.department_id" placeholder="请选择部门" @change="changeDepart">
           <el-option v-for="item in departmentList" :key="item.department_id" :label="item.department_name"
@@ -102,8 +102,8 @@
       <el-form-item label="风险分类" prop="risk_type">
         <el-input v-model="taskForm.risk_type"></el-input>
       </el-form-item> -->
-      
-      <el-form-item>
+      <br />
+      <el-form-item class="margin-top-20">
         <el-button type="primary" @click="submitForm('taskForm')">确定</el-button>
         <el-button @click="resetForm('taskForm')">重置</el-button>
       </el-form-item>
