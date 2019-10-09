@@ -10,9 +10,9 @@
           </el-option>
         </el-select>
       </el-form-item> -->
-      <el-form-item label="风险点名称" prop="task_name">
-        <el-input v-model="taskForm.task_name"></el-input>
-      </el-form-item>
+      <!-- <el-form-item label="风险点名称" prop="task_name">
+        <el-input v-model="taskForm.position_name"></el-input>
+      </el-form-item> -->
       <el-form-item label="二级子项">
         <el-select v-model="taskForm.position_detail_id" placeholder="请选择"
           @change="changePostion" filterable>

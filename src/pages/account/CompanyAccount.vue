@@ -58,8 +58,8 @@
             </router-link>
           </template>
         </el-table-column>
-        <!-- <el-table-column prop="government_name" v-if="pageType == 1" label="账号/政府名称"></el-table-column> -->
-        <el-table-column prop="user_name" v-if="pageType == 1" label="账号/政府名称"></el-table-column>
+        <el-table-column prop="user_name" v-if="pageType == 1" label="政府账号"></el-table-column>
+        <el-table-column prop="government_name" v-if="pageType == 1" label="政府名称"></el-table-column>
         <el-table-column prop="company.company_name" label="公司名称" v-if="pageType != 1"></el-table-column>
         <el-table-column prop="user_name" label="企业账号" v-if="pageType != 1"></el-table-column>
         <!-- <el-table-column prop="area_name" label="区域" v-if="pageType != 1"></el-table-column>

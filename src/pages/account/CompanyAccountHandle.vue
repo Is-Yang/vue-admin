@@ -18,8 +18,11 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item prop="user_name" :label="pageType == 1 ? '政府名称：' : '账号/企业名称：'">
-            <el-input type="text" v-model.trim="account.user_name" :placeholder="pageType == 1 ? '请输入政府名称' : '请输入账号/企业名称'"></el-input>
+          <el-form-item prop="user_name" :label="pageType == 1 ? '政府账号：' : '账号/企业名称：'">
+            <el-input type="text" v-model.trim="account.user_name" :placeholder="pageType == 1 ? '请输入政府账号' : '请输入账号/企业名称'"></el-input>
+          </el-form-item>
+          <el-form-item prop="government_name" v-if="pageType == 1" label="政府名称：">
+            <el-input type="text" v-model.trim="account.government_name" placeholder="请输入政府名称"></el-input>
           </el-form-item>
           <el-form-item prop="pwd" label="密码：">
             <el-input type="password" v-model.trim="account.pwd" placeholder="请输入密码"></el-input>
@@ -79,9 +82,9 @@
         companyId: '',
         paramsId: '',
         rules: {
-          user_name: [{required: true, message: '用户名称不能为空', trigger: 'blur'}],
+          user_name: [{required: true, message: '账号名称不能为空', trigger: 'blur'}],
           pwd: [{required: true, message: '密码不能为空', trigger: 'blur'}],
-          // company_id: [{ required: true, message: '请选择所属公司', trigger: 'change' }],
+          government_name: [{ required: true, message: '请输入政府名称', trigger: 'blur' }],
           // manager_index: [{ required: true, message: '请选择管理地区', trigger: 'change' }]
         },
       }
@@ -140,14 +143,14 @@
           })
       },
       getSelectInfo() {
-          Http.getSelectInfo().then(res => {
-            this.$handleResponse(res, res => {
-              if (res.areas) {
-                this.areaInfo = res.areas;
-                this.companyList = res.companies;
-              }
-            });
-          })
+          // Http.getSelectInfo().then(res => {
+          //   this.$handleResponse(res, res => {
+          //     if (res.areas) {
+          //       this.areaInfo = res.areas;
+          //       this.companyList = res.companies;
+          //     }
+          //   });
+          // })
       },
       onSubmit(formName) {
         this.$refs[formName].validate((valid) => {
@@ -157,7 +160,9 @@
               user_name,
               pwd,
               company_id,
-              can_be_login
+              can_be_login,
+              government_name,
+              manager_index
             } = this.account;
 
 
@@ -165,9 +170,10 @@
                 user_name: user_name,
                 pwd: this.account.pwdCopy != this.account.pwd ? md5(pwd) : pwd,
                 propity: this.pageType,
-                manager_index: this.areaInfo.manager_index,
+                manager_index: manager_index,
                 company_id:  this.companyId ? this.companyId : company_id,
-                can_be_login: can_be_login
+                can_be_login: can_be_login,
+                government_name: government_name
             }
 
             if (!this.paramsId) { // 新增

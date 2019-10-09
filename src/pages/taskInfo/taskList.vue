@@ -8,6 +8,7 @@
           <el-form :inline="true" :model="searchInfo" size="small">
             <el-form-item label="二级子项">
               <el-select v-model="searchInfo.position_detail_id" placeholder="请选择"
+                filterable
                 @change="changePostion">
                 <el-option v-for="item in positionDetailList" :key="item.position_detail_id"
                   :label="item.position_detail_sname" :value="item.position_detail_id">
@@ -16,6 +17,7 @@
             </el-form-item>
             <el-form-item label="三级子项">
               <el-select v-model="searchInfo.position_three_id" placeholder="请选择"
+                filterable
                 @change="changeThree">
                 <el-option v-for="item in positionThreeList" :key="item.position_three_id"
                   :label="item.position_three_name" :value="item.position_three_id">
@@ -41,9 +43,9 @@
       </el-row>
       <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
         <!-- <el-table-column prop="company_name" label="公司名称" width="150px"></el-table-column> -->
-        <el-table-column prop="task_name" label="风险点名称"></el-table-column>
+        <el-table-column prop="position_name" label="风险点名称"></el-table-column>
         <el-table-column prop="position_detail_name" label="二级子项"></el-table-column>
-        <el-table-column prop="position_detail_sname" label="三级子项"></el-table-column>
+        <el-table-column prop="position_three_name" label="三级子项"></el-table-column>
         <!-- <el-table-column prop="task_status_text" label="任务状态"></el-table-column> -->
         <!-- <el-table-column prop="task_risk_level_text" label="隐患等级"></el-table-column> -->
         <el-table-column prop="task_desc.risk_desc" label="风险描述"></el-table-column>
