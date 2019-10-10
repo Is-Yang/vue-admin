@@ -1,14 +1,15 @@
 <template>
-    <el-dialog :title="title" :visible.sync="dialogShow" width="1100px" :before-close="handleClose">
+    <el-dialog :title="title" :visible.sync="dialogShow" width="1200px" :before-close="handleClose">
         <el-table :data="gridData" v-loading="loading" border tooltip-effect="dark">
-            <el-table-column property="position_name" label="风险点名称"></el-table-column>
-            <el-table-column property="position_detail_name" label="二级子项"></el-table-column>
-            <el-table-column property="position_three_name" label="三级子项"></el-table-column>
-            <el-table-column property="task_desc.risk_desc" label="风险描述"></el-table-column>
-            <el-table-column property="task_desc.risk_result" label="导致后果"></el-table-column>
-            <el-table-column property="task_desc.risk_to_do" label="管控措施"></el-table-column>
-            <el-table-column property="task_desc.row" label="法规依据"></el-table-column>
-            <el-table-column property="task_check_cycle" label="管控周期"></el-table-column>
+            <el-table-column prop="position_name" label="风险点名称" width="110px"></el-table-column>
+            <el-table-column prop="position_detail_name" label="二级子项" width="80px"></el-table-column>
+            <el-table-column prop="position_three_name" label="三级子项" width="80px"></el-table-column>
+            <el-table-column prop="task_desc.risk_desc" label="风险描述" width="120px"></el-table-column>
+            <el-table-column prop="task_desc.risk_result" label="导致后果" width="120px"></el-table-column>
+            <el-table-column prop="task_desc.risk_to_do" label="管控措施" width="110px"></el-table-column>
+            <el-table-column prop="task_desc.row" label="法规依据"></el-table-column>
+            <el-table-column prop="task_check_cycle" label="管控周期" width="80px"></el-table-column>
+            <el-table-column prop="task_check_cycle_text" label="管控周期" width="90px"></el-table-column>
         </el-table>
 
         <!-- 分页 -->

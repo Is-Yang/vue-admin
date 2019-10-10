@@ -1,10 +1,10 @@
 <template>
     <el-dialog :title="title" :visible.sync="dialogShow" width="1100px" :before-close="handleClose">
         <el-table :data="gridData" v-loading="loading" border tooltip-effect="dark">
-            <el-table-column property="check_time" label="检查次数" width="80px"></el-table-column>
-            <el-table-column property="name" label="姓名" width="150px"></el-table-column>
-            <el-table-column property="position_name" label="位置"></el-table-column>
-            <el-table-column property="task_check_cycle" label="检查周期" width="120px"></el-table-column>
+            <el-table-column prop="check_time" label="检查次数" width="80px"></el-table-column>
+            <el-table-column prop="name" label="姓名" width="150px"></el-table-column>
+            <el-table-column prop="position_name" label="位置" width="110px"></el-table-column>
+            <el-table-column prop="task_check_cycle" label="检查周期" width="110px"></el-table-column>
             <el-table-column label="图片" width="120px">
                 <template slot-scope="scope">
                     <a :href="scope.row.task_img_forsure" target="_blank">
@@ -12,8 +12,8 @@
                     </a>
                 </template>
             </el-table-column>
-            <el-table-column property="task_input_forsure" label="检查提交"></el-table-column>
-            <el-table-column property="risk_desc" label="任务说明"></el-table-column>
+            <el-table-column prop="task_input_forsure" label="检查提交" width="120px"></el-table-column>
+            <el-table-column prop="risk_desc" label="任务说明"></el-table-column>
         </el-table>
 
         <!-- 分页 -->

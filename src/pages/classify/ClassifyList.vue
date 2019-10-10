@@ -113,9 +113,9 @@
     <el-dialog
       title="二维码"
       :visible.sync="dialogVisible"
-      width="400px">
+      width="300px">
         <div class="text-center">
-          <vue-qr :text="qrVal" :margin="0"></vue-qr>
+          <vue-qr :text="qrVal" :margin="0" :size="180" :dotScale="1"></vue-qr>
         </div>
     </el-dialog>
   </div>

@@ -9,7 +9,7 @@
       @select="handleSelect" 
       @open="handleOpen"
       @close="handleClose" >
-      <el-menu-item v-if="level == 1 || level == 3" :index="level == 1 ? '/index' : '/companyIndex'">
+      <el-menu-item v-if="level == 1 || level == 3" :index="level == 3 ? '/companyIndex' : userInfo.userName == '巴中市test' ? '/araeIndex' : '/index'">
         <i class="fa fa-home"></i> 
         <span slot="title">首页</span>
       </el-menu-item>

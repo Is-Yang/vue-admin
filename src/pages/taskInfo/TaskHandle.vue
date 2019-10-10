@@ -17,7 +17,7 @@
         <el-select v-model="taskForm.position_detail_id" placeholder="请选择"
           @change="changePostion" filterable>
           <el-option v-for="item in positionDetailList" :key="item.position_detail_id"
-            :label="item.position_detail_sname" :value="item.position_detail_id">
+            :label="item.position_detail_name" :value="item.position_detail_id">
           </el-option>
         </el-select>
       </el-form-item>
