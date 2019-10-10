@@ -47,9 +47,10 @@
         <el-input v-model="taskForm.risk_level"></el-input>
       </el-form-item> -->
       <el-form-item label="风险级别" prop="risk_level">
-        <el-select v-model="taskForm.risk_level" placeholder="请选择">
+        <el-select v-model="taskForm.risk_level" placeholder="请选择" filterable 
+          @change="changeRiskLevel">
           <el-option v-for="item in riskLevel" :key="item.value" :label="item.label"
-            :value="item.value">
+            :value="item.label">
           </el-option>
         </el-select>
       </el-form-item>
@@ -79,12 +80,12 @@
       <el-form-item label="管控周期">
         <!-- <el-radio v-model="taskForm.task_check_cycle" label="1">1天1次</el-radio>
         <el-radio v-model="taskForm.task_check_cycle" label="3">1天3次</el-radio> -->
-        <el-input-number v-model="taskForm.task_check_cycle" :min="1" controls-position="right" />
+        <el-input-number v-model="taskForm.task_check_cycle" :min="1" controls-position="right" @change="checkCycleChange" />
         <p class="tip-txt">*比如：1天一次就填24，3天一次就填72，1天3次就填8。(单位为小时)</p>
       </el-form-item>
       <el-form-item label="管控周期文字">
-        <el-input v-model="taskForm.risk_for"></el-input>
-        <p class="tip-txt">*比如：1天1次，1周1次</p>
+        <el-input v-model="taskForm.task_check_cycle_text" disabled></el-input>
+        <!-- <p class="tip-txt">*比如：1天1次，1周1次</p> -->
       </el-form-item>
       <el-form-item label="所属部门">
         <el-select v-model="taskForm.department_id" placeholder="请选择部门" @change="changeDepart">
@@ -122,7 +123,6 @@
         title: "创建任务",
         dialogShow: true,
         loading: false,
-        taskForm: {},
         riskLevel: [
           {
             label: '低风险',
@@ -138,6 +138,9 @@
             value: 3
           }
         ],
+        taskForm: {
+          risk_level: ''
+        },
         rules: {
           task_risk_init_level: [{
             required: true,
@@ -196,8 +199,8 @@
           }],
           risk_level: [{
             required: true,
-            message: '请输入选择等级',
-            trigger: 'blur'
+            message: '请选择风险等级',
+            trigger: 'change'
           }],
           company_id: [{
             required: true,
@@ -236,6 +239,21 @@
       this.init();
     },
     methods: {
+      checkCycleChange(task_check_cycle) {
+        if(task_check_cycle < 24){
+            if(task_check_cycle != 0) {
+                this.taskForm.task_check_cycle_text = "1天" + 24.0 / task_check_cycle +"次";
+            } else {
+                this.taskForm.task_check_cycle_text = "未设置";
+            }
+        } else {
+            this.taskForm.task_check_cycle_text = task_check_cycle / 24.0 + "天1次";
+        }
+      },
+      changeRiskLevel(val) {
+        this.$set(this.taskForm, 'risk_level', val);
+        this.$forceUpdate();
+      },
       changePostion() {
         this.taskForm.position_three_id = '';
         this.getPositionThreeList(this.taskForm.position_detail_id);
@@ -353,7 +371,7 @@
           this.getPositionDetailList();
           setTimeout(() => {
             this.taskForm = Object.assign({}, this.taskParent);
-            this.taskForm.risk_for = this.taskParent.task_desc.risk_for;
+            this.taskForm.task_check_cycle_text = this.taskParent.task_check_cycle_text;
             this.taskForm.risk_desc = this.taskParent.task_desc.risk_desc;
             this.taskForm.risk_to_do = this.taskParent.task_desc.risk_to_do;
             this.taskForm.risk_type = this.taskParent.task_desc.risk_type;
@@ -384,7 +402,7 @@
           if (valid) {
             this.loading = true;
             let {
-              task_risk_init_level,
+              // task_risk_init_level,
               position_id,
               position_detail_id,
               position_three_id,
@@ -394,7 +412,7 @@
               company_id,
               task_deadline_text,
               task_check_cycle,
-              risk_for,
+              task_check_cycle_text,
               risk_desc,
               risk_to_do,
               risk_type,
@@ -411,7 +429,7 @@
             let task_deadline = moment(task_deadline_text).hours(23).minutes(59).seconds(59).valueOf();
 
             let params = {
-              task_risk_init_level: task_risk_init_level,
+              // task_risk_init_level: task_risk_init_level,
               position_id: position_id,
               position_detail_id: position_detail_id,
               position_three_id: position_three_id,
@@ -421,7 +439,7 @@
               company_id: company_id,
               task_deadline: parseInt(task_deadline/1000),
               task_check_cycle: task_check_cycle,
-              risk_for: risk_for,
+              task_check_cycle_text: task_check_cycle_text,
               risk_desc: risk_desc,
               risk_to_do: risk_to_do,
               risk_type: risk_type,

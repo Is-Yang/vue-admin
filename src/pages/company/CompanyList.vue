@@ -44,7 +44,7 @@
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column v-if="propity == 2" label="公司名称" min-width="300">
         <template slot-scope="scope">
-          <a class="a-link" href="javascript:;" @click="companyOperate(scope.row.company_id, scope.row.company_name)">{{scope.row.company_name}}</a>
+          <a class="a-link" href="javascript:;" @click="companyOperate(scope.row.company_id, scope.row.company_name, scope.row.manager_index)">{{scope.row.company_name}}</a>
         </template>
       </el-table-column>
       <el-table-column v-else prop="company.company_name" label="公司名称"></el-table-column>
@@ -249,7 +249,7 @@ export default {
         manager_index: manager_index,
         key: keyword
       };
-      let queryName = this.propity == 1 ? 'getMGovAccountList' : 'getCompanyList';
+      let queryName = this.propity == 1 ? 'getCompanyAccount' : 'getCompanyList';
       Http[queryName](params)
         .then(res => {
           this.loading = false;
@@ -269,9 +269,10 @@ export default {
             })
         })
     },
-    companyOperate(company_id, company_name) {
+    companyOperate(company_id, company_name, manager_index) {
       this.dialog.companyId = company_id;
       this.dialog.companyName = company_name;
+      this.dialog.manager_index = manager_index;
       this.dialog.selectShow = true;
     },
     editFn(data){ 
@@ -336,6 +337,7 @@ export default {
           path: this.selectVal,
           query: {
             companyId: this.dialog.companyId,
+            manager_index: this.dialog.manager_index,
             brea_name: this.dialog.companyName
           }
       })

@@ -12,7 +12,7 @@
           label-width="150px"
           size="medium"
           style="width: 420px">
-          <el-form-item label="所属区域：" v-if="pageType != 3">
+          <el-form-item label="所属区域：" v-if="pageType == 1">
             <el-select v-model="account.manager_index" placeholder="请选择区域" size="medium">
               <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index" :disabled="item.area_name == '巴中市' ? true :false">
               </el-option>
@@ -202,12 +202,21 @@
         })
       },
       handleClose() {
-        this.$router.push({
-          path: this.pageType == 3 ? '../account/company' : '../account/government',
-          // query: {
-          //   companyId: this.companyId
-          // }
-        });
+        if (this.pageType == 3) {
+          this.$router.push({
+            path: '../account/company',
+            query: {
+              companyId: this.companyId,
+              manager_index: this.$route.query.manager_index,
+              brea_name: this.$route.query.brea_name
+            }
+          });
+        } else {
+          this.$router.push({
+              path: '../account/government'
+          });
+        }
+        
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();

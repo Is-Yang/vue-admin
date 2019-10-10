@@ -63,7 +63,7 @@
         <el-table-column prop="task_desc.row" label="法规依据"></el-table-column>
         <el-table-column prop="task_desc.risk_evaluate_to_do" label="新增管控措施"></el-table-column>
         <el-table-column prop="task_check_cycle" label="管控周期"></el-table-column>
-        <el-table-column prop="task_desc.risk_for" label="管控周期文字"></el-table-column>
+        <el-table-column prop="task_check_cycle_text" label="管控周期文字"></el-table-column>
         <el-table-column prop="department_name" label="部门名称"></el-table-column>
         <!-- <el-table-column prop="task_deadline_text" label="任务截止时间" width="150px"></el-table-column> -->
         <!-- <el-table-column prop="create_time_text" label="创建时间" width="150px"></el-table-column> -->

@@ -115,7 +115,7 @@
       :visible.sync="dialogVisible"
       width="400px">
         <div class="text-center">
-          <vue-qr :text="qrVal"></vue-qr>
+          <vue-qr :text="qrVal" :margin="0"></vue-qr>
         </div>
     </el-dialog>
   </div>

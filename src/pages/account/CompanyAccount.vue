@@ -44,7 +44,7 @@
           <router-link v-if="pageType == 1" to="addGovernment">
             <el-button type="primary" size="small">{{'创建政府账号'}}</el-button>
           </router-link>
-          <router-link v-else to="addCompany">
+          <router-link v-else :to="{path: 'addCompany', query: {companyId: searchInfo.companyId, manager_index: searchInfo.manager_index, brea_name: $route.query.brea_name}}">
             <el-button type="primary" size="small">{{'创建企业账号'}}</el-button>
           </router-link>
         </el-col>
@@ -148,6 +148,9 @@ export default {
     if (route.query && route.query.manager_index) {
       this.searchInfo.manager_index = route.query.manager_index;
     }
+    if (route.query && route.query.companyId) {
+      this.searchInfo.companyId = route.query.companyId;
+    }
     this.customBread.push({
       'name': route.query && route.query.brea_name
     });
@@ -166,7 +169,8 @@ export default {
       let {
         company_type,
         manager_index,
-        keyword
+        keyword,
+        companyId
       } = this.searchInfo
 
       let params = {
@@ -175,7 +179,8 @@ export default {
         propity: this.pageType,   // 企业账户3， 政府账户2，平台账户列表1
         company_type: company_type,  // 公司类型
         manager_index: manager_index,  // 区域
-        key: keyword  // 公司名称查询
+        key: keyword,  // 公司名称查询
+        company_id: companyId
       };
       let queryName = this.pageType == 1 ? 'getMGovAccountList' : 'getCompanyAccount';
       Http[queryName](params)
@@ -203,7 +208,10 @@ export default {
       this.$router.push({
         path: this.pageType == 1 ? "/account/editGovernment" : "/account/editCompany",
         query: {
-          userId: user_id
+          companyId: this.searchInfo.companyId,
+          manager_index: this.searchInfo.manager_index,
+          userId: user_id,
+          brea_name: this.$route.query.brea_name
         }
       });
     },
