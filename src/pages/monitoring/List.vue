@@ -27,7 +27,7 @@
             <el-select v-model="searchInfo.position_detail_id" placeholder="请选择"
               @change="changePostionDetail">
               <el-option v-for="item in positionDetailList" :key="item.position_detail_id"
-                :label="item.position_detail_sname" :value="item.position_detail_id">
+                :label="item.position_detail_name" :value="item.position_detail_id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -56,7 +56,7 @@
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark" ref="menuTable">
       <el-table-column prop="position_name" label="风险点名称"></el-table-column>
       <el-table-column prop="position_detail_name" label="二级子项"></el-table-column>
-      <el-table-column prop="position_detail_sname" label="三级子项"></el-table-column>
+      <el-table-column prop="position_three_name" label="三级子项"></el-table-column>
       <el-table-column prop="task_name" label="任务名称"></el-table-column>
       <el-table-column prop="task_status_text" label="任务状态"></el-table-column>
       <el-table-column prop="task_risk_level_text" label="隐患等级"></el-table-column>
