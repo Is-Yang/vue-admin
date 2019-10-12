@@ -17,7 +17,7 @@
             <el-input v-model="searchInfo.keyword" placeholder="请输入关键字"></el-input>
           </el-form-item>
           <el-form-item label="一级子项">
-            <el-select v-model="searchInfo.position_id" placeholder="请选择">
+            <el-select v-model="searchInfo.position_id" placeholder="请选择" @change="changePostion">
               <el-option v-for="item in positionList" :key="item.position_id" :label="item.position_name"
                 :value="item.position_id">
               </el-option>
@@ -25,7 +25,7 @@
           </el-form-item>
           <el-form-item label="二级子项">
             <el-select v-model="searchInfo.position_detail_id" placeholder="请选择"
-              @change="changePostion">
+              @change="changePostionDetail">
               <el-option v-for="item in positionDetailList" :key="item.position_detail_id"
                 :label="item.position_detail_sname" :value="item.position_detail_id">
               </el-option>
@@ -103,6 +103,7 @@ export default {
         taskId: 0
       },
       companyId: '',
+      riskLevel: '',
       companyInfo: {},
       searchInfo: {},
       positionList: [],
@@ -117,23 +118,23 @@ export default {
         this.tableType = 1;
     } else if (route.path === '/monitoring/not') {
         this.tableType = 2;
-        if (route.query && route.query.company_id) {
-          this.companyId = route.query.company_id;
-        }
     } else if (route.path === '/monitoring/haveCompany') {
         this.tableType = 3;
     } else if (route.path === '/monitoring/notCompany') {
         this.tableType = 4;
-        if (route.query && route.query.company_id) {
-          this.companyId = route.query.company_id;
-        }
     }
+
+    this.companyId = route.query && route.query.company_id;
+    this.riskLevel = route.query && route.query.risk_level;
+    
     this.getPositionList();
-    this.getPositionDetailList();
     this.getListData();
   },
   methods: {
     changePostion() {
+      this.getPositionDetailList(this.searchInfo.position_id);
+    },
+    changePostionDetail() {
       this.searchInfo.position_three_id = '';
       this.getPositionThreeList(this.searchInfo.position_detail_id);
     },
@@ -155,8 +156,10 @@ export default {
         });
       }).catch(err => {});
     },
-    getPositionDetailList() {
-      Http.getPositionDetailList()
+    getPositionDetailList(position_id) {
+      Http.getPositionDetailList({
+        position_id: position_id
+      })
         .then(res => {
           this.$handleResponse(res, res => {
             if (res) {
@@ -167,7 +170,9 @@ export default {
         .catch(err => {});
     },
     getPositionList() {
-      Http.getPositionList()
+      Http.getPositionList({
+        company_id: this.companyId
+      })
         .then(res => {
           this.$handleResponse(res, res => {
             if (res) {
@@ -191,11 +196,12 @@ export default {
         key: keyword,  // 风险点名称
         position_id: position_id,  // 一级子项
         position_detail_id: position_detail_id,  // 二级子项
-        position_three_id: position_three_id  // 三级子项
+        position_three_id: position_three_id,  // 三级子项
+        risk_level: this.riskLevel
       };
       let queryDataName = this.tableType === 1 ? 'getCheckList': 
                           this.tableType === 2 && !this.companyId ? 'getUCheckList' : 
-                          this.tableType === 2 && this.companyId ? 'companyUncheck' : 
+                          this.tableType === 2 && this.companyId ? 'getRiskCheckTask' : 
                           this.tableType === 3 ? 'companyCheckList' : 
                           this.tableType === 4 ? 'companyUncheck' : '';
       this.companyId ? params.company_id = this.companyId : params

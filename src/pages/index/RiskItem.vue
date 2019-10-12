@@ -25,7 +25,56 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="8" class="flow-item">
+         <el-col :span="8" class="flow-item">
+            <div class="card-item">
+                <h3>安全风险管控情况</h3>
+                <p class="text-right margin-bottom-20">完成率：
+                    <span style="color: #fd6b6b; font-weight: 600;">{{monitoringInfo.complete_rate*100}}%</span>
+                </p>
+                <div class="monitoring-table">
+                    <ul class="table-head">
+                        <li></li>
+                        <li>重大风险</li>
+                        <li>较大风险</li>
+                        <li>一般风险</li>
+                        <li>低风险</li>
+                    </ul>
+                    <div class="table-body">
+                        <ul>
+                            <li>已监控</li>
+                            <li>
+                                <a href="javascript:;" @click="getTypeTask(3, 0)">{{monitoringInfo.risk_history_serious}}</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" @click="getTypeTask(2, 0)">{{monitoringInfo.risk_history_high}}</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" @click="getTypeTask(1, 0)">{{monitoringInfo.risk_history_normal}}</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" @click="getTypeTask(0, 0)">{{monitoringInfo.risk_history_low}}</a>
+                            </li>
+                        </ul>
+                        <ul class="txt-danger">
+                            <li>未监控</li>
+                            <li>
+                                <a href="javascript:;" @click="getTypeTask(3, 1)">{{monitoringInfo.risk_undo_serious}}</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" @click="getTypeTask(2, 1)">{{monitoringInfo.risk_undo_high}}</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" @click="getTypeTask(1, 1)">{{monitoringInfo.risk_undo_normal}}</a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" @click="getTypeTask(0, 1)">{{monitoringInfo.risk_undo_low}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </el-col>
+        <!-- <el-col :span="8" class="flow-item">
            <router-link :to="{path: '/monitoring/have'}">
             <el-card shadow="never">
               <h3>已监控</h3>
@@ -44,7 +93,7 @@
               </div>
             </el-card>
           </router-link>
-        </el-col>
+        </el-col> -->
       </el-row>
     </div>
 
@@ -57,20 +106,37 @@
                 </el-option>
             </el-select>
     </el-dialog>
+
+    <!-- 监控任务 -->
+    <type-task v-if="dialog.typeShow"
+        :typeTask="dialog.typeTask"
+        @cancel="dialog.typeShow = false"
+        @success="dialog.typeShow = false">
+    </type-task>
   </div>
 </template>
 
 <script>
 import * as Http from '@/api/home'
 import * as userInfo from "@/utils/commonService/getUserInfo";
+import TypeTask  from './TypeTask';
 export default {
+    components: {
+        TypeTask
+    },
     data () {
         return {
             dataCount: {},
+            monitoringInfo: {},
             dialogVisible: false,
             typeList: [],
             companyId: '',
-            token: ''
+            riskLevel: '',
+            token: '',
+            dialog: {
+                typeShow: false,
+                typeTask: {},
+            },
         }
     },
     created () {
@@ -94,23 +160,33 @@ export default {
                 this.$store.dispatch('closeLoading', 'full');
                 this.$handleResponse(res, res => {
                         this.dataCount = res.data;
+                        this.monitoringInfo = res.risk_info;
                 })
             }).catch(err => {
                 this.$store.dispatch('closeLoading', 'full');
                 console.log(err)
             });
         },
+        getTypeTask(level, type) {
+            // this.dialog.typeShow = true;
+            // this.dialog.typeTask = {
+            //     level: level,
+            //     type: type
+            // };
+        },
         selectCompany() {
             if(this.companyId) {
                 this.$router.push({
                     path: "monitoring/not",
                     query: {
-                        company_id: this.companyId
+                        company_id: this.companyId,
+                        risk_level: this.riskLevel
                     }
                 });
             }
         },
         showCompanySelect(type, level) {
+            this.riskLevel = level;
             let params = {
                 risk_level: level,
                 type: type

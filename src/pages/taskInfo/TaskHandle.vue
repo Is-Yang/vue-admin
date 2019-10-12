@@ -47,8 +47,7 @@
         <el-input v-model="taskForm.risk_level"></el-input>
       </el-form-item> -->
       <el-form-item label="风险级别" prop="risk_level">
-        <el-select v-model="taskForm.risk_level" placeholder="请选择" filterable 
-          @change="changeRiskLevel">
+        <el-select v-model="taskForm.risk_level" placeholder="请选择" filterable >
           <el-option v-for="item in riskLevel" :key="item.value" :label="item.label"
             :value="item.label">
           </el-option>
@@ -139,7 +138,19 @@
           }
         ],
         taskForm: {
-          risk_level: ''
+          risk_level: '',
+          task_check_cycle_text: '',
+          risk_desc: '',
+          risk_to_do: '',
+          risk_type: '',
+          risk_result: '',
+          risk_evaluate_technology: '',
+          risk_evaluate_to_do: '',
+          risk_evaluate_train: '',
+          risk_evaluate_protect: '',
+          risk_evaluate_emergency: '',
+          risk_level: '',
+          row: '',
         },
         rules: {
           task_risk_init_level: [{
@@ -249,10 +260,6 @@
         } else {
             this.taskForm.task_check_cycle_text = task_check_cycle / 24.0 + "天1次";
         }
-      },
-      changeRiskLevel(val) {
-        this.$set(this.taskForm, 'risk_level', val);
-        this.$forceUpdate();
       },
       changePostion() {
         this.taskForm.position_three_id = '';
@@ -370,19 +377,56 @@
           this.loading = true;
           this.getPositionDetailList();
           setTimeout(() => {
-            this.taskForm = Object.assign({}, this.taskParent);
-            this.taskForm.task_check_cycle_text = this.taskParent.task_check_cycle_text;
-            this.taskForm.risk_desc = this.taskParent.task_desc.risk_desc;
-            this.taskForm.risk_to_do = this.taskParent.task_desc.risk_to_do;
-            this.taskForm.risk_type = this.taskParent.task_desc.risk_type;
-            this.taskForm.risk_result = this.taskParent.task_desc.risk_result;
-            this.taskForm.risk_evaluate_technology = this.taskParent.task_desc.risk_evaluate_technology;
-            this.taskForm.risk_evaluate_to_do = this.taskParent.task_desc.risk_evaluate_to_do;
-            this.taskForm.risk_evaluate_train = this.taskParent.task_desc.risk_evaluate_train;
-            this.taskForm.risk_evaluate_protect = this.taskParent.task_desc.risk_evaluate_protect;
-            this.taskForm.risk_evaluate_emergency = this.taskParent.task_desc.risk_evaluate_emergency;
-            this.taskForm.risk_level = this.taskParent.task_desc.risk_level;
-            this.taskForm.row = this.taskParent.task_desc.row;
+            let {
+              position_id,
+              position_detail_id,
+              position_three_id,
+              task_name,
+              user_id,
+              task_id,
+              department_id,
+              company_id,
+              task_check_cycle,
+              task_check_cycle_text,
+              task_desc
+            } = this.taskParent
+
+            let {
+              risk_desc,
+              risk_to_do,
+              risk_result,
+              risk_evaluate_technology,
+              risk_evaluate_to_do,
+              risk_evaluate_train,
+              risk_evaluate_protect,
+              risk_evaluate_emergency,
+              risk_level,
+              row
+            } = task_desc
+
+            this.taskForm = {
+              position_id: position_id,
+              position_detail_id: position_detail_id,
+              position_three_id: position_three_id,
+              task_name: task_name,
+              user_id: user_id,
+              task_id: task_id,
+              department_id: department_id,
+              company_id: company_id,
+              task_check_cycle: task_check_cycle,
+              task_check_cycle_text: task_check_cycle_text,
+              risk_desc: risk_desc,
+              risk_to_do: risk_to_do,
+              // risk_type: risk_type,
+              risk_result: risk_result,
+              risk_evaluate_technology: risk_evaluate_technology,
+              risk_evaluate_to_do: risk_evaluate_to_do,
+              risk_evaluate_train: risk_evaluate_train,
+              risk_evaluate_protect: risk_evaluate_protect,
+              risk_evaluate_emergency: risk_evaluate_emergency,
+              risk_level: risk_level,
+              row: row
+            }
 
             // // 部门列表
             let obj = {};
@@ -410,7 +454,7 @@
               user_id,
               department_id,
               company_id,
-              task_deadline_text,
+              // task_deadline_text,
               task_check_cycle,
               task_check_cycle_text,
               risk_desc,
@@ -426,7 +470,7 @@
               row
             } = this.taskForm;
 
-            let task_deadline = moment(task_deadline_text).hours(23).minutes(59).seconds(59).valueOf();
+            // let task_deadline = moment(task_deadline_text).hours(23).minutes(59).seconds(59).valueOf();
 
             let params = {
               // task_risk_init_level: task_risk_init_level,
@@ -437,7 +481,7 @@
               user_id: user_id,
               department_id: department_id,
               company_id: company_id,
-              task_deadline: parseInt(task_deadline/1000),
+              // task_deadline: parseInt(task_deadline/1000),
               task_check_cycle: task_check_cycle,
               task_check_cycle_text: task_check_cycle_text,
               risk_desc: risk_desc,
