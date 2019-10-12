@@ -9,7 +9,7 @@
             <el-table-column prop="task_desc.risk_to_do" label="管控措施" width="110px"></el-table-column>
             <el-table-column prop="task_desc.row" label="法规依据"></el-table-column>
             <el-table-column prop="task_check_cycle" label="管控周期" width="80px"></el-table-column>
-            <el-table-column prop="task_check_cycle_text" label="管控周期" width="90px"></el-table-column>
+            <el-table-column prop="task_check_cycle_text" label="管控周期文字" width="90px"></el-table-column>
         </el-table>
 
         <!-- 分页 -->
