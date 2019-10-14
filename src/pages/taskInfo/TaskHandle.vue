@@ -46,10 +46,10 @@
       <!-- <el-form-item label="风险级别" prop="risk_level">
         <el-input v-model="taskForm.risk_level"></el-input>
       </el-form-item> -->
-      <el-form-item label="风险级别" prop="risk_level">
-        <el-select v-model="taskForm.risk_level" placeholder="请选择" filterable >
+      <el-form-item label="风险级别" prop="task_risk_init_level">
+        <el-select v-model="taskForm.task_risk_init_level" placeholder="请选择" filterable >
           <el-option v-for="item in riskLevel" :key="item.value" :label="item.label"
-            :value="item.label">
+            :value="item.value">
           </el-option>
         </el-select>
       </el-form-item>
@@ -153,11 +153,6 @@
           row: '',
         },
         rules: {
-          task_risk_init_level: [{
-            required: true,
-            message: '请选择风险级别',
-            trigger: 'blur'
-          }],
           task_name: [{
             required: true,
             message: '请输入任务名称',
@@ -208,11 +203,16 @@
             message: '请输入应急处理',
             trigger: 'blur'
           }],
-          risk_level: [{
+          task_risk_init_level: [{
             required: true,
-            message: '请选择风险等级',
+            message: '请选择风险级别',
             trigger: 'change'
           }],
+          // risk_level: [{
+          //   required: true,
+          //   message: '请选择风险等级',
+          //   trigger: 'change'
+          // }],
           company_id: [{
             required: true,
             message: '请选择所属公司',
@@ -388,7 +388,8 @@
               company_id,
               task_check_cycle,
               task_check_cycle_text,
-              task_desc
+              task_desc,
+              task_risk_init_level
             } = this.taskParent
 
             let {
@@ -425,6 +426,7 @@
               risk_evaluate_protect: risk_evaluate_protect,
               risk_evaluate_emergency: risk_evaluate_emergency,
               risk_level: risk_level,
+              task_risk_init_level: task_risk_init_level,
               row: row
             }
 
@@ -446,7 +448,7 @@
           if (valid) {
             this.loading = true;
             let {
-              // task_risk_init_level,
+              task_risk_init_level,
               position_id,
               position_detail_id,
               position_three_id,
@@ -466,14 +468,14 @@
               risk_evaluate_train,
               risk_evaluate_protect,
               risk_evaluate_emergency,
-              risk_level,
+              // risk_level,
               row
             } = this.taskForm;
 
             // let task_deadline = moment(task_deadline_text).hours(23).minutes(59).seconds(59).valueOf();
 
             let params = {
-              // task_risk_init_level: task_risk_init_level,
+              task_risk_init_level: task_risk_init_level,
               position_id: position_id,
               position_detail_id: position_detail_id,
               position_three_id: position_three_id,
@@ -493,7 +495,7 @@
               risk_evaluate_train: risk_evaluate_train,
               risk_evaluate_protect: risk_evaluate_protect,
               risk_evaluate_emergency: risk_evaluate_emergency,
-              risk_level: risk_level,
+              // risk_level: risk_level,
               row: row
             }
 
