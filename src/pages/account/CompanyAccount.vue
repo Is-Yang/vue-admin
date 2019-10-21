@@ -71,9 +71,9 @@
         </el-table-column>
         <el-table-column label="操作" width="200px">
           <template slot-scope="scope">
-            <el-button size="mini" :disabled="scope.row.user_name == '巴中市test' ? true :false" type="primary" plain icon="el-icon-edit" @click="editFn(scope.row.user_id)"
+            <el-button size="mini" :disabled="scope.row.user_name == '巴中市应急管理局' ? true :false" type="primary" plain icon="el-icon-edit" @click="editFn(scope.row.user_id)"
               title="编辑"></el-button>
-            <el-button size="mini" :disabled="scope.row.user_name == '巴中市test' ? true :false" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
+            <el-button size="mini" :disabled="scope.row.user_name == '巴中市应急管理局' ? true :false" type="danger" plain icon="el-icon-delete" @click="deleteFn(scope.row)"
               title="删除"></el-button>
           </template>
         </el-table-column>

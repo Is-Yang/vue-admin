@@ -249,7 +249,7 @@ export default {
         manager_index: manager_index,
         key: keyword
       };
-      let queryName = this.propity == 1 ? 'getCompanyAccount' : 'getCompanyList';
+      let queryName = this.propity == 1 ? 'getCompanyList' : 'getCompanyList';
       Http[queryName](params)
         .then(res => {
           this.loading = false;

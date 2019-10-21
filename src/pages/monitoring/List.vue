@@ -57,7 +57,7 @@
       <el-table-column prop="position_name" label="风险点名称"></el-table-column>
       <el-table-column prop="position_detail_name" label="二级子项"></el-table-column>
       <el-table-column prop="position_three_name" label="三级子项"></el-table-column>
-      <el-table-column prop="task_name" label="任务名称"></el-table-column>
+      <!-- <el-table-column prop="task_name" label="任务名称"></el-table-column> -->
       <el-table-column prop="task_status_text" label="任务状态"></el-table-column>
       <el-table-column prop="task_risk_level_text" label="隐患等级"></el-table-column>
       <el-table-column prop="task_check_cycle_text" label="管控周期文字"></el-table-column>

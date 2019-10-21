@@ -1,53 +1,9 @@
 <template>
-    <div>
+    <div v-loading="loading">
         <bread-crumb :dataIsArr="false" isBack breadName="monitorDetail"></bread-crumb>
 
         <div class="details-wrapper minh768 common-section">
-            <el-alert 
-                title=""
-                :closable="false"
-                type="success">
-                    <p>风险描述： {{descData.risk_desc}}</p>
-                    <p>风险定位： {{descData.risk_for}}</p>
-                    <p>风险等级： {{descData.risk_level}}</p>
-                    <p>导致后果： {{descData.risk_result}}</p>
-                    <p>应对措施： {{descData.risk_to_do}}</p>
-                    <p>应对分类： {{descData.risk_type}}</p>
-            </el-alert>
-
-            <el-row  type="flex" :gutter="15">
-                <el-col>
-                    <div class="info-wrap">
-                        <h3>上报隐患</h3>
-                        <div>上报人：<span>{{infoData.name}}</span></div>
-                        <div>台&nbsp;&nbsp;&nbsp;账：<span>{{infoData.task_complete_input}}</span></div>
-                        <div>照&nbsp;&nbsp;&nbsp;片：<a :href="infoData.task_complete_img" target="_blank"><img :src="infoData.task_complete_img" /></a></div>
-                    </div>
-                </el-col>
-                <el-col>
-                    <div class="info-wrap">
-                        <h3>隐患处理</h3>
-                        <div>隐患等级：<span>{{configData.task_risk_level == 0 ? '低风险' : 
-                            configData.task_risk_level == 1 ? '一般风险' : 
-                            configData.task_risk_level == 2 ? '高风险' : 
-                            configData.task_risk_level == 3 ? '严重风险' : ''}}</span></div>
-                        <div>整&nbsp;改&nbsp;人：<span>{{configData.eliminate_risk_name}}</span></div>
-                        <div>整改期限：<span>{{configData.eliminate_risk_time_text}}</span></div>
-                        <div>整改资金：<span>{{configData.eliminate_risk_money}}</span></div>
-                        <div>整改措施：<span>{{configData.eliminate_risk_desc}}</span></div>
-                    </div>
-                </el-col>
-                <el-col>
-                    <div class="info-wrap">
-                        <h3>整改隐患</h3>
-                        <div>上报人：<span>{{submitData.eliminate_risk_name}}</span></div>
-                        <div>台&nbsp;&nbsp;&nbsp;账：<span>{{submitData.task_input_forsure}}</span></div>
-                        <div>照&nbsp;&nbsp;&nbsp;片：<a :href="submitData.task_complete_img" target="_blank"><img :src="submitData.task_complete_img" /></a></div>
-                    </div>
-                </el-col>
-            </el-row>
-
-            <div class="card-item" style="height: 420px;">
+            <div class="card-item" style="height: 220px;">
                 <h3>安全风险管控情况</h3>
                 <p class="text-right margin-bottom-20">完成率：
                     <span style="color: #fd6b6b; font-weight: 600;">{{monitoringInfo.complete_rate*100}}%</span>
@@ -94,6 +50,78 @@
                     </div>
                 </div>
             </div>
+
+            <div class="desc-risk">
+                <el-row type="flex">
+                    <el-col>风险描述： </el-col>
+                    <el-col>{{descData.risk_desc}} </el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col>导致后果：</el-col> 
+                    <el-col>{{descData.risk_result}}</el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col>法规依据： </el-col>
+                    <el-col>{{descData.row}}</el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col>风险评估： </el-col>
+                    <el-col>
+                        <p>工程技术: {{descData.risk_evaluate_technology}}</p>
+                        <p>管控措施：{{descData.risk_to_do}}</p>
+                        <p>培训教育: {{descData.risk_evaluate_train}}</p>
+                        <p>应急处理: {{descData.risk_evaluate_emergency}}</p>
+                        <p>个体防护: {{descData.risk_evaluate_protect}}</p>
+                    </el-col>
+                </el-row>
+                <el-row type="flex">
+                    <el-col>新增管控措施: </el-col>
+                    <el-col> {{descData.risk_evaluate_to_do}}</el-col>
+                </el-row>
+            </div>
+
+            <el-row type="flex" :gutter="15" v-if="infoData.task_status != 4">
+                <el-col>
+                    <div class="info-wrap">
+                        <h3>上报隐患</h3>
+                        <div>上报人：<span>{{infoData.name}}</span></div>
+                        <div>台&nbsp;&nbsp;&nbsp;账：<span>{{infoData.task_complete_input}}</span></div>
+                        <div>照&nbsp;&nbsp;&nbsp;片：<a :href="infoData.task_img_forsure" target="_blank"><img :src="infoData.task_img_forsure" /></a></div>
+                    </div>
+                </el-col>
+                <el-col>
+                    <div class="info-wrap">
+                        <h3>隐患处理</h3>
+                        <div>隐患等级：<span>{{configData.task_risk_level == 0 ? '低风险' : 
+                            configData.task_risk_level == 1 ? '一般风险' : 
+                            configData.task_risk_level == 2 ? '高风险' : 
+                            configData.task_risk_level == 3 ? '严重风险' : ''}}</span></div>
+                        <div>整&nbsp;改&nbsp;人：<span>{{configData.eliminate_risk_name}}</span></div>
+                        <div>整改期限：<span>{{configData.eliminate_risk_time_text}}</span></div>
+                        <div>整改资金：<span>{{configData.eliminate_risk_money}}</span></div>
+                        <div>整改措施：<span>{{configData.eliminate_risk_desc}}</span></div>
+                    </div>
+                </el-col>
+                <el-col>
+                    <div class="info-wrap">
+                        <h3>整改隐患</h3>
+                        <div>上报人：<span>{{submitData.eliminate_risk_name}}</span></div>
+                        <div>台&nbsp;&nbsp;&nbsp;账：<span>{{submitData.task_input_forsure}}</span></div>
+                        <div>照&nbsp;&nbsp;&nbsp;片：<a :href="submitData.task_complete_img" target="_blank"><img :src="submitData.task_complete_img" /></a></div>
+                    </div>
+                </el-col>
+            </el-row>
+            
+            <!-- 确认正常 -->
+            <el-row type="flex" style="width: 33%;" v-if="infoData.task_status == 4">
+                <el-col>
+                    <div class="info-wrap">
+                        <h3>确认正常</h3>
+                        <div>上报人：<span>{{infoData.name}}</span></div>
+                        <div>照&nbsp;&nbsp;&nbsp;片：<a :href="infoData.task_img_forsure" target="_blank"><img :src="infoData.task_img_forsure" /></a></div>
+                    </div>
+                </el-col>
+            </el-row>
         </div>
     </div>
 </template>
@@ -111,6 +139,7 @@ export default {
             configData: {},
             submitData: {},
             monitoringInfo: {},
+            loading: false
         }
     },
     created() {
@@ -232,6 +261,23 @@ export default {
                     height: 80px;
                     border: 1px solid #eee;
                     vertical-align: top;
+                }
+            }
+        }
+        .desc-risk {
+            background-color: #f1f9ec;
+            padding: 20px;
+            border-radius: 4px;
+
+            .el-row {
+                margin: 9px 0;
+                .el-col:nth-child(1) {
+                    width: 110px;
+                    text-align: right;
+                    margin-right: 10px;
+                }
+                p {
+                    margin: 5px 0;
                 }
             }
         }
