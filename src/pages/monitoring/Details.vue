@@ -81,6 +81,10 @@
                 </el-row>
             </div>
 
+            <div v-if="infoData.task_status == 0" class="status0">
+                待管控
+            </div>
+
             <el-row type="flex" :gutter="15" v-if="infoData.task_status != 0">
                 <el-col>
                     <div class="info-wrap">
@@ -281,6 +285,13 @@ export default {
                     margin: 5px 0;
                 }
             }
+        }
+
+        .status0 {
+            margin-top: 20px;
+            font-size: 40px;
+            font-weight: 600;
+            color: red;
         }
     }
 </style>
