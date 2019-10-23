@@ -192,7 +192,7 @@ export function updateManageImg(params) {
 
 // 根据管理风险等级获取公司类型 ?token=f918e561892d4fc587bd628f8484d03f&risk_level=2&type=0
 export function companyByType(params) {
-    return http.getAjax('/manager_company_by_type?token=' + getToken(), params)
+    return http.getAjax('/manager_company_by_type', params)
 }
 
 // 未监控管理列表信息 manager_company_uncheck?token=5e0929a65c364432b1cfe86903f713d7&page=0&company_id=1

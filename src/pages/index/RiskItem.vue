@@ -7,11 +7,11 @@
             <h3>{{item.company_type_name}}</h3>
             <div class="info">
                 <div @click="showCompanySelect(item.company_type, 3)">
-                    {{item.company_type === 1 ? '重大风险' : '严重风险'}}
+                    重大风险
                     <div>{{item.risk_serious}}</div>
                 </div>
                 <div @click="showCompanySelect(item.company_type, 2)">
-                    {{item.company_type === 1 ? '较大风险' : '高风险'}}
+                    较大风险
                     <div>{{item.risk_high}}</div>
                 </div>
                 <div @click="showCompanySelect(item.company_type, 1)">
@@ -29,7 +29,7 @@
             <div class="card-item">
                 <h3>安全风险管控情况</h3>
                 <p class="text-right margin-bottom-20">完成率：
-                    <span style="color: #fd6b6b; font-weight: 600;">{{monitoringInfo.complete_rate*100}}%</span>
+                    <span style="color: #fd6b6b; font-weight: 600;">{{complete_rate}}%</span>
                 </p>
                 <div class="monitoring-table">
                     <ul class="table-head">
@@ -127,6 +127,7 @@ export default {
     data () {
         return {
             dataCount: {},
+            complete_rate: '',
             monitoringInfo: {},
             dialogVisible: false,
             typeList: [],
@@ -161,6 +162,7 @@ export default {
                 this.$handleResponse(res, res => {
                         this.dataCount = res.data;
                         this.monitoringInfo = res.risk_info;
+                        this.complete_rate = parseFloat(res.risk_info.complete_rate * 100).toFixed(2);
                 })
             }).catch(err => {
                 this.$store.dispatch('closeLoading', 'full');
@@ -189,7 +191,8 @@ export default {
             this.riskLevel = level;
             let params = {
                 risk_level: level,
-                type: type
+                type: type,
+                token: this.token
             }
             Http.companyByType(params).then(res => {
                 this.$handleResponse(res, res => {

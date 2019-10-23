@@ -3,7 +3,8 @@
         <bread-crumb :dataIsArr="false" isBack breadName="monitorDetail"></bread-crumb>
 
         <div class="details-wrapper minh768 common-section">
-            <div class="card-item" style="height: 220px;">
+            <h3 class="margin-bottom-20">安全风险管控情况</h3>
+            <!-- <div class="card-item" style="height: 220px;">
                 <h3>安全风险管控情况</h3>
                 <p class="text-right margin-bottom-20">完成率：
                     <span style="color: #fd6b6b; font-weight: 600;">{{monitoringInfo.complete_rate*100}}%</span>
@@ -49,7 +50,7 @@
                         </ul>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="desc-risk">
                 <el-row type="flex">
@@ -80,7 +81,7 @@
                 </el-row>
             </div>
 
-            <el-row type="flex" :gutter="15" v-if="infoData.task_status != 4">
+            <el-row type="flex" :gutter="15" v-if="infoData.task_status != 0">
                 <el-col>
                     <div class="info-wrap">
                         <h3>上报隐患</h3>
@@ -94,8 +95,8 @@
                         <h3>隐患处理</h3>
                         <div>隐患等级：<span>{{configData.task_risk_level == 0 ? '低风险' : 
                             configData.task_risk_level == 1 ? '一般风险' : 
-                            configData.task_risk_level == 2 ? '高风险' : 
-                            configData.task_risk_level == 3 ? '严重风险' : ''}}</span></div>
+                            configData.task_risk_level == 2 ? '较大风险' : 
+                            configData.task_risk_level == 3 ? '重大风险' : ''}}</span></div>
                         <div>整&nbsp;改&nbsp;人：<span>{{configData.eliminate_risk_name}}</span></div>
                         <div>整改期限：<span>{{configData.eliminate_risk_time_text}}</span></div>
                         <div>整改资金：<span>{{configData.eliminate_risk_money}}</span></div>
@@ -159,7 +160,7 @@ export default {
 
             this.checkSubmit();
 
-            this.checkRick();
+            // this.checkRick();
         },
         checkRick() {
             let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
