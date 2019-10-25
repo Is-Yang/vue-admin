@@ -118,7 +118,7 @@
             </el-row>
             
             <!-- 确认正常 -->
-            <el-row type="flex" style="width: 33%;" v-if="infoData.task_status == 4">
+            <el-row type="flex" style="width: 33%;" v-if="infoData.task_status == 4 || infoData.task_status == 5">
                 <el-col>
                     <div class="info-wrap">
                         <h3>确认正常</h3>

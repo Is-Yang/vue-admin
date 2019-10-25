@@ -79,6 +79,7 @@
 
 <script>
 import * as Http from "@/api/home";
+import store from '../../store/index.js'
 export default {
   components: {
   },
@@ -126,6 +127,11 @@ export default {
 
     this.companyId = route.query && route.query.company_id;
     this.riskLevel = route.query && route.query.risk_level;
+
+    let pageInfo = store.getters.pageInfo;
+    if (pageInfo.current) {
+      this.page = Object.assign({}, pageInfo);
+    }
     
     this.getPositionList();
     this.getListData();
@@ -191,6 +197,7 @@ export default {
         position_detail_id,
         position_three_id
       } = this.searchInfo;
+
       let params = {
         page: this.page.current,
         key: keyword,  // 风险点名称
@@ -273,10 +280,12 @@ export default {
     },
     sizeChange(val) {
       this.page.size = val;
+      this.$store.dispatch('pageInfo', this.page);
       this.getListData();
     },
     currentChange(val) {
       this.page.current = val;
+      this.$store.dispatch('pageInfo', this.page);
       this.getListData();
     },
     dialogSuccess() {

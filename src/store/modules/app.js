@@ -10,7 +10,8 @@ const app = {
       full: {},  // 全局的loading
       local: false, // 局部 main组件的loading
     },
-    enterpriseInfo: {}  // 企业信息
+    enterpriseInfo: {},  // 企业信息
+    pageInfo: {}  // 页码信息
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {
@@ -54,6 +55,10 @@ const app = {
     GET_ENTERPRISE_INFO: (state, data) => {
       let info = Object.assign({}, state.enterpriseInfo, data); 
       state.enterpriseInfo = info;
+    },
+    PAGE_INFO: (state, data) => {
+      let info = Object.assign({}, state.pageInfo, data); 
+      state.pageInfo = info;
     }
   },
   actions: {
@@ -75,6 +80,9 @@ const app = {
     },
     GetEnterpriseInfo: ({ commit}, data) => {
       commit('GET_ENTERPRISE_INFO', data);
+    },
+    pageInfo: ({ commit }, data) => {
+      commit('PAGE_INFO', data);
     }
   }
 };
