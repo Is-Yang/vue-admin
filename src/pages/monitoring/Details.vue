@@ -85,7 +85,7 @@
                 待管控
             </div>
 
-            <el-row type="flex" :gutter="15" v-if="infoData.task_status != 0">
+            <el-row type="flex" :gutter="15" v-if="infoData.task_status != 0 && infoData.task_status != 4 && infoData.task_status != 5">
                 <el-col>
                     <div class="info-wrap">
                         <h3>上报隐患</h3>
