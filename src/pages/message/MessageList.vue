@@ -40,7 +40,6 @@
 import * as Http from "@/api/home";
 import * as userInfo from "@/utils/commonService/getUserInfo";
 import MessageHandle from './MessageHandle';
-let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
 export default {
   components: {
     MessageHandle
@@ -63,8 +62,10 @@ export default {
     };
   },
   created() {
+    let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
     if (user_info && user_info.propity) {
         this.propity = user_info.propity;
+        console.log(this.propity);
     }
     this.getListData();
   },
