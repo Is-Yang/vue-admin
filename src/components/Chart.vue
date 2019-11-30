@@ -48,6 +48,7 @@ export default {
                     }
                 },
                 chart: {
+                    height: chartOptions.height || null,  // 高度
                     type: chartOptions.type || 'line',  // 图表类型
                     zoomType: chartOptions.zoomType || '',  // 缩放方式
                     marginBottom: chartOptions.marginBottom || null, // 距离底部的距离

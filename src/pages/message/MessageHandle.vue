@@ -24,13 +24,13 @@
             </el-option>
           </el-select>
       </el-form-item> -->
-      <el-form-item label="区域：" v-if="pageType == 2">
+      <el-form-item label="区域：" v-if="pageType == 2 && sendType == 1">
       <el-select v-model="messageForm.manager_index" placeholder="请选择区域" size="medium">
         <el-option v-for="item in areaList" :key="item.manager_index" :label="item.area_name" :value="item.manager_index">
         </el-option>
       </el-select>
     </el-form-item>
-      <el-form-item prop="company_type" label="公司类型：">
+      <el-form-item prop="company_type" v-if="sendType == 1" label="公司类型：">
         <el-select v-model="messageForm.company_type" placeholder="请选择公司类型" size="medium">
           <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
@@ -123,7 +123,9 @@ export default {
     methods: {
       // 获取所有公司列表
       getCompanySelect() {
-        Http.getGovCompanySelect()
+        // this.pageType == 1 ? 'getGovCompanySelect' : 
+        let queryName = 'getAllCompanyList';
+        Http[queryName]()
           .then(res => {
             this.$handleResponse(res, res => {
               if (res) {

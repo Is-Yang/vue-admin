@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="margin-bottom-20 text-right">
-      <el-button type="primary" size="small" @click="dialog.show = true">发送消息</el-button>
+      <el-button v-if="propity == 2" type="primary" size="small" @click="dialog.show = true">发送消息</el-button>
+    
+      <el-tabs v-if="propity == 3" v-model="currentMessage" type="card" @tab-click="getListData">
+        <el-tab-pane label="政府消息" name="0"></el-tab-pane>
+        <el-tab-pane label="平台消息" name="1"></el-tab-pane>
+      </el-tabs>
     </div>
     <el-table v-loading="loading" border :data="listData" tooltip-effect="dark">
       <el-table-column prop="message_from" label="消息发送者"></el-table-column>
@@ -33,7 +38,9 @@
 
 <script>
 import * as Http from "@/api/home";
+import * as userInfo from "@/utils/commonService/getUserInfo";
 import MessageHandle from './MessageHandle';
+let user_info = userInfo.getUserInfo() && JSON.parse(userInfo.getUserInfo());
 export default {
   components: {
     MessageHandle
@@ -43,6 +50,7 @@ export default {
     return {
       loading: false,
       listData: [],
+      currentMessage: '0',
       page: {
         current: 1,
         size: 10,
@@ -50,10 +58,14 @@ export default {
       },
       dialog: {
         show: false,
-      }
+      },
+      propity: ''
     };
   },
   created() {
+    if (user_info && user_info.propity) {
+        this.propity = user_info.propity;
+    }
     this.getListData();
   },
   methods: {
@@ -62,6 +74,9 @@ export default {
       let params = {
         page: this.page.current
       };
+      if (this.propity == 3) {
+        params.from = this.currentMessage;
+      }
       Http.getCompanyMessageList(params)
         .then(res => {
           this.loading = false;
@@ -82,16 +97,16 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.doDelete(data.message_id);
+          this.doDelete(data.id);
         })
         .catch(() => {});
     },
     doDelete(id) {
       this.loading = true;
       let params = {
-        message_id: id
+        id: id
       };
-      Http.delMessage(params)
+      Http.delCompanyMessage(params)
         .then(res => {
           this.$handleResponse(res, res => {
             this.$message.success("删除成功");

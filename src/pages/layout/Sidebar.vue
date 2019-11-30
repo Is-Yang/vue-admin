@@ -110,7 +110,7 @@
         </el-menu-item>
       </el-submenu> -->
 
-      <el-menu-item :index="level === 1 ? '/message/government' : '/message'" v-if="level == 1 || level == 2">
+      <el-menu-item :index="level === 1 ? '/message/government' : '/message'">
         <i class="fa fa-thumbtack"></i> 
         <span slot="title">消息管理</span>
       </el-menu-item>

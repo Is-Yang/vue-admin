@@ -106,7 +106,7 @@
           job_level: [{ required: true, message: '请选择岗位等级', trigger: 'change' }]
         },
         userInfo: {},
-        propity: {}
+        propity: ''
       }
     },
     created() {
@@ -163,10 +163,10 @@
       },
       init() {
         if (this.propity !== 3) {
-          // 获取公司列表
-          this.getCompany();
-          // 获取部门列表
-          this.getDepartment();
+            // 获取公司列表
+            this.getCompany();
+            // 获取部门列表
+            this.getDepartment();
         } else {
           this.getManagerCompanyDepartMent();
         }

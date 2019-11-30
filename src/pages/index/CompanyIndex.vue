@@ -170,7 +170,7 @@ export default {
             { 
                 type: 'pie',
                 enabled: false, 
-                marginBottom: 80, 
+                height: 300,
                 dataShowInLegend: true,
                 useHTML: true,
                 dataColors: ['#fd6b6b', '#FDB582', '#ffd555', '#1494EB']
@@ -178,7 +178,7 @@ export default {
             { 
                 type: 'pie',
                 enabled: false,
-                marginBottom: 80, 
+                height: 300,
                 dataShowInLegend: true,
                 useHTML: true,
                 dataColors: ['#fd6b6b', '#1494EB'] 
