@@ -102,7 +102,7 @@ export default {
           }
         ],
         imageUrl: '',
-        uploadUrl: window.scrmApi + '/manager_upload_company_img?token=' + (user_info.token ? user_info.token : store.getters.userInfo.token),
+        uploadUrl: window.scrmApi + '/manager_upload_message_file?token=' + (user_info.token ? user_info.token : store.getters.userInfo.token),
         rules: {
           message_title: [
             { required: true, message: '请输入消息标题', trigger: 'blur' }
@@ -143,9 +143,9 @@ export default {
           })
       },
       handleImageSuccess(res, file) {
-        if (res.ok) {
+        if (res.file_url) {
           this.imageUrl = URL.createObjectURL(file.raw);
-          this.messageForm.file_url = res.url; 
+          this.messageForm.file_url = res.file_url; 
           this.$message.success("上传成功");
         } else {
           this.$message.error("上传失败");

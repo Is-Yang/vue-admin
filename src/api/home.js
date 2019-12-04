@@ -485,3 +485,8 @@ export function updateThree(params) {
 export function deleteThree(params) {
     return http.postAjax('/manager_delete_three?token=' + getToken(), params)
 }
+
+// 获取消息文件
+export function messageFile(params) {
+    return http.postAjax('/manager_upload_message_file?token=' + getToken(), params);
+}
